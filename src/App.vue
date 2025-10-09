@@ -1,30 +1,21 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+// 如果需要import圖片
+import taiwanImg from './assets/img/taiwan.png'
 </script>
 
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="app">
+    <img :src="taiwanImg" alt="台灣茶葉" />
+    <p>桃園</p>
+    <p>是非成敗轉眼空，青山依舊在，幾度夕陽紅。</p>
+    <p>白雲深處有人家，笑看紅塵多變化。</p>
+    <p>遠上寒山石徑斜，白雲生處有人家。</p>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+.app {
+  text-align: center;
+  padding: 20px;
 }
 </style>
