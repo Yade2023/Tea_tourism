@@ -1,0 +1,29 @@
+.home-page .carousel .carousel-item img {
+  width: 100%;
+  height: 420px;   /* 你要的視覺高度，自行調整 */
+  object-fit: cover;
+}
+
+/* 讓輪播外框也跟主內容一樣有水平邊距（跟 Navbar 同步）*/
+.home-page #carouselExampleCaptions {
+  width: 100%;
+  display: block;
+}
+.carousel-indicators [data-bs-target] {
+  width: 10px;            /* 圓的寬度 */
+  height: 10px;           /* 圓的高度 */
+  border-radius: 50%;     /* 關鍵：變圓 */
+  background-color: #fff; /* 預設顏色 */
+  opacity: 0.5;           /* 半透明 */
+  transition: opacity 0.3s ease;
+  margin: 0 6px;          /* 點與點之間間距 */
+}
+
+/* 當前 active 狀態 */
+.carousel-indicators .active {
+  opacity: 1;
+  background-color: #f7d7d0; /* 可換成你主色（例如粉茶色） */
+}
+.carousel-indicators [data-bs-target] {
+  /* box-shadow: 0 0 4px rgba(0,0,0,0.3); */
+}

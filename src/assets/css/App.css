@@ -5,9 +5,19 @@
   font-family: sans-serif;
 
 }
-#app{
-    
+
+#app {
+  /* background: url('../img/tea_backgroundImage.jpg'); */
 }
+
+.wrap {  
+  /* justify-self: center; */
+  height:auto;
+  width: auto;
+  /* margin: 10px; */
+  padding: 2px;
+}
+
 /* ===== 導覽列版型：左LOGO / 中選單 / 右動作 ===== */
 .navbar {
   position: sticky;
@@ -21,7 +31,7 @@
   background: #d2f3cd;
   padding: 0.6rem 1.25rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
-  margin: 10px;
+
 }
 
 /* 左：logo 與品牌 */
@@ -30,6 +40,13 @@
   display: inline-flex;
   align-items: center;
   text-decoration: none;
+}
+
+.main-content {
+  width: 100%;
+  min-height: 100%;
+  /* padding: 0.6rem 1.25rem; 與 .navbar 水平邊距一致 */
+  box-sizing: border-box;
 }
 
 .main-logo {
