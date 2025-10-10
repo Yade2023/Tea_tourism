@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 
-body {
+.knowledgebase {
     font-family: 'Microsoft JhengHei', 'PingFang TC', 'Helvetica Neue', Arial, sans-serif;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     color: #333;
