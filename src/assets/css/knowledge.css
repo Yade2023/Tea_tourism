@@ -1,0 +1,136 @@
+:root {
+    --W: 100vw;
+    /* 寬度改成螢幕寬度 */
+    --H: 100vh;
+    /* 高度改成螢幕高度 */
+}
+
+body {
+    background: #fff;
+    font-family: 'Noto Sans TC', system-ui, sans-serif;
+    color: #222;
+}
+
+/* ====== 茶葉分類 ====== */
+.stage {
+    width: var(--W);
+    height: var(--H);
+    overflow: hidden;
+    margin: 0 auto;
+    position: relative;
+}
+
+.thumbs {
+    display: flex;
+    height: 100%;
+}
+
+.thumb {
+    flex: 1;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+.thumb::after {
+    content: attr(data-title);
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 24px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 12px 0;
+    font-weight: 600;
+}
+
+/* 展開後的版型：左1/6圖，右5/6資訊 */
+.selected-layout {
+    display: flex;
+    height: 100%;
+}
+
+.selected-left {
+    width: 16.666%;
+    background-size: cover;
+    background-position: center;
+}
+
+.selected-right {
+    width: 83.333%;
+    background-color: #fdfdfd;
+    padding: 60px;
+    overflow-y: auto;
+    position: relative;
+    cursor: pointer;
+}
+
+.selected-right h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.selected-right p {
+    font-size: 18px;
+    color: #555;
+}
+
+.back-note {
+    font-size: 14px;
+    color: #999;
+    margin-top: 30px;
+}
+
+/* ====== 沖泡方式 ====== */
+.brew-section {
+    width: var(--W);
+    background: #fafafa;
+    text-align: center;
+    padding: 100px 0;
+}
+
+.brew-section img {
+    width: 80%;
+    max-width: 1200px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+}
+
+.brew-section p {
+    width: 70%;
+    margin: 0 auto;
+    font-size: 18px;
+    color: #555;
+}
+
+/* ====== 茶葉特色 / 台灣茶歷史 ====== */
+.info-block {
+    display: flex;
+    align-items: center;
+    padding: 100px;
+    gap: 60px;
+}
+
+.info-block img {
+    width: 45%;
+    border-radius: 12px;
+}
+
+.info-text {
+    width: 50%;
+}
+
+.info-text h3 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.info-text p {
+    font-size: 18px;
+    color: #555;
+    line-height: 1.8;
+}
