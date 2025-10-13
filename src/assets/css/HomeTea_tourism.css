@@ -60,8 +60,9 @@
   box-shadow: none;
   background-color: transparent;
 }
-.home-page .carBoby .col-md-5 .img-fluid.rounded-start{
-    border-radius: 20px;
+
+.home-page .carBoby .col-md-5 img {
+  border-radius: 20px;
 }
 
 .card.mb-3:first-child .row {
@@ -281,7 +282,7 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: 1.2rem;
-  
+
 }
 
 .card-group:last-of-type .card {
