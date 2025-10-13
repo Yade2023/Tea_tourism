@@ -51,10 +51,10 @@ import '../assets/css/HomeTea_tourism.css'
         <span class="visually-hidden">Next</span>
       </button>
     </div>
-    <div class="carBoby" >
+    <div class="carBoby">
       <!-- Bootstrap_Horizontal -->
-      <div class="card mb-3" >
-        <div class="row g-0" >
+      <div class="card mb-3">
+        <div class="row g-0">
           <div class="col-md-5">
             <img src="../assets/img/view1.jpg" class="img-fluid rounded-start" alt="...">
           </div>
@@ -92,7 +92,9 @@ import '../assets/css/HomeTea_tourism.css'
       <!-- Bootstrap_CAR*3 -->
       <div class="card-group">
         <div class="card">
-          <img src="../assets/img/view3.jpg" class="card-img-top" alt="...">
+          <a href="#">
+            <img src="../assets/img/view3.jpg" class="card-img-top" alt="...">
+          </a>
           <div class="card-body">
             <h5 class="card-title">Card title</h5>
             <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
@@ -101,7 +103,9 @@ import '../assets/css/HomeTea_tourism.css'
           </div>
         </div>
         <div class="card">
-          <img src="../assets/img/05.jpg" class="card-img-top" alt="...">
+          <a href="#">
+            <img src="../assets/img/05.jpg" class="card-img-top" alt="...">
+          </a>
           <div class="card-body">
             <h5 class="card-title">Card title</h5>
             <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
@@ -109,7 +113,9 @@ import '../assets/css/HomeTea_tourism.css'
           </div>
         </div>
         <div class="card">
-          <img src="../assets/img/06.jpg" class="card-img-top" alt="...">
+          <a href="#">
+            <img src="../assets/img/06.jpg" class="card-img-top" alt="...">
+          </a>
           <div class="card-body">
             <h5 class="card-title">Card title</h5>
             <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
