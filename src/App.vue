@@ -20,7 +20,7 @@ import './assets/css/App.css';
           <router-link to="/news">台灣茶知識庫</router-link>
           <router-link to="/teachers">茶旅專區</router-link>
           <router-link to="/services">線上茶店</router-link>
-          <router-link to="/services">關於我們</router-link>
+          <router-link to="/address">關於我們</router-link>
         </div>
         <div class="nav-icons">
           <a href="#" class="icon-btn search" title="搜尋"></a>

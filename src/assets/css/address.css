@@ -1,0 +1,143 @@
+/* 只影響 ContactAddress.vue 的區塊 */
+.address * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, "Microsoft JhengHei", sans-serif;
+}
+
+/* 版心 */
+.address .container {
+  width: 90%;
+  max-width: 1000px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+/* 三大理念：排版 */
+.address .concepts {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 60px;
+  flex-wrap: wrap; /* 小螢幕自動換行 */
+}
+
+/* 單一理念卡片 */
+.address .concept {
+  flex: 1 1 260px; /* 小螢幕也能落兩欄/一欄 */
+  text-align: center;
+}
+
+/* 標題間距 */
+.address .h2text {
+  margin-bottom: 10px;
+}
+
+/* 圓形 ICON 容器 */
+.address .concept .icon {
+  width: 140px;
+  height: 140px;
+  background: #b3b3b3;
+  border-radius: 50%;
+  margin: 0 auto 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: #fff;
+  overflow: hidden; /* 確保圖片不會溢出圓形 */
+}
+
+/* ICON 內的圖片：等比縮放置中 */
+.address .concept .icon img {
+  max-width: 80%;
+  height: auto;
+  display: block;
+}
+
+/* 表單框 */
+.address form {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: left;
+}
+
+/* 表單欄位群組 */
+.address .form-group {
+  margin-bottom: 20px;
+}
+
+/* 標籤 */
+.address label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* 輸入框/文字區塊 */
+.address input,
+.address textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* 文字區塊高度 */
+.address textarea {
+  height: 150px;
+  resize: vertical;
+}
+
+/* 送出按鈕容器 */
+.address .submit-btn {
+  display: flex;
+  justify-content: center;
+}
+
+/* 按鈕樣式 */
+.address button {
+  padding: 12px 40px;
+  font-size: 16px;
+  background: #333;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background .2s ease;
+}
+
+.address button:hover {
+  background: #555;
+}
+
+/* 成功/錯誤訊息（配合元件中的 class） */
+.address .form-success {
+  color: #1b8f3e;
+  margin-top: 12px;
+  text-align: center;
+}
+
+.address .form-error {
+  color: #b3261e;
+  margin-top: 12px;
+  text-align: center;
+}
+
+/* 簡單 RWD：小於 768px 時改為單欄堆疊 */
+@media (max-width: 768px) {
+  .address .concepts {
+    justify-content: center;
+  }
+  .address .concept {
+    flex: 1 1 100%;
+    max-width: 420px;
+  }
+  .address .container {
+    margin: 32px auto;
+  }
+}
