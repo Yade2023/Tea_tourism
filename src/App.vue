@@ -22,7 +22,7 @@ onMounted(() => {
           </a>
         </router-link>
         <div>
-          <router-link to="/news">台灣茶知識庫</router-link>
+          <router-link to="/knowledge">台灣茶知識庫</router-link>
           <router-link to="/teachers">茶旅專區</router-link>
           <router-link to="/services">線上茶店</router-link>
           <router-link to="/address">關於我們</router-link>

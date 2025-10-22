@@ -1,12 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeTea_tourism from '../components/HomeTea_tourism.vue'
 import address from '../components/address.vue'
+import knowledge from '../components/knowledge.vue'
 
 
 // 定義路由
 const routes = [
   { path: '/', component: HomeTea_tourism },
-  { /*path: '/News', component: News */},
+  { path: '/knowledge', component: knowledge },
   {/* path: '/services', component: Services*/ },
   { /*path: '/teachers', component: Teachers*/ },
   { path: '/address', component: address },
