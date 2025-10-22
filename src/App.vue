@@ -1,9 +1,14 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted } from 'vue';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
 import Footer from './components/Footer.vue'
 import './assets/css/App.css';
+
+// 導入導航欄滾動功能
+onMounted(() => {
+  import('./assets/js/navbar-scroll.js');
+});
 </script>
 
 <template>

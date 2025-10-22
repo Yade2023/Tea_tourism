@@ -3,7 +3,7 @@
 -------------------------------------------------- */
 .home-page .carousel .carousel-item img {
   width: 100%;
-  height: 480px;
+  height: 700px;
   /* 視覺高度，可微調 */
   object-fit: cover;
 
@@ -27,7 +27,7 @@
   opacity: 1;
   background-color: #c7a27c;
   /* 茶金色 */
-  transform: scale(0.8);
+  transform: scale(0.6);
 }
 
 /* --------------------------------------------------
@@ -44,6 +44,7 @@
 }
 
 .card-group .card {
+  
   border: none;
 }
 
@@ -51,14 +52,14 @@
    🟫 第一段（文化導言區：滿版左右各半）
 -------------------------------------------------- */
 .card.mb-3:first-child {
-  width: 100%;
-  /* 滿版寬度 */
-
-  /* 移除上下左右邊距 */
+  /* 與第二段統一的寬度並置中 */
+  width: min(1150px, 94vw);
+  margin: 50px auto;
   border: none;
-  border-radius: 50%;
+  border-radius: 18px;
   box-shadow: none;
   background-color: transparent;
+  overflow: visible;
 }
 
 .home-page .carBoby .col-md-5 img {
@@ -66,7 +67,7 @@
 }
 
 .card.mb-3:first-child .row {
-  margin: 0 100px;
+  margin: 0;
 }
 
 .card.mb-3:first-child .col-md-5,
@@ -119,44 +120,44 @@
 -------------------------------------------------- */
 
 .card.mb-3:nth-of-type(2) {
-  width: min(1270px, 94vw);
-  margin: 50PX 100px;
+  /* 與其他區塊一致的最大寬度並置中 */
+  width: min(1150px, 94vw);
+  margin: 50px auto;
   border: none;
   background: transparent;
   text-align: left;
-  /* 文字靠左，符合稿 */
+  border-radius: 18px;
+  overflow: visible;
 }
 
-/* 大圖：滿寬、固定高、圓角 */
+/* 大圖：滿寬、固定高、圓角（跟 card 一致） */
 .card.mb-3:nth-of-type(2) .card-img-top {
   display: block;
   width: 100%;
   height: 360px;
-  /* 需要更高就調這裡 */
   object-fit: cover;
-  border-radius: 18px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, .1);
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .08);
 }
 
 /* 把 overlay 變成「正常流」→ 標題會出現在圖片下方 */
 .card.mb-3:nth-of-type(2) .card-img-overlay {
   position: static;
-  /* 關鍵：不再覆蓋於圖上 */
   background: none;
-  padding: .75rem .25rem 0 .25rem;
+  padding: .5rem .5rem 0 .5rem;
 }
 
 /* 標題樣式（在圖下方） */
 .card.mb-3:nth-of-type(2) .card-title {
   margin: .5rem 0 0.75rem 0;
-  font-size: 1.6rem;
-  font-weight: 800;
+  font-size: 1.4rem;
+  font-weight: 700;
   color: #3e2f24;
 }
 
 /* 文字區：兩欄排版（左 2fr / 右 1fr） */
 .card.mb-3:nth-of-type(2) .card-body {
-  padding: .25rem 0 0;
+  padding: .75rem 1rem 1rem;
   display: grid;
   grid-template-columns: 2fr 1fr;
   column-gap: 2rem;
@@ -176,7 +177,7 @@
 .card.mb-3:nth-of-type(2) .card-body>.card-text:last-of-type {
   grid-column: 2;
   margin: .25rem 0 0;
-  line-height: 1.9;
+  line-height: 1.8;
   font-size: .95rem;
 }
 
@@ -191,21 +192,24 @@
    🟩 第三段（三張卡片介紹區）
 -------------------------------------------------- */
 .card-group {
-  margin: 50px 100px;
+  width: min(1150px, 94vw);
+  margin: 50px auto;
   border: none;
 }
 
 .card-group:first-of-type {
-  width: 90%;
-  margin: 0 auto 4rem auto;
+  /* 與其他段落統一的寬度並置中 */
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: 1.2rem;
+  padding: 0 1rem;
+  box-sizing: border-box;
 }
 
 .card-group:first-of-type .card {
-  flex: 1 1 300px;
+  flex: 1 1 280px;
+  max-width: 350px;
   display: flex;
   /* 關鍵 */
   flex-direction: column;
@@ -276,13 +280,11 @@
    🟨 第四段（價格卡：overlay樣式）
 -------------------------------------------------- */
 .card-group:last-of-type {
-  width: 100%;
-  margin: 0 50px;
+  /* 與其他段落統一的寬度並置中 */
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 1.2rem;
-
 }
 
 .card-group:last-of-type .card {
@@ -304,13 +306,13 @@
   width: 100%;
   height: 260px;
   object-fit: cover;
-  filter: brightness(70%);
+  filter: brightness(90%);
   transition: filter 0.3s ease;
 
 }
 
 .card-group:last-of-type .card:hover img {
-  filter: brightness(85%);
+  filter: brightness(100%);
 }
 
 .card-group:last-of-type .card-img-overlay {
@@ -338,6 +340,12 @@
 @media (max-width: 768px) {
   .card.mb-3:first-child {
     flex-direction: column;
+    margin: 20px auto;
+    width: calc(100% - 30px);
+  }
+
+  .card.mb-3:first-child .row {
+    margin: 0;
   }
 
   .card.mb-3:first-child img {
@@ -353,6 +361,8 @@
   .card-group:last-of-type {
     flex-direction: column;
     align-items: center;
+    margin: 20px auto;
+    width: calc(100% - 30px);
   }
 
   .card-group:first-of-type .card,
@@ -361,18 +371,63 @@
     max-width: 100%;
   }
 
+  .card.mb-3:nth-of-type(2) {
+    margin: 20px 15px;
+    width: calc(100% - 30px);
+  }
+
   .card.mb-3:nth-of-type(2) img {
     height: 220px;
+  }
+
+  .card.mb-3:nth-of-type(2) .card-body {
+    padding: 1rem 0.5rem;
+  }
+
+  .card.mb-3:nth-of-type(2) .card-body .card-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  .card.mb-3:nth-of-type(2) .card-body small {
+    font-size: 0.8rem;
+    line-height: 1.5;
   }
 }
 
 @media (max-width: 992px) {
+  .card.mb-3:first-child {
+    margin: 30px auto;
+    width: calc(100% - 40px);
+  }
+
+  .card.mb-3:nth-of-type(2) {
+    margin: 30px auto;
+    width: calc(100% - 40px);
+  }
+
+  .card-group:first-of-type,
+  .card-group:last-of-type {
+    margin: 30px auto;
+    width: calc(100% - 40px);
+  }
+
   .card.mb-3:nth-of-type(2) .card-body {
     grid-template-columns: 1fr;
     row-gap: 1rem;
+    padding: 1rem;
   }
 
   .card.mb-3:nth-of-type(2) .card-title {
     text-align: center;
+  }
+
+  .card.mb-3:nth-of-type(2) .card-body>.card-text:first-of-type,
+  .card.mb-3:nth-of-type(2) .card-body>.card-text:last-of-type {
+    grid-column: 1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 }
