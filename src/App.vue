@@ -32,6 +32,11 @@ onMounted(() => {
           <a href="/store" class="icon-btn cart" title="購物"></a>
           <a href="/login" class="icon-btn user" title="登入"></a>
         </div>
+        <svg class="navbar-wave" viewBox="0 0 1440 70" preserveAspectRatio="none">
+          <path d="M0,0 L1440,0 L1440,55 
+             C1080,100 720,20 360,60 
+             C180,80 100,60 0,55 Z" fill="#d2f3cd" />
+        </svg>
       </nav>
       <main class="main-content">
         <router-view />

@@ -49,7 +49,7 @@ function initNavbarScroll() {
         }
         lastScrollTop = scrollTop;
       }
-    }, 10); // 10ms 延時
+    }, 0); // 10ms 延時
   }
 
   // 鼠標移動到頂部時顯示導航欄
