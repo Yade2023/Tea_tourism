@@ -134,9 +134,9 @@ body {
     gap: 60px;
 }
 
-.info-block.reverse {
+/* .info-block.reverse {
     flex-direction: row-reverse;
-}
+} */
 
 /* ====== 茶葉特色 / 台灣茶歷史 ==> 按鈕 ====== */
 .info-block button {
@@ -146,11 +146,50 @@ body {
     background-color: rgba(70, 85, 58, 0.2);
     color: #fff;
     font-weight: 1000;
+    z-index: 10;
 }
 
 .info-block button:hover {
     background-color: rgba(70, 85, 58, 0.5);
+}
 
+/* 響應式：圖片容器相對定位 */
+@media (max-width: 991px) {
+    .info-block {
+        position: relative;
+    }
+    
+    .info-block img {
+        position: relative;
+    }
+    
+    /* 左右箭頭按鈕浮動在圖片上 */
+    .info-block button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(70, 85, 58, 0.7);
+        backdrop-filter: blur(4px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    .info-block button:first-child {
+        left: 20px;
+    }
+    
+    .info-block button:last-child {
+        right: 20px;
+    }
+    
+    .info-block button:hover {
+        background-color: rgba(70, 85, 58, 0.9);
+    }
 }
 
 .info-block img {
