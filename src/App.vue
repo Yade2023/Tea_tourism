@@ -152,16 +152,7 @@ onUnmounted(() => {
       </div>
     </div>
     
-    <div class="content-container gray-bg">
-      <img :src="taiwanImg" alt="台灣茶葉" class="taiwan-image" />
-      <div class="text-content">
-        <h1>新竹茶韻</h1>
-        <p class="subtitle">品味東方美人茶的故鄉</p>
-        <p>新竹是台灣著名的茶葉產區，特別以東方美人茶聞名世界。這裡的茶園多分布在山區，氣候涼爽，土壤肥沃，非常適合茶樹生長。</p>
-        <p>新竹的茶葉不僅是一種飲品，更是一種生活方式的體現。在當地，品茶被視為一種藝術，需要細心品味每一口茶的香氣和滋味。</p>
-        <p>「古樸茶園傳千年，品味人生好時光」</p>
-      </div>
-    </div>
+    
     
     <!-- 圖片輪播 -->
     <div class="carousel-container">
@@ -293,7 +284,7 @@ onUnmounted(() => {
 }
 
 .taiwan-image {
-  width: 300px;
+  width: 400px;
   height: auto;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(107, 107, 107, 0);
@@ -331,16 +322,16 @@ onUnmounted(() => {
 .carousel-container {
   width: 100%;
   background-color: #ffffff;
-  padding: 60px 40px;
+  padding: 40px 0;
 }
 
 .carousel {
   position: relative;
-  max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   overflow: hidden;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .carousel-track {
@@ -350,7 +341,7 @@ onUnmounted(() => {
 
 .carousel-slide {
   min-width: 100%;
-  height: 400px;
+  height: 500px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -360,7 +351,7 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 15px;
+  border-radius: 0;
 }
 
 .carousel-btn {
@@ -624,11 +615,11 @@ onUnmounted(() => {
   }
   
   .taiwan-image {
-    width: 250px;
+    width: 300px;
   }
   
   .carousel-slide {
-    height: 300px;
+    height: 400px;
   }
   
   .carousel-btn {
