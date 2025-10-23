@@ -1,9 +1,12 @@
+
 /* === 全頁排版調整，避免左右滑動 === */
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     width: 100%;
-    overflow-x: hidden; /* 🚫 禁止橫向滾動 */
+    overflow-x: hidden;
+    /* 🚫 禁止橫向滾動 */
     box-sizing: border-box;
 }
 
@@ -78,7 +81,7 @@ body {
 .selected-right {
     width: 83.333%;
     background-color: #fdfdfd;
-    padding: 60px;
+    padding: 100px 60px 60px 60px;
     overflow-y: auto;
     position: relative;
     cursor: pointer;
@@ -131,8 +134,12 @@ body {
     gap: 60px;
 }
 
+.info-block.reverse {
+    flex-direction: row-reverse;
+}
+
 /* ====== 茶葉特色 / 台灣茶歷史 ==> 按鈕 ====== */
-.info-block button{
+.info-block button {
     border-radius: 50%;
     border: none;
     padding: 10px 15px;
@@ -141,7 +148,7 @@ body {
     font-weight: 1000;
 }
 
-.info-block button:hover{
+.info-block button:hover {
     background-color: rgba(70, 85, 58, 0.5);
 
 }
@@ -169,29 +176,194 @@ body {
 /* === 覆蓋全域 左右留白 樣式 === */
 @media (min-width: 1200px) {
     .main-content {
-        padding: 0 !important; 
+        padding: 0 !important;
     }
 }
 
-@media  (max-width: 991px) and (min-width: 768px) {
+@media (max-width: 991px) {
+    .info-block.reverse {
+        flex-direction: column;
+        /* ✅ 平板以下自動垂直排列 */
+    }
+}
+
+@media (max-width: 991px) and (min-width: 768px) {
     .main-content {
-        padding: 0 !important; 
+        padding: 0 !important;
     }
 }
 
 @media (max-width: 767px) and (min-width: 481px) {
     .main-content {
-        padding: 0 !important; 
+        padding: 0 !important;
     }
 }
 
 @media (max-width: 480px) {
     .main-content {
-        padding: 0 !important; 
+        padding: 0 !important;
     }
 }
 
-img, .thumb, .selected-left, .selected-right {
+img,
+.thumb,
+.selected-left,
+.selected-right {
     max-width: 100%;
     box-sizing: border-box;
+}
+
+/* 響應式區塊 */
+/* === RWD：筆電 992–1199px === */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .info-block {
+        padding: 80px;
+        gap: 40px;
+    }
+
+    .info-block img {
+        width: 50%;
+    }
+
+    .info-text {
+        width: 45%;
+    }
+
+    .selected-right {
+        padding: 160px 40px 40px 40px;
+    }
+
+}
+
+/* === RWD：平板 768–991px === */
+@media (max-width: 991px) and (min-width: 768px) {
+    .info-block {
+        flex-direction: column;
+        text-align: center;
+        /* padding: 60px 40px; */
+    }
+
+    .info-block img,
+    .info-text {
+        width: 100%;
+    }
+
+    .info-block img {
+        margin-bottom: 30px;
+    }
+
+    .selected-layout {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .selected-left,
+    .selected-right {
+        width: 100%;
+        height: auto;
+    }
+
+    .selected-right {
+        padding: 160px 40px 40px 40px;
+    }
+
+    .brew-section img {
+        width: 90%;
+    }
+}
+
+/* === RWD：小平板 481–767px === */
+@media (max-width: 767px) and (min-width: 481px) {
+    .info-block {
+        flex-direction: column;
+        padding: 50px 30px;
+        gap: 30px;
+    }
+
+    .info-block img,
+    .info-text {
+        width: 100%;
+    }
+
+    .info-text h3 {
+        font-size: 28px;
+    }
+
+    .info-text p {
+        font-size: 16px;
+    }
+
+    .selected-layout {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .selected-left,
+    .selected-right {
+        width: 100%;
+        height: auto;
+    }
+
+    .selected-right {
+        padding: 160px 40px 40px 40px;
+    }
+
+    .brew-section {
+        padding: 80px 0;
+    }
+
+    .brew-section img {
+        width: 90%;
+    }
+}
+
+/* === RWD：手機 ≤480px === */
+@media (max-width: 480px) {
+    .info-block {
+        flex-direction: column;
+        padding: 40px 20px;
+        gap: 20px;
+    }
+
+    .info-block img,
+    .info-text {
+        width: 100%;
+    }
+
+    .info-text h3 {
+        font-size: 24px;
+    }
+
+    .info-text p {
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    .selected-layout {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .selected-left,
+    .selected-right {
+        width: 100%;
+        height: auto;
+    }
+
+    .selected-right {
+        padding: 160px 40px 40px 40px;
+    }
+
+    .thumb::after {
+        font-size: 18px;
+        bottom: 10px;
+    }
+
+    .brew-section {
+        padding: 60px 0;
+    }
+
+    .brew-section img {
+        width: 95%;
+    }
 }
