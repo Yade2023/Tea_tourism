@@ -330,9 +330,9 @@ img,
         gap: 20px;
     }
 
-    .thumb{
+    /* .thumb{
         display: none !important;
-    }
+    } */
 
     .info-block img,
     .info-text {
