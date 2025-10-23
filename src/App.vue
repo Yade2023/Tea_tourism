@@ -15,6 +15,41 @@ const slides = ref([
 const currentPage = ref(1)
 const totalPages = ref(6)
 
+// 地圖相關
+const currentLocation = ref('桃園市')
+const isSatellite = ref(false)
+const map = ref(null)
+const teaGardens = ref([
+  {
+    id: 1,
+    name: '拉拉山茶園',
+    lat: 24.7,
+    lng: 121.4,
+    description: '海拔1500公尺的高山茶園'
+  },
+  {
+    id: 2,
+    name: '復興鄉茶園',
+    lat: 24.8,
+    lng: 121.3,
+    description: '傳統製茶工藝保存區'
+  },
+  {
+    id: 3,
+    name: '大溪茶園',
+    lat: 24.9,
+    lng: 121.3,
+    description: '歷史悠久的茶葉產區'
+  },
+  {
+    id: 4,
+    name: '龍潭茶園',
+    lat: 24.9,
+    lng: 121.2,
+    description: '有機茶葉種植基地'
+  }
+])
+
 // 活動數據
 const eventsData = ref([
   // 第1頁 - 秋季茶葉活動
@@ -116,6 +151,28 @@ const goToPage = (page) => {
   }
 }
 
+// 地圖相關函數
+const initMap = () => {
+  // 這裡將初始化 Google Map
+  // 需要 Google Maps API key
+  console.log('初始化地圖...')
+}
+
+const centerMap = () => {
+  console.log('回到地圖中心')
+  // 實際實現會移動地圖到桃園市中心
+}
+
+const toggleSatellite = () => {
+  isSatellite.value = !isSatellite.value
+  console.log('切換地圖模式:', isSatellite.value ? '衛星模式' : '地圖模式')
+}
+
+const showAllTeaGardens = () => {
+  console.log('顯示所有茶園:', teaGardens.value)
+  // 實際實現會在地圖上顯示所有茶園標記
+}
+
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--
@@ -141,63 +198,29 @@ onUnmounted(() => {
 
 <template>
   <div class="app">
-    <div class="content-container white-bg">
-      <img :src="taiwanImg" alt="台灣茶葉" class="taiwan-image" />
-      <div class="text-content">
-        <h1>桃園茶鄉</h1>
-        <p class="subtitle">探索台灣茶葉的故鄉</p>
-        <p>桃園擁有豐富的茶葉文化底蘊，從清朝時期開始種植茶葉，至今已有數百年歷史。這裡的茶園分布在山區，氣候涼爽，土壤肥沃，非常適合茶樹生長。</p>
-        <p>漫步在桃園的茶園中，可以感受到大自然的寧靜與美好。茶農們用心照料每一株茶樹，確保茶葉的品質，傳承著這份珍貴的茶文化。</p>
-        <p>「茶香飄逸滿山間，綠意盎然映眼簾」</p>
-      </div>
-    </div>
-    
-    
-    
-    <!-- 圖片輪播 -->
-    <div class="carousel-container">
-      <div class="carousel">
-        <div class="carousel-track" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
-          <div 
-            v-for="(slide, index) in slides" 
-            :key="index" 
-            class="carousel-slide"
-          >
-            <img :src="slide.src" :alt="slide.alt" class="carousel-image" />
+    <div class="main-container">
+      <div class="unified-content">
+        <img :src="taiwanImg" alt="台灣茶葉" class="taiwan-image" />
+        <div class="right-content">
+          <div class="text-content">
+            <h1>桃園茶鄉</h1>
+            <p class="subtitle">探索台灣茶葉的故鄉</p>
+            <p>桃園擁有豐富的茶葉文化底蘊，從清朝時期開始種植茶葉，至今已有數百年歷史。這裡的茶園分布在山區，氣候涼爽，土壤肥沃，非常適合茶樹生長。</p>
+            <p>漫步在桃園的茶園中，可以感受到大自然的寧靜與美好。茶農們用心照料每一株茶樹，確保茶葉的品質，傳承著這份珍貴的茶文化。</p>
+            <p>「茶香飄逸滿山間，綠意盎然映眼簾」</p>
+          </div>
+          
+          <!-- Google Map 區塊 -->
+          <div class="map-container">
+            <div id="google-map" class="google-map"></div>
           </div>
         </div>
-        
-        <!-- 左右箭頭 -->
-        <button class="carousel-btn prev-btn" @click="prevSlide">‹</button>
-        <button class="carousel-btn next-btn" @click="nextSlide">›</button>
-        
-        <!-- 指示器 -->
-        <div class="carousel-indicators">
-          <button 
-            v-for="(slide, index) in slides" 
-            :key="index"
-            class="indicator"
-            :class="{ active: currentSlide === index }"
-            @click="goToSlide(index)"
-          ></button>
-        </div>
       </div>
     </div>
     
-    <!-- 雙欄文字容器 -->
-    <div class="dual-text-container">
-      <div class="text-block left-block">
-        <h2>茶葉文化</h2>
-        <p>台灣茶葉文化源遠流長，從清朝時期開始種植，至今已有數百年歷史。台灣茶葉以其獨特的香氣和口感聞名世界，是台灣重要的文化資產。</p>
-        <p>茶葉不僅是一種飲品，更是一種生活方式的體現。在台灣，品茶被視為一種藝術，需要細心品味每一口茶的香氣和滋味。</p>
-      </div>
-      
-      <div class="text-block right-block">
-        <h2>茶園風光</h2>
-        <p>台灣的茶園多分布在山區，氣候涼爽，土壤肥沃，非常適合茶樹生長。從阿里山到梨山，從文山到凍頂，每個產區都有其獨特的風味特色。</p>
-        <p>漫步在茶園中，可以感受到大自然的寧靜與美好。茶農們用心照料每一株茶樹，確保茶葉的品質，傳承著這份珍貴的茶文化。</p>
-      </div>
-    </div>
+    
+    
+    
     
     <!-- 活動資訊表格 -->
     <div class="events-table-container">
@@ -267,12 +290,43 @@ onUnmounted(() => {
   justify-content: center;
 }
 
-.content-container {
-  display: flex;
-  align-items: center;
-  gap: 300px;
+.main-container {
   width: 100%;
-  padding: 60px 40px;
+  padding: 80px 60px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+}
+
+.unified-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 60px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 25px;
+  padding: 50px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.unified-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #2c5530, #4a7c59, #6b8e6b);
+  border-radius: 25px 25px 0 0;
+}
+
+.right-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
 .white-bg {
@@ -284,37 +338,66 @@ onUnmounted(() => {
 }
 
 .taiwan-image {
-  width: 400px;
+  width: 50vw;
   height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(107, 107, 107, 0);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .text-content {
   flex: 1;
   text-align: left;
+  position: relative;
 }
 
 .text-content h1 {
-  font-size: 2.5rem;
+  font-size: 3rem;
   color: #2c5530;
-  margin-bottom: 15px;
-  font-weight: bold;
+  margin-bottom: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #2c5530, #4a7c59);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 4px 8px rgba(44, 85, 48, 0.1);
+  position: relative;
+}
+
+.text-content h1::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #4a7c59, #6b8e6b);
+  border-radius: 2px;
 }
 
 .text-content .subtitle {
-  font-size: 1.1rem;
-  color: #6b8e6b;
+  font-size: 1.4rem;
+  color: #4a7c59;
   font-style: italic;
-  margin-bottom: 25px;
+  margin-bottom: 2rem;
   font-weight: 500;
+  opacity: 0.9;
 }
 
 .text-content p {
+  font-size: 1.15rem;
+  line-height: 1.9;
+  color: #444;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-left: 25px;
+}
+
+.text-content p::before {
+  content: '🍃';
+  position: absolute;
+  left: 0;
+  top: 0;
   font-size: 1.2rem;
-  line-height: 1.8;
-  color: #4a4a4a;
-  margin-bottom: 15px;
 }
 
 
@@ -604,18 +687,80 @@ onUnmounted(() => {
   font-weight: 500;
 }
 
+/* 地圖樣式 */
+.map-container {
+  width: 100%;
+  background: rgba(248, 249, 250, 0.8);
+  padding: 25px;
+  border-radius: 15px;
+  border: 1px solid rgba(44, 85, 48, 0.1);
+}
+
+.google-map {
+  width: 100%;
+  height: 400px;
+  background: linear-gradient(135deg, #f0f2f5, #e8f4f8);
+  border-radius: 20px;
+  border: 2px solid rgba(44, 85, 48, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 18px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.google-map::before {
+  content: '🗺️ Google Map 將在此顯示';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(44, 85, 48, 0.2);
+}
+
 @media (max-width: 768px) {
-  .content-container {
+  .main-container {
+    padding: 40px 20px;
+    background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+  }
+  
+  .unified-content {
     flex-direction: column;
-    text-align: center;
+    padding: 30px 20px;
+    gap: 30px;
+  }
+  
+  .right-content {
+    gap: 30px;
   }
   
   .text-content {
     text-align: center;
   }
   
+  .text-content h1 {
+    font-size: 2.5rem;
+  }
+  
+  .text-content h1::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
   .taiwan-image {
-    width: 300px;
+    width: 80vw;
+  }
+  
+  .map-container {
+    padding: 20px;
   }
   
   .carousel-slide {
@@ -687,6 +832,10 @@ onUnmounted(() => {
   
   .page-info {
     font-size: 0.9rem;
+  }
+  
+  .google-map {
+    height: 300px;
   }
 }
 </style>

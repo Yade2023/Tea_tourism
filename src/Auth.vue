@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import taiwanImg from './assets/img/taiwan.png'
 
 // 表單狀態
@@ -8,6 +8,18 @@ const loading = ref(false)
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 const rememberMe = ref(false)
+
+// 動畫狀態
+const isLoading = ref(true)
+const mousePosition = ref({ x: 0, y: 0 })
+const characters = ref([
+  { id: 1, name: 'orange', x: 35, y: 40, lookingAt: 'center', isVisible: true },
+  { id: 2, name: 'purple', x: 50, y: 35, lookingAt: 'center', isVisible: true },
+  { id: 3, name: 'black', x: 40, y: 55, lookingAt: 'center', isVisible: true },
+  { id: 4, name: 'yellow', x: 55, y: 50, lookingAt: 'center', isVisible: true }
+])
+const isPasswordVisible = ref(false)
+const loginResult = ref(null) // 'success', 'error', null
 
 // 登陸表單
 const loginForm = ref({
@@ -36,10 +48,127 @@ const toggleMode = () => {
 // 切換密碼顯示
 const togglePassword = () => {
   showPassword.value = !showPassword.value
+  isPasswordVisible.value = showPassword.value
+  
+  // 讓角色移開視線（害羞）
+  characters.value.forEach(char => {
+    char.lookingAt = 'away'
+  })
+  
+  // 1.5秒後回到中心
+  setTimeout(() => {
+    characters.value.forEach(char => {
+      char.lookingAt = 'center'
+    })
+  }, 1500)
 }
 
 const toggleConfirmPassword = () => {
   showConfirmPassword.value = !showConfirmPassword.value
+  isPasswordVisible.value = showConfirmPassword.value
+  
+  // 讓角色移開視線（害羞）
+  characters.value.forEach(char => {
+    char.lookingAt = 'away'
+  })
+  
+  // 1.5秒後回到中心
+  setTimeout(() => {
+    characters.value.forEach(char => {
+      char.lookingAt = 'center'
+    })
+  }, 1500)
+}
+
+// 鼠標跟隨效果
+const handleMouseMove = (event) => {
+  const rect = event.target.getBoundingClientRect()
+  mousePosition.value = {
+    x: ((event.clientX - rect.left) / rect.width) * 100,
+    y: ((event.clientY - rect.top) / rect.height) * 100
+  }
+  
+  // 只有在沒有其他互動時才跟隨鼠標
+  const hasActiveInteraction = characters.value.some(char => 
+    ['password', 'email', 'name', 'confirmPassword', 'away', 'jump', 'shake'].includes(char.lookingAt)
+  )
+  
+  if (!hasActiveInteraction) {
+    characters.value.forEach(char => {
+      char.lookingAt = 'mouse'
+    })
+  }
+}
+
+// 輸入框焦點效果
+const handleInputFocus = (fieldName) => {
+  characters.value.forEach(char => {
+    char.lookingAt = fieldName
+  })
+}
+
+// 輸入框失焦效果
+const handleInputBlur = () => {
+  // 回到跟隨鼠標狀態
+  characters.value.forEach(char => {
+    char.lookingAt = 'mouse'
+  })
+}
+
+// 輸入內容變化效果
+const handleInputChange = (fieldName) => {
+  characters.value.forEach(char => {
+    char.lookingAt = fieldName
+  })
+  
+  // 持續關注輸入框，不自動回到中心
+}
+
+// 載入動畫
+const startLoadingAnimation = () => {
+  isLoading.value = true
+  
+  // 角色彈出動畫
+  characters.value.forEach((char, index) => {
+    setTimeout(() => {
+      char.isVisible = true
+    }, index * 200)
+  })
+  
+  // 3秒後隱藏載入畫面
+  setTimeout(() => {
+    isLoading.value = false
+  }, 3000)
+}
+
+// 登陸成功動畫
+const showSuccessAnimation = () => {
+  loginResult.value = 'success'
+  characters.value.forEach(char => {
+    char.lookingAt = 'jump'
+  })
+  
+  setTimeout(() => {
+    loginResult.value = null
+    characters.value.forEach(char => {
+      char.lookingAt = 'center'
+    })
+  }, 2000)
+}
+
+// 登陸失敗動畫
+const showErrorAnimation = () => {
+  loginResult.value = 'error'
+  characters.value.forEach(char => {
+    char.lookingAt = 'shake'
+  })
+  
+  setTimeout(() => {
+    loginResult.value = null
+    characters.value.forEach(char => {
+      char.lookingAt = 'center'
+    })
+  }, 2000)
 }
 
 // 清空表單
@@ -110,8 +239,21 @@ const handleLogin = async () => {
   // 模擬API請求
   setTimeout(() => {
     loading.value = false
-    alert('登陸成功！歡迎回來！')
-    // 這裡可以添加實際的登陸邏輯
+    
+    // 模擬登陸結果（這裡可以根據實際驗證邏輯修改）
+    const isValid = loginForm.value.email === 'test@example.com' && loginForm.value.password === 'password123'
+    
+    if (isValid) {
+      showSuccessAnimation()
+      setTimeout(() => {
+        alert('登陸成功！歡迎回來！')
+      }, 1000)
+    } else {
+      showErrorAnimation()
+      setTimeout(() => {
+        alert('登陸失敗！請檢查帳號密碼！')
+      }, 1000)
+    }
   }, 1000)
 }
 
@@ -123,22 +265,93 @@ const handleRegister = async () => {
   // 模擬API請求
   setTimeout(() => {
     loading.value = false
-    alert('註冊成功！歡迎加入台灣茶葉旅遊！')
-    // 這裡可以添加實際的註冊邏輯
+    showSuccessAnimation()
+    setTimeout(() => {
+      alert('註冊成功！歡迎加入台灣茶葉旅遊！')
+    }, 1000)
   }, 1000)
 }
 
 // 計算屬性
 const currentForm = computed(() => isLogin.value ? loginForm.value : registerForm.value)
 const currentErrors = computed(() => isLogin.value ? loginErrors.value : registerErrors.value)
+
+// 組件掛載時啟動載入動畫
+onMounted(() => {
+  startLoadingAnimation()
+})
 </script>
 
 <template>
   <div class="auth-container">
-    <div class="auth-wrapper">
-      <!-- 左側背景區域 -->
-      <div class="auth-image-section">
-        <!-- 背景區塊，不包含角色 -->
+    <!-- 載入動畫 -->
+    <div v-if="isLoading" class="loading-overlay">
+      <div class="characters-container" @mousemove="handleMouseMove">
+        <div 
+          v-for="character in characters" 
+          :key="character.id"
+          :class="[
+            'character', 
+            character.name,
+            { 'visible': character.isVisible },
+            { 'looking-password': character.lookingAt === 'password' },
+            { 'looking-email': character.lookingAt === 'email' },
+            { 'looking-name': character.lookingAt === 'name' },
+            { 'looking-confirmPassword': character.lookingAt === 'confirmPassword' },
+            { 'looking-away': character.lookingAt === 'away' },
+            { 'looking-mouse': character.lookingAt === 'mouse' },
+            { 'jumping': character.lookingAt === 'jump' },
+            { 'shaking': character.lookingAt === 'shake' }
+          ]"
+          :style="{ 
+            left: character.x + '%', 
+            top: character.y + '%'
+          }"
+        >
+          <div class="character-body"></div>
+          <div class="character-eyes">
+            <div class="eye left-eye"></div>
+            <div class="eye right-eye"></div>
+          </div>
+          <div class="character-mouth"></div>
+        </div>
+      </div>
+      <div class="loading-text">載入中...</div>
+    </div>
+
+    <div class="auth-wrapper" :class="{ 'hidden': isLoading }">
+      <!-- 左側角色區域 -->
+      <div class="auth-image-section" @mousemove="handleMouseMove">
+        <div class="characters-container">
+          <div 
+            v-for="character in characters" 
+            :key="character.id"
+            :class="[
+              'character', 
+              character.name,
+              { 'visible': character.isVisible },
+            { 'looking-password': character.lookingAt === 'password' },
+            { 'looking-email': character.lookingAt === 'email' },
+            { 'looking-name': character.lookingAt === 'name' },
+            { 'looking-confirmPassword': character.lookingAt === 'confirmPassword' },
+            { 'looking-away': character.lookingAt === 'away' },
+            { 'looking-mouse': character.lookingAt === 'mouse' },
+            { 'jumping': character.lookingAt === 'jump' },
+            { 'shaking': character.lookingAt === 'shake' }
+            ]"
+            :style="{ 
+              left: character.x + '%', 
+              top: character.y + '%'
+            }"
+          >
+            <div class="character-body"></div>
+            <div class="character-eyes">
+              <div class="eye left-eye"></div>
+              <div class="eye right-eye"></div>
+            </div>
+            <div class="character-mouth"></div>
+          </div>
+        </div>
       </div>
       
       <!-- 右側表單區域 -->
@@ -166,6 +379,9 @@ const currentErrors = computed(() => isLogin.value ? loginErrors.value : registe
                 type="text"
                 placeholder="Enter your name"
                 :class="{ error: registerErrors.name }"
+                @focus="handleInputFocus('name')"
+                @blur="handleInputBlur"
+                @input="handleInputChange('name')"
               />
               <span v-if="registerErrors.name" class="error-message">{{ registerErrors.name }}</span>
             </div>
@@ -179,6 +395,9 @@ const currentErrors = computed(() => isLogin.value ? loginErrors.value : registe
                 type="email"
                 placeholder="Enter your email"
                 :class="{ error: currentErrors.email }"
+                @focus="handleInputFocus('email')"
+                @blur="handleInputBlur"
+                @input="handleInputChange('email')"
               />
               <span v-if="currentErrors.email" class="error-message">{{ currentErrors.email }}</span>
             </div>
@@ -193,6 +412,9 @@ const currentErrors = computed(() => isLogin.value ? loginErrors.value : registe
                   :type="showPassword ? 'text' : 'password'"
                   placeholder="Enter your password"
                   :class="{ error: currentErrors.password }"
+                  @focus="handleInputFocus('password')"
+                  @blur="handleInputBlur"
+                  @input="handleInputChange('password')"
                 />
                 <button type="button" @click="togglePassword" class="password-toggle">
                   <span v-if="showPassword">👁️</span>
@@ -212,6 +434,9 @@ const currentErrors = computed(() => isLogin.value ? loginErrors.value : registe
                   :type="showConfirmPassword ? 'text' : 'password'"
                   placeholder="Confirm your password"
                   :class="{ error: registerErrors.confirmPassword }"
+                  @focus="handleInputFocus('confirmPassword')"
+                  @blur="handleInputBlur"
+                  @input="handleInputChange('confirmPassword')"
                 />
                 <button type="button" @click="toggleConfirmPassword" class="password-toggle">
                   <span v-if="showConfirmPassword">👁️</span>
@@ -267,6 +492,224 @@ const currentErrors = computed(() => isLogin.value ? loginErrors.value : registe
   align-items: center;
   justify-content: center;
   padding: 0;
+  position: relative;
+}
+
+/* 載入動畫樣式 */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.characters-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* 表單中的角色容器 */
+.auth-image-section .characters-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.character {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.character.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.character-body {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.character.orange .character-body {
+  background: linear-gradient(135deg, #ff8c42, #ff6b35);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+}
+
+.character.purple .character-body {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  border-radius: 20px;
+  height: 80px;
+}
+
+.character.black .character-body {
+  background: linear-gradient(135deg, #374151, #1f2937);
+  border-radius: 15px;
+  height: 70px;
+}
+
+.character.yellow .character-body {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
+  width: 80px;
+  height: 60px;
+}
+
+.character-eyes {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.eye {
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  position: relative;
+}
+
+.eye::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 4px;
+  height: 4px;
+  background: #000;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.character-mouth {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 10px;
+  border: 2px solid #000;
+  border-top: none;
+  border-radius: 0 0 20px 20px;
+  transition: all 0.3s ease;
+}
+
+/* 角色動畫 */
+.character.looking-password .character-eyes {
+  transform: translateX(-50%) translateX(10px);
+}
+
+.character.looking-password .character-mouth {
+  width: 15px;
+  height: 8px;
+}
+
+.character.looking-email .character-eyes {
+  transform: translateX(-50%) translateX(8px);
+}
+
+.character.looking-email .character-mouth {
+  width: 18px;
+  height: 9px;
+}
+
+.character.looking-name .character-eyes {
+  transform: translateX(-50%) translateX(6px);
+}
+
+.character.looking-name .character-mouth {
+  width: 16px;
+  height: 8px;
+}
+
+.character.looking-confirmPassword .character-eyes {
+  transform: translateX(-50%) translateX(12px);
+}
+
+.character.looking-confirmPassword .character-mouth {
+  width: 14px;
+  height: 7px;
+}
+
+.character.looking-away .character-eyes {
+  transform: translateX(-50%) translateX(-15px);
+}
+
+.character.looking-away .character-mouth {
+  width: 12px;
+  height: 6px;
+  border-radius: 0 0 15px 15px;
+}
+
+.character.looking-mouse .character-eyes {
+  transform: translateX(-50%) translateX(8px);
+}
+
+.character.looking-mouse .character-mouth {
+  width: 18px;
+  height: 9px;
+}
+
+.character.jumping {
+  animation: jump 0.6s ease-in-out;
+}
+
+.character.shaking {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes jump {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.loading-text {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  color: #2c5530;
+  font-weight: bold;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.auth-wrapper.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .auth-wrapper {
