@@ -86,7 +86,7 @@ import '../assets/css/HomeTea_tourism.css'
           <p class="card-text"><small class="text-muted">地址: 335桃園市大溪區復興路二段732巷80號
               營業時間: 週一至週五 9:30-17:30 (國定假日依官方公告)
               電話: 03-382-5089
-              網址: https://travel.tycg.gov.tw/</small></p>
+              網址: <a href="https://travel.tycg.gov.tw/">https://travel.tycg.gov.tw/</a></small></p>
         </div>
       </div>
       <!-- Bootstrap_CAR*3 -->
