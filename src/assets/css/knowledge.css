@@ -1,3 +1,18 @@
+/* === 全頁排版調整，避免左右滑動 === */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden; /* 🚫 禁止橫向滾動 */
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
 :root {
     --W: 100vw;
     /* 寬度改成螢幕寬度 */
@@ -13,7 +28,7 @@ body {
 
 /* ====== 茶葉分類 ====== */
 .stage {
-    width: var(--W);
+    width: 100%;
     height: var(--H);
     overflow: hidden;
     margin: 0 auto;
@@ -44,7 +59,7 @@ body {
     font-size: 24px;
     color: #fff;
     /* background: rgba(0, 0, 0, 0.4); */
-    padding: 12px 3px;
+    padding: 12px 0px;
     font-weight: 600;
 }
 
@@ -87,7 +102,7 @@ body {
 
 /* ====== 沖泡方式 ====== */
 .brew-section {
-    width: var(--W);
+    width: 100%;
     background: #fafafa;
     text-align: center;
     padding: 100px 0;
@@ -109,6 +124,7 @@ body {
 
 /* ====== 茶葉特色 / 台灣茶歷史 ====== */
 .info-block {
+    width: 100%;
     display: flex;
     align-items: center;
     padding: 100px;
@@ -148,4 +164,34 @@ body {
     font-size: 18px;
     color: #555;
     line-height: 1.8;
+}
+
+/* === 覆蓋全域 左右留白 樣式 === */
+@media (min-width: 1200px) {
+    .main-content {
+        padding: 0 !important; 
+    }
+}
+
+@media  (max-width: 991px) and (min-width: 768px) {
+    .main-content {
+        padding: 0 !important; 
+    }
+}
+
+@media (max-width: 767px) and (min-width: 481px) {
+    .main-content {
+        padding: 0 !important; 
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 0 !important; 
+    }
+}
+
+img, .thumb, .selected-left, .selected-right {
+    max-width: 100%;
+    box-sizing: border-box;
 }
