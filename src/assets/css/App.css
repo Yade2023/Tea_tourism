@@ -22,7 +22,7 @@
 .navbar {
   position: fixed;
   top: 0; left: 0; right: 0;
-  z-index: 100;
+  z-index: 140; /* 比熱區低一點 */
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -31,7 +31,7 @@
   height: 80px;
   padding: 0.6rem 1.25rem 0;
   box-shadow: none; /* 移除陰影避免干擾 */
-  transform: translateY(0);
+  transform: translateY(-100%); /* <-- 預設收起來 */
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   overflow: visible;
 }
@@ -49,16 +49,28 @@
 }
 /* 波浪型底部遮罩效果 */
 
-/* 隱藏導航欄的狀態 */
+/* ✅ 顯示 navbar */
+.navbar.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* 🚫 隱藏 navbar */
 .navbar.hidden {
   transform: translateY(-100%);
   opacity: 0;
 }
 
-/* 顯示導航欄的狀態 */
-.navbar.visible {
-  transform: translateY(0);
-  opacity: 1;
+/* 🔥 偵測滑鼠的上方熱區（透明） */
+.nav-hover-zone {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;           /* 你要多大就設多大，60px=滑到頁面頂部附近就會觸發 */
+  z-index: 150;           /* 要比 navbar 高，才能收到滑鼠事件 */
+  background: transparent;
+  pointer-events: auto;   /* 要可以收到滑鼠移入/移出 */
 }
 
 /* 左：logo 與品牌 */
@@ -430,5 +442,52 @@
   .icon-btn:hover,
   .contact-link:hover {
     transform: none;
+  }
+}
+
+/* ===== 🔼 回到頂部按鈕 ===== */
+.back-to-top {
+  position: fixed;
+  top: 50%;
+  right: 40px;
+  transform: translateY(-50%);
+  width: 60px;
+  height: 45px;
+  border-radius: 25px;
+  background-color: #d2f3cd; /* 茶綠色 */
+  color: #103b3c;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 200; /* 高於 navbar */
+}
+
+/* 顯示狀態 */
+.back-to-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-50%);
+}
+
+/* 滑鼠移上去一點動態 */
+.back-to-top:hover {
+  background-color: #b4e0a5;
+  transform: translateY(-50%) translateX(-3px);
+}
+
+/* 響應式縮小 */
+@media (max-width: 480px) {
+  .back-to-top {
+    width: 50px;
+    height: 38px;
+    font-size: 12px;
+    right: 25px;
   }
 }

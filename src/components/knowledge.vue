@@ -37,13 +37,13 @@
         <!-- ===== 台灣茶歷史 ===== -->
         <!-- <section class="info-block" style="flex-direction: row-reverse;"> -->
         <section class="info-block reverse">
-            <button @click="nextHistory">＜</button>
+            <button @click="prevHistory">＜</button>
             <img :src="historyList[historyIndex].image" alt="台灣茶歷史" style="border-radius: 0" />
             <div class="info-text">
                 <h3>{{ historyList[historyIndex].title }}</h3>
                 <p>{{ historyList[historyIndex].desc }}</p>
             </div>
-            <button @click="prevHistory">＞</button>
+            <button @click="nextHistory">＞</button>
 
         </section>
     </div>

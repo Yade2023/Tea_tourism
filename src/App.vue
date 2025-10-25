@@ -14,7 +14,9 @@ onMounted(() => {
 <template>
   <div id="app">
     <div class="wrap">
-      <nav class="navbar">
+      <!-- 🔥 這塊是透明的滑鼠感應區 -->
+      <div class="nav-hover-zone"></div>
+      <nav class="navbar hidden">
         <router-link to="/" class="logo-link">
           <img src="./assets/img/tea_LOGO.jpg" alt="logo" class="main-logo" />
           <a href="">
@@ -41,6 +43,9 @@ onMounted(() => {
       <main class="main-content">
         <router-view />
       </main>
+      <!-- 🔽 回到頂部按鈕 -->
+      <div class="back-to-top" id="backToTop">TOP</div>
+
       <footer>
         <Footer />
       </footer>
