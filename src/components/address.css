@@ -12,6 +12,15 @@
         text-align: center;
     }
     
+    /* 確保 QA 區域和表單不受容器限制 */
+    .qa-section,
+    #contactForm {
+        width: 100%;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
     .concepts {
         display: flex;
         flex-direction: column;
@@ -94,14 +103,130 @@
     button:hover {
         background: #555;
     }
-    /* 調整聯絡表單的樣式，讓其位於 Q&A 區域底部並居中顯示 */
+    /* Q&A 手風琴樣式 */
 .qa-section {
     margin-bottom: 2rem;
 }
 
+.qa-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #4CAF50;
+    margin-bottom: 2rem;
+    font-weight: bold;
+}
+
+.accordion {
+    width: 100%;
+}
+
+.accordion-item {
+    margin-bottom: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.accordion-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.accordion-header {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.accordion-header:hover {
+    background: linear-gradient(135deg, #45a049, #3d8b40);
+}
+
+.accordion-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.accordion-icon {
+    font-size: 1.5rem;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+    line-height: 1;
+}
+
+.accordion-item.active .accordion-icon {
+    transform: rotate(45deg);
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: #fafafa;
+}
+
+.accordion-item.active .accordion-content {
+    max-height: 1000px;
+}
+
+.qa-item {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.qa-item:last-child {
+    border-bottom: none;
+}
+
+.question {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.answer {
+    color: #555;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .qa-title {
+        font-size: 1.5rem;
+    }
+    
+    .accordion-header {
+        padding: 0.8rem 1rem;
+    }
+    
+    .accordion-header h3 {
+        font-size: 1rem;
+    }
+    
+    .qa-item {
+        padding: 0.8rem 1rem;
+    }
+    
+    .question {
+        font-size: 0.9rem;
+    }
+    
+    .answer {
+        font-size: 0.85rem;
+    }
+}
+
 #contactForm {
-    max-width: 600px;
-    margin: 0 auto;
     background: #f9f9f9;
     padding: 1.5rem;
     border-radius: 8px;
