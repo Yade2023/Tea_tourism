@@ -1,143 +1,277 @@
-/* 只影響 ContactAddress.vue 的區塊 */
-.address * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, "Microsoft JhengHei", sans-serif;
+    *{
+        margin: 0;
+        padding: 0;
+        font-family: Arial, "Microsoft JhengHei", sans-serif;
+    }
+    
+
+    .container {
+        width: 90%;
+        max-width: 1000px;
+        margin: 50px auto;
+        text-align: center;
+    }
+    
+    /* 確保 QA 區域和表單不受容器限制 */
+    .qa-section,
+    #contactForm {
+        width: 100%;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .concepts {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 60px;
+    }
+
+    .concept {
+        flex: 1;
+        text-align: center;
+        
+    }
+    .h2text{
+        margin-bottom: 10px;
+    }
+    .concept .icon {
+        width: 140px;
+        height: 140px;
+        background: #b3b3b3;
+        border-radius: 50%;
+        margin: 0 auto 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        color: white;
+       
+    }
+   
+
+    .icon img{
+        width: 200px;
+        
+    }
+
+    form {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        text-align: left;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    textarea { height: 150px; }
+
+    .submit-btn {
+        display: flex;
+        justify-content: center;
+    }
+
+    button {
+        padding: 12px 40px;
+        font-size: 16px;
+        background: #333;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    button:hover {
+        background: #555;
+    }
+    /* Q&A 手風琴樣式 */
+.qa-section {
+    margin-bottom: 2rem;
 }
 
-/* 版心 */
-.address .container {
-  width: 90%;
-  max-width: 1000px;
-  margin: 50px auto;
-  text-align: center;
+.qa-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #4CAF50;
+    margin-bottom: 2rem;
+    font-weight: bold;
 }
 
-/* 三大理念：排版 */
-.address .concepts {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  margin-bottom: 60px;
-  flex-wrap: wrap; /* 小螢幕自動換行 */
+.accordion {
+    width: 100%;
 }
 
-/* 單一理念卡片 */
-.address .concept {
-  flex: 1 1 260px; /* 小螢幕也能落兩欄/一欄 */
-  text-align: center;
+.accordion-item {
+    margin-bottom: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
-/* 標題間距 */
-.address .h2text {
-  margin-bottom: 10px;
+.accordion-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* 圓形 ICON 容器 */
-.address .concept .icon {
-  width: 140px;
-  height: 140px;
-  background: #b3b3b3;
-  border-radius: 50%;
-  margin: 0 auto 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  color: #fff;
-  overflow: hidden; /* 確保圖片不會溢出圓形 */
+.accordion-header {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    user-select: none;
 }
 
-/* ICON 內的圖片：等比縮放置中 */
-.address .concept .icon img {
-  max-width: 80%;
-  height: auto;
-  display: block;
+.accordion-header:hover {
+    background: linear-gradient(135deg, #45a049, #3d8b40);
 }
 
-/* 表單框 */
-.address form {
-  background: #fff;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  text-align: left;
+.accordion-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
 }
 
-/* 表單欄位群組 */
-.address .form-group {
-  margin-bottom: 20px;
+.accordion-icon {
+    font-size: 1.5rem;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+    line-height: 1;
 }
 
-/* 標籤 */
-.address label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
+.accordion-item.active .accordion-icon {
+    transform: rotate(45deg);
 }
 
-/* 輸入框/文字區塊 */
-.address input,
-.address textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: #fafafa;
 }
 
-/* 文字區塊高度 */
-.address textarea {
-  height: 150px;
-  resize: vertical;
+.accordion-item.active .accordion-content {
+    max-height: 1000px;
 }
 
-/* 送出按鈕容器 */
-.address .submit-btn {
-  display: flex;
-  justify-content: center;
+.qa-item {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e8e8e8;
 }
 
-/* 按鈕樣式 */
-.address button {
-  padding: 12px 40px;
-  font-size: 16px;
-  background: #333;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background .2s ease;
+.qa-item:last-child {
+    border-bottom: none;
 }
 
-.address button:hover {
-  background: #555;
+.question {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
 }
 
-/* 成功/錯誤訊息（配合元件中的 class） */
-.address .form-success {
-  color: #1b8f3e;
-  margin-top: 12px;
-  text-align: center;
+.answer {
+    color: #555;
+    line-height: 1.6;
+    font-size: 0.95rem;
 }
 
-.address .form-error {
-  color: #b3261e;
-  margin-top: 12px;
-  text-align: center;
-}
-
-/* 簡單 RWD：小於 768px 時改為單欄堆疊 */
+/* 響應式設計 */
 @media (max-width: 768px) {
-  .address .concepts {
-    justify-content: center;
-  }
-  .address .concept {
-    flex: 1 1 100%;
-    max-width: 420px;
-  }
-  .address .container {
-    margin: 32px auto;
-  }
+    .qa-title {
+        font-size: 1.5rem;
+    }
+    
+    .accordion-header {
+        padding: 0.8rem 1rem;
+    }
+    
+    .accordion-header h3 {
+        font-size: 1rem;
+    }
+    
+    .qa-item {
+        padding: 0.8rem 1rem;
+    }
+    
+    .question {
+        font-size: 0.9rem;
+    }
+    
+    .answer {
+        font-size: 0.85rem;
+    }
+}
+
+#contactForm {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.h2text {
+    text-align: center;
+    font-size: 2rem;
+    color: #4CAF50;
+    margin-top: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-group textarea {
+    height: 150px;
+}
+
+.submit-btn {
+    text-align: center;
+}
+
+.submit-btn button {
+    background: #4CAF50;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
 }
