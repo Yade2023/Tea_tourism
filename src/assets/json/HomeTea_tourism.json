@@ -1,29 +1,60 @@
 {
   "carousel": [
-    { "img": "../assets/images/index_img/carousel01.jpg" },
-    { "img": "../assets/images/index_img/carousel02.jpg" },
-    { "img": "../assets/images/index_img/carousel03.jpg" }
+    { "img": "./src/assets/images/index_img/carousel01.jpg" },
+    { "img": "./src/assets/images/index_img/carousel02.jpg" },
+    { "img": "./src/assets/images/index_img/carousel03.jpg" }
   ],
-  "teaIntro": {
-    "img": "../assets/images/index_img/idea01.jpg",
+  "introBlock": {
+    "leftImage": "./src/assets/images/index_img/idea01.jpg",
     "title": "茶與旅",
-    "text": "茶，不只是飲品，更是一段文化的旅程。我們以旅為名，走訪茶山，記錄台灣茶的靜與深。"
+    "text": "茶，不只是飲品，\n更是一段文化的旅程。\n我們以旅為名，走訪茶山，\n記錄台灣茶的靜與深。"
   },
-  "cards": [
+  "featureSpot": {
+    "mainImage": "./src/assets/images/index_img/daxitea.jpg",
+    "title": "大溪茶廠",
+    "desc": "大溪茶廠創建於1926年，是台灣現存最古老的茶廠之一。這座歷史悠久的建築見證了台灣茶業的興衰，至今仍保持著傳統的製茶工藝。茶廠座落在桃園大溪的山間，四周綠意盎然，空氣清新怡人。在這裡，您可以深度體驗從採茶、製茶到品茶的完整過程，感受茶葉在時光中沉澱的醇厚韻味。走進大溪茶廠，彷彿走進了一座茶文化的博物館，每一個角落都訴說著台灣茶的故事。",
+    "info": "地址: 335桃園市大溪區復興路二段732巷80號\n營業時間: 週一至週五 9:30-17:30 (國定假日依官方公告)\n電話: 03-382-5089\n網址: https://travel.tycg.gov.tw/"
+  },
+  "knowledgeCards": [
     {
-      "title": "台灣高山茶",
-      "text": "這是高山茶的介紹內容。",
-      "img": "../assets/images/index_img/Knowledge01.jpg"
+      "img": "./src/assets/images/index_img/Knowledge01.jpg",
+      "title": "Card title",
+      "text": "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.",
+      "footer": "Last updated 3 mins ago"
     },
     {
-      "title": "從葉到杯的旅程",
-      "text": "這是茶葉製作過程的介紹內容。",
-      "img": "../assets/images/index_img/Knowledge02.jpg"
+      "img": "./src/assets/images/index_img/Knowledge02.jpg",
+      "title": "Card title",
+      "text": "This card has supporting text below as a natural lead-in to additional content.",
+      "footer": "Last updated 3 mins ago"
     },
     {
-      "title": "台灣茶歷史",
-      "text": "這是台灣茶文化的歷史故事。",
-      "img": "../assets/images/index_img/Knowledge03.jpg"
+      "img": "./src/assets/images/index_img/Knowledge03.jpg",
+      "title": "Card title",
+      "text": "This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.",
+      "footer": "Last updated 3 mins ago"
+    }
+  ],
+  "shopItems": [
+    {
+      "img": "./src/assets/images/index_img/joint01.jpg",
+      "title": "Card title",
+      "price": "$800"
+    },
+    {
+      "img": "./src/assets/images/index_img/joint02.jpg",
+      "title": "Card title",
+      "price": "$800"
+    },
+    {
+      "img": "./src/assets/images/index_img/joint03.jpg",
+      "title": "Card title",
+      "price": "$800"
+    },
+    {
+      "img": "./src/assets/images/index_img/joint04.jpg",
+      "title": "Card title",
+      "price": "$800"
     }
   ]
 }

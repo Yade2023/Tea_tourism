@@ -2,42 +2,53 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import '../assets/css/HomeTea_tourism.css'
+import { ref, onMounted } from 'vue'
+import localJsonUrl from '../assets/json/HomeTea_tourism.json'
+// 合併工具：用 API 值覆蓋預設，但不覆蓋成 null / "" / undefined
+import { mergeDefault } from '../assets/js/mergeDefault.js'
+
+const homeData = ref(null)
+
+onMounted(async () => {
+  // 1. 先一定抓到本地預設資料
+  const defaultData = localJsonUrl
+
+  try {
+    // 2. 嘗試抓 API
+    const res = await fetch('http://localhost:5000/api/home')
+    if (!res.ok) throw new Error('API 回傳狀態不是 200')
+
+    const apiData = await res.json()
+
+    // 3. 把 API 跟預設合併，API 只會覆蓋有內容的欄位
+    homeData.value = mergeDefault(defaultData, apiData)
+
+    console.log('✅ 使用 API + fallback 合併資料')
+  } catch (err) {
+    // 4. API 壞掉 → 純預設
+    console.warn('⚠️ API 失敗，使用純預設 JSON：', err)
+    homeData.value = defaultData
+  }
+})
 </script>
 
+
 <template>
-  <div class="home-page">
+  <!-- 如果 homeData 已經有資料了才畫畫面 -->
+  <div v-if="homeData" class="home-page">
+    <!-- ＝＝＝＝ 輪播區 carousel ＝＝＝＝ -->
     <div id="carouselExampleCaptions" class="carousel slide" data-bs-next="600" data-bs-ride="carousel"
       data-bs-interval="2000" data-bs-touch="true" data-bs-wrap="true">
       <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
-          aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
-          aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
-          aria-label="Slide 3"></button>
+        <button v-for="(c, idx) in homeData.carousel" :key="'ind-' + idx" type="button"
+          data-bs-target="#carouselExampleCaptions" :data-bs-slide-to="idx" :class="{ active: idx === 0 }"
+          :aria-current="idx === 0 ? 'true' : undefined" :aria-label="`Slide ${idx + 1}`"></button>
       </div>
 
       <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img src="../assets/images/index_img/carousel01.jpg" class="d-block w-100" alt="...">
-          <!-- <div class="carousel-caption d-none d-md-block">
-            <h5>First slide label</h5>
-            <p>Some representative placeholder content for the first slide.</p>
-          </div> -->
-        </div>
-        <div class="carousel-item">
-          <img src="../assets/images/index_img/carousel02.jpg" class="d-block w-100" alt="...">
-          <!-- <div class="carousel-caption d-none d-md-block">
-            <h5>Second slide label</h5>
-            <p>Some representative placeholder content for the second slide.</p>
-          </div> -->
-        </div>
-        <div class="carousel-item">
-          <img src="../assets/images/index_img/carousel03.jpg" class="d-block w-100" alt="...">
-          <!-- <div class="carousel-caption d-none d-md-block">
-            <h5>Third slide label</h5>
-            <p>Some representative placeholder content for the third slide.</p>
-          </div> -->
+        <div v-for="(c, idx) in homeData.carousel" :key="'car-' + idx" class="carousel-item"
+          :class="{ active: idx === 0 }">
+          <img :src="c.img" class="d-block w-100" alt="carousel slide" />
         </div>
       </div>
 
@@ -52,111 +63,74 @@ import '../assets/css/HomeTea_tourism.css'
         <span class="visually-hidden">Next</span>
       </button>
     </div>
+
     <div class="carBoby">
-      <!-- Bootstrap_Horizontal -->
+      <!-- ＝＝＝＝ 第一段：茶與旅 (左右圖文區) ＝＝＝＝ -->
       <div class="card mb-3">
         <div class="row g-0">
           <div class="col-md-5">
-            <img src="../assets/images/index_img/idea01.jpg" class="img-fluid " alt="...">
+            <img :src="homeData.introBlock.leftImage" class="img-fluid" alt="intro image" />
           </div>
           <div class="col-md-6">
             <div class="card-body">
-              <h5 class="card-title">茶與旅</h5>
-              <p class="card-text">茶,不只是飲品,
-                更是一段文化的旅程。
-                我們以旅為名,走訪茶山,
-                記錄台灣茶的靜與深。</p>
+              <h5 class="card-title">{{ homeData.introBlock.title }}</h5>
+              <p class="card-text" style="white-space: pre-line;">
+                {{ homeData.introBlock.text }}
+              </p>
             </div>
           </div>
         </div>
       </div>
-      <!-- Bootstrap_img -->
+
+      <!-- ＝＝＝＝ 第二段：大溪茶廠 故事區塊 ＝＝＝＝ -->
       <div class="card mb-3">
-        <img src="../assets/images/index_img/daxitea.jpg" class="card-img-top" alt="...">
+        <img :src="homeData.featureSpot.mainImage" class="card-img-top" alt="feature main" />
         <div class="card-img-overlay">
-          <h5 class="card-title">大溪茶廠</h5>
+          <h5 class="card-title">{{ homeData.featureSpot.title }}</h5>
         </div>
         <div class="card-body">
-          <p class="card-text">大溪茶廠創建於1926年，是台灣現存最古老的茶廠之一。
-            這座歷史悠久的建築見證了台灣茶業的興衰，至今仍保持著傳統的製茶工藝。
-            茶廠座落在桃園大溪的山間，四周綠意盎然，空氣清新怡人。
-            在這裡，您可以深度體驗從採茶、製茶到品茶的完整過程，
-            感受茶葉在時光中沉澱的醇厚韻味。走進大溪茶廠，
-            彷彿走進了一座茶文化的博物館，每一個角落都訴說著台灣茶的故事。</p>
-          <p class="card-text"><small class="text-muted">地址: 335桃園市大溪區復興路二段732巷80號
-              營業時間: 週一至週五 9:30-17:30 (國定假日依官方公告)
-              電話: 03-382-5089
-              網址: <a href="https://travel.tycg.gov.tw/">https://travel.tycg.gov.tw/</a></small></p>
+          <p class="card-text">
+            {{ homeData.featureSpot.desc }}
+          </p>
+          <p class="card-text">
+            <small class="text-muted" style="white-space: pre-line;">
+              {{ homeData.featureSpot.info }}
+            </small>
+          </p>
         </div>
       </div>
-      <!-- Bootstrap_CAR*3 -->
+
+      <!-- ＝＝＝＝ 第三段：三張知識卡片 ＝＝＝＝ -->
       <div class="card-group">
-        <div class="card me-3">
+        <div class="card me-3" v-for="(kItem, kIdx) in homeData.knowledgeCards" :key="'know-' + kIdx">
           <a href="#">
-            <img src="../assets/images/index_img/Knowledge01.jpg" class="card-img-top" alt="...">
-          </a>
-          <div class="card-body ">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
-              content. This content is a little bit longer.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-          </div>
-        </div>
-        <div class="card me-3">
-          <a href="#">
-            <img src="../assets/images/index_img/Knowledge02.jpg" class="card-img-top" alt="...">
+            <img :src="kItem.img" class="card-img-top" alt="knowledge img" />
           </a>
           <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-          </div>
-        </div>
-        <div class="card me-3">
-          <a href="#">
-            <img src="../assets/images/index_img/Knowledge03.jpg" class="card-img-top" alt="...">
-          </a>
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
-              content. This card has even longer content than the first to show that equal height action.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            <h5 class="card-title">{{ kItem.title }}</h5>
+            <p class="card-text">{{ kItem.text }}</p>
+            <p class="card-text">
+              <small class="text-muted">{{ kItem.footer }}</small>
+            </p>
           </div>
         </div>
       </div>
-      <!-- Bootstrap_Image overlays -->
+
+      <!-- ＝＝＝＝ 第四段：商品 / 聯名 / 價格 ＝＝＝＝ -->
       <div class="card-group d-flex justify-content-between align-items-stretch px-0 flex-wrap">
-        <div class="card bg-dark text-white">
-          <img src="../assets/images/index_img/joint01.jpg" class="card-img" alt="...">
+        <div class="card bg-dark text-white" v-for="(shop, sIdx) in homeData.shopItems" :key="'shop-' + sIdx">
+          <img :src="shop.img" class="card-img" alt="shop item" />
           <div class="card-img-overlay">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">$800</p>
-          </div>
-        </div>
-        <div class="card bg-dark text-white">
-          <img src="../assets/images/index_img/joint02.jpg" class="card-img" alt="...">
-          <div class="card-img-overlay">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">$800</p>
-          </div>
-        </div>
-        <div class="card bg-dark text-white">
-          <img src="../assets/images/index_img/joint03.jpg" class="card-img" alt="...">
-          <div class="card-img-overlay">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">$800</p>
-          </div>
-        </div>
-        <div class="card bg-dark text-white">
-          <img src="../assets/images/index_img/joint04.jpg" class="card-img" alt="...">
-          <div class="card-img-overlay">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">$800</p>
+            <h5 class="card-title">{{ shop.title }}</h5>
+            <p class="card-text">{{ shop.price }}</p>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-
+  <!-- 資料還沒載入時的畫面 -->
+  <div v-else class="home-pageNG">
+    資料載入中...
   </div>
 </template>
