@@ -18,7 +18,7 @@ onMounted(() => {
       <div class="nav-hover-zone"></div>
       <nav class="navbar hidden">
         <router-link to="/" class="logo-link">
-          <img src="./assets/img/tea_LOGO.jpg" alt="logo" class="main-logo" />
+          <img src="./assets/img/tea_LOGO1.jpg" alt="logo" class="main-logo" />
           <a href="">
             <h1 class="brand">茶旅</h1>
           </a>
