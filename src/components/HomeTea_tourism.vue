@@ -61,7 +61,7 @@ import '../assets/css/HomeTea_tourism.css'
           </div>
           <div class="col-md-6">
             <div class="card-body">
-              <h5 class="card-title">Card title</h5>
+              <h5 class="card-title">茶與旅</h5>
               <p class="card-text">茶,不只是飲品,
                 更是一段文化的旅程。
                 我們以旅為名,走訪茶山,

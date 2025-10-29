@@ -1,0 +1,29 @@
+{
+  "carousel": [
+    { "img": "../assets/images/index_img/carousel01.jpg" },
+    { "img": "../assets/images/index_img/carousel02.jpg" },
+    { "img": "../assets/images/index_img/carousel03.jpg" }
+  ],
+  "teaIntro": {
+    "img": "../assets/images/index_img/idea01.jpg",
+    "title": "茶與旅",
+    "text": "茶，不只是飲品，更是一段文化的旅程。我們以旅為名，走訪茶山，記錄台灣茶的靜與深。"
+  },
+  "cards": [
+    {
+      "title": "台灣高山茶",
+      "text": "這是高山茶的介紹內容。",
+      "img": "../assets/images/index_img/Knowledge01.jpg"
+    },
+    {
+      "title": "從葉到杯的旅程",
+      "text": "這是茶葉製作過程的介紹內容。",
+      "img": "../assets/images/index_img/Knowledge02.jpg"
+    },
+    {
+      "title": "台灣茶歷史",
+      "text": "這是台灣茶文化的歷史故事。",
+      "img": "../assets/images/index_img/Knowledge03.jpg"
+    }
+  ]
+}
