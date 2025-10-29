@@ -11,7 +11,7 @@ const homeData = ref(null)
 
 onMounted(async () => {
   // 1. 先一定抓到本地預設資料
-  const defaultData = localJsonUrl
+  homeData.value = localJsonUrl
 
   try {
     // 2. 嘗試抓 API
@@ -27,7 +27,6 @@ onMounted(async () => {
   } catch (err) {
     // 4. API 壞掉 → 純預設
     console.warn('⚠️ API 失敗，使用純預設 JSON：', err)
-    homeData.value = defaultData
   }
 })
 </script>

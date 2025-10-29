@@ -42,9 +42,9 @@ function submitForm() {
 import defaultDataRaw from '../assets/json/address.json'
 
 onMounted(async () => {
-  // 1. 一定要有的本地預設資料
-  const defaultData = defaultDataRaw // { accordionList: [...] }
-
+  // 1. 先把本地預設資料顯示在畫面上，讓頁面一開始就有內容
+  //    defaultDataRaw 長這樣：{ accordionList: [...] }
+  accordionList.value = defaultDataRaw.accordionList || []
   try {
     // 2. 嘗試叫 API (你之後可以讓這支 API 回傳 { accordionList: [...] } )
     const res = await fetch('http://localhost:5000/api/address')
@@ -53,14 +53,14 @@ onMounted(async () => {
     const apiData = await res.json()
 
     // 3. 合併：用 API 值覆蓋，API 沒給/是 null 不會洗掉預設
-    const merged = mergeDefault(defaultData, apiData)
+    const merged = mergeDefault(defaultDataRaw, apiData)
 
+     // 4. 更新畫面資料
     accordionList.value = merged.accordionList || []
     console.log('✅ 使用 API + fallback 合併資料')
   } catch (err) {
-    // 4. API 掛了 -> 用純本地 fallback
     console.warn('⚠️ API 失敗，使用純預設 JSON：', err)
-    accordionList.value = defaultData.accordionList || []
+
   }
 })
 </script>
@@ -74,12 +74,8 @@ onMounted(async () => {
         <h2 class="qa-title">🍵 茶類常見問答精選</h2>
 
         <div class="accordion">
-          <div
-            class="accordion-item"
-            v-for="(group, idx) in accordionList"
-            :key="idx"
-            :class="{ active: activeIndex === idx }"
-          >
+          <div class="accordion-item" v-for="(group, idx) in accordionList" :key="idx"
+            :class="{ active: activeIndex === idx }">
             <!-- 標題列 -->
             <div class="accordion-header" @click="toggleAccordion(idx)">
               <h3>{{ group.title }}</h3>

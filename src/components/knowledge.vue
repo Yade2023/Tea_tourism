@@ -42,10 +42,8 @@ const prevHistory = () => {
 
 // ===== onMounted：用你指定的流程，一字不漏邏輯保持 =====
 onMounted(async () => {
-    // 1. 先一定抓到本地預設資料
-    //    這裡我們不用 fetch，本地 JSON 已經 import 成 defaultDataRaw
-    const defaultData = defaultDataRaw
-
+    // 1. 一開始就先上本地預設資料，畫面立即顯示
+    knowledgeData.value = defaultDataRaw
     try {
         // 2. 嘗試抓 API（之後你會改成雲端的網址）
         const res = await fetch('http://localhost:5000/api/knowledge')
@@ -60,7 +58,6 @@ onMounted(async () => {
     } catch (err) {
         // 4. API 壞掉 → 純預設
         console.warn('⚠️ API 失敗，使用純預設 JSON：', err)
-        knowledgeData.value = defaultData
     }
 })
 </script>
