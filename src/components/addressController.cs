@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
@@ -8,85 +8,195 @@ namespace WebApplication1.Controllers
     [Route("api/[controller]")]
     public class addressController : ControllerBase
     {
-        private readonly IWebHostEnvironment _environment;
+        private readonly QAdbContext _context;
 
-        public addressController(IWebHostEnvironment environment)
+        public addressController(QAdbContext context)
         {
-            _environment = environment;
+            _context = context;
         }
 
         /// <summary>
-        /// 取得所有問答資料
+        /// 取得所有問答資料（包含分類和問答配對）
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(QAAddress), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetAddressData()
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAllQA()
         {
-            var filePath = Path.Combine(_environment.ContentRootPath, "..", "..", "address.json");
-            var fullPath = Path.GetFullPath(filePath);
-
-            if (!System.IO.File.Exists(fullPath))
-            {
-                return NotFound(new { error = "找不到 address.json 檔案" });
-            }
-
             try
             {
-                var jsonContent = System.IO.File.ReadAllText(fullPath);
-                var addressData = JsonSerializer.Deserialize<QAAddress>(jsonContent, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+                var categories = await _context.AccordionCategory
+                    .Include(c => c.QAPair)
+                    .OrderBy(c => c.Id)
+                    .ToListAsync();
 
-                if (addressData == null)
+                var result = new
                 {
-                    return NotFound(new { error = "無法解析 address.json 檔案" });
-                }
+                    accordionList = categories.Select(c => new
+                    {
+                        id = c.Id,
+                        title = c.Title,
+                        qa = c.QAPair.OrderBy(q => q.Id).Select(q => new
+                        {
+                            id = q.Id,
+                            q = q.Question,
+                            a = q.Answer
+                        }).ToList()
+                    }).ToList()
+                };
 
-                return Ok(addressData);
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = $"讀取檔案時發生錯誤：{ex.Message}" });
+                return StatusCode(500, new { error = $"讀取資料時發生錯誤：{ex.Message}" });
             }
         }
 
         /// <summary>
-        /// 取得特定分類的問答資料
+        /// 取得所有分類列表
         /// </summary>
-        [HttpGet("{index}")]
-        [ProducesResponseType(typeof(AccordionCategory), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetCategoryByIndex(int index)
+        [HttpGet("categories")]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetCategories()
         {
-            var filePath = Path.Combine(_environment.ContentRootPath, "..", "..", "address.json");
-            var fullPath = Path.GetFullPath(filePath);
-
-            if (!System.IO.File.Exists(fullPath))
+            try
             {
-                return NotFound(new { error = "找不到 address.json 檔案" });
+                var categories = await _context.AccordionCategory
+                    .OrderBy(c => c.Id)
+                    .Select(c => new
+                    {
+                        id = c.Id,
+                        title = c.Title
+                    })
+                    .ToListAsync();
+
+                return Ok(new { categories });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = $"讀取分類資料時發生錯誤：{ex.Message}" });
+            }
+        }
+
+        /// <summary>
+        /// 根據分類 ID 取得該分類的所有問答
+        /// </summary>
+        [HttpGet("category/{id}")]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetCategoryById(int id)
+        {
+            try
+            {
+                var category = await _context.AccordionCategory
+                    .Include(c => c.QAPair)
+                    .Where(c => c.Id == id)
+                    .FirstOrDefaultAsync();
+
+                if (category == null)
+                {
+                    return NotFound(new { error = $"找不到 ID 為 {id} 的分類" });
+                }
+
+                var result = new
+                {
+                    id = category.Id,
+                    title = category.Title,
+                    qa = category.QAPair.OrderBy(q => q.Id).Select(q => new
+                    {
+                        id = q.Id,
+                        q = q.Question,
+                        a = q.Answer
+                    }).ToList()
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = $"讀取分類資料時發生錯誤：{ex.Message}" });
+            }
+        }
+
+        /// <summary>
+        /// 取得單一問答配對
+        /// </summary>
+        [HttpGet("qa/{id}")]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetQAById(int id)
+        {
+            try
+            {
+                var qa = await _context.QAPair
+                    .Include(q => q.Category)
+                    .Where(q => q.Id == id)
+                    .FirstOrDefaultAsync();
+
+                if (qa == null)
+                {
+                    return NotFound(new { error = $"找不到 ID 為 {id} 的問答" });
+                }
+
+                var result = new
+                {
+                    id = qa.Id,
+                    categoryId = qa.CategoryId,
+                    categoryTitle = qa.Category.Title,
+                    q = qa.Question,
+                    a = qa.Answer
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = $"讀取問答資料時發生錯誤：{ex.Message}" });
+            }
+        }
+
+        /// <summary>
+        /// 搜尋問答（根據問題或答案關鍵字）
+        /// </summary>
+        [HttpGet("search")]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> SearchQA([FromQuery] string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return BadRequest(new { error = "請提供搜尋關鍵字" });
             }
 
             try
             {
-                var jsonContent = System.IO.File.ReadAllText(fullPath);
-                var addressData = JsonSerializer.Deserialize<QAAddress>(jsonContent, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+                var qaList = await _context.QAPair
+                    .Include(q => q.Category)
+                    .Where(q => q.Question.Contains(keyword) || q.Answer.Contains(keyword))
+                    .OrderBy(q => q.CategoryId)
+                    .ThenBy(q => q.Id)
+                    .Select(q => new
+                    {
+                        id = q.Id,
+                        categoryId = q.CategoryId,
+                        categoryTitle = q.Category.Title,
+                        q = q.Question,
+                        a = q.Answer
+                    })
+                    .ToListAsync();
 
-                if (addressData?.AccordionList == null || index < 0 || index >= addressData.AccordionList.Count)
-                {
-                    return NotFound(new { error = $"找不到索引 {index} 的分類" });
-                }
-
-                return Ok(addressData.AccordionList[index]);
+                return Ok(new { results = qaList, count = qaList.Count });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = $"讀取檔案時發生錯誤：{ex.Message}" });
+                return StatusCode(500, new { error = $"搜尋時發生錯誤：{ex.Message}" });
             }
         }
     }
 }
+
