@@ -46,13 +46,13 @@ onMounted(async () => {
     knowledgeData.value = defaultDataRaw
     try {
         // 2. 嘗試抓 API（之後你會改成雲端的網址）
-        const res = await fetch('http://localhost:5000/api/knowledge')
+        const res = await fetch('http://localhost:5028/api/knowledge')
         if (!res.ok) throw new Error('API 回傳狀態不是 200')
 
         const apiData = await res.json()
 
         // 3. 把 API 跟預設合併，API 只會覆蓋有內容的欄位
-        knowledgeData.value = mergeDefault(defaultData, apiData)
+        knowledgeData.value = mergeDefault(defaultDataRaw, apiData)
 
         console.log('✅ 使用 API + fallback 合併資料')
     } catch (err) {
