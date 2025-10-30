@@ -14,6 +14,9 @@ const messageInput = ref('')
 // 這頁要用的內容資料（從 JSON + API 來）
 const accordionList = ref([])
 
+// API 狀態
+const isApiSuccess = ref(false)
+
 // 點開 / 收合手風琴
 function toggleAccordion(index) {
   if (activeIndex.value === index) {
@@ -47,7 +50,7 @@ onMounted(async () => {
   accordionList.value = defaultDataRaw.accordionList || []
   try {
     // 2. 嘗試叫 API (你之後可以讓這支 API 回傳 { accordionList: [...] } )
-    const res = await fetch('http://localhost:5000/api/address')
+    const res = await fetch('http://localhost:5028/api/Address')
     if (!res.ok) throw new Error('API 回傳狀態不是 200')
 
     const apiData = await res.json()
@@ -57,10 +60,11 @@ onMounted(async () => {
 
      // 4. 更新畫面資料
     accordionList.value = merged.accordionList || []
+    isApiSuccess.value = true  // API 成功
     console.log('✅ 使用 API + fallback 合併資料')
   } catch (err) {
     console.warn('⚠️ API 失敗，使用純預設 JSON：', err)
-
+    isApiSuccess.value = false  // API 失敗
   }
 })
 </script>
@@ -71,7 +75,8 @@ onMounted(async () => {
 
       <!-- Q&A 區域 -->
       <div class="qa-section">
-        <h2 class="qa-title">🍵 茶類常見問答精選</h2>
+        <h2 class="qa-title" v-if="isApiSuccess">🍵 茶類常見問答精選(API成功)</h2>
+        <h2 class="qa-title" v-else>🍵 茶類常見問答精選(API失敗)</h2>
 
         <div class="accordion">
           <div class="accordion-item" v-for="(group, idx) in accordionList" :key="idx"
