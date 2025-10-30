@@ -17,10 +17,17 @@ public partial class QAdbContext : DbContext
 
     public virtual DbSet<AccordionCategory> AccordionCategory { get; set; }
 
+    public virtual DbSet<ContactMessages> ContactMessages { get; set; }
+
     public virtual DbSet<QAPair> QAPair { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=DefaultConnection");
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer("Name=DefaultConnection");
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,6 +36,17 @@ public partial class QAdbContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__Accordio__3214EC0788023D0F");
 
             entity.Property(e => e.Title).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<ContactMessages>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__ContactM__3214EC072A66E0AD");
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Email).HasMaxLength(200);
+            entity.Property(e => e.Name).HasMaxLength(100);
         });
 
         modelBuilder.Entity<QAPair>(entity =>

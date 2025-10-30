@@ -197,6 +197,69 @@ namespace WebApplication1.Controllers
                 return StatusCode(500, new { error = $"搜尋時發生錯誤：{ex.Message}" });
             }
         }
+
+        public record CreateContactDto(string Name, string Email, string Message);
+
+        /// <summary>
+        /// 新增聯絡訊息（路由：api/address/contact）
+        /// </summary>
+        [HttpPost("contact")]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateContact([FromBody] CreateContactDto dto)
+        {
+            if (dto == null || string.IsNullOrWhiteSpace(dto.Name) || string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.Message))
+            {
+                return BadRequest(new { error = "請提供正確的 Name/Email/Message" });
+            }
+
+            var entity = new ContactMessages
+            {
+                Name = dto.Name,
+                Email = dto.Email,
+                Message = dto.Message,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.ContactMessages.Add(entity);
+            await _context.SaveChangesAsync();
+            return Ok(new { entity.Id });
+        }
+
+        /// <summary>
+        /// 取得聯絡訊息列表（路由：api/address/contact）
+        /// </summary>
+        [HttpGet("contact")]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetContacts()
+        {
+            var items = await _context.ContactMessages
+                .OrderByDescending(c => c.CreatedAt)
+                .Select(c => new { c.Id, c.Name, c.Email, c.Message, c.CreatedAt })
+                .ToListAsync();
+
+            return Ok(items);
+        }
+
+        /// <summary>
+        /// 取得單筆聯絡訊息（路由：api/address/contact/{id}）
+        /// </summary>
+        [HttpGet("contact/{id}")]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetContactById(int id)
+        {
+            var item = await _context.ContactMessages
+                .Where(c => c.Id == id)
+                .Select(c => new { c.Id, c.Name, c.Email, c.Message, c.CreatedAt })
+                .FirstOrDefaultAsync();
+
+            if (item == null)
+            {
+                return NotFound(new { error = $"找不到 ID 為 {id} 的聯絡訊息" });
+            }
+
+            return Ok(item);
+        }
     }
 }
-
