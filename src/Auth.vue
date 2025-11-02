@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import taiwanImg from './assets/img/taiwan.png'
+import taiwanImg from './assets/img/taiwan.jpeg'
 
 // 表單狀態
 const isLogin = ref(true) // true: 登陸, false: 註冊
