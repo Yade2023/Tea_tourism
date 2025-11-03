@@ -26,19 +26,49 @@ function toggleAccordion(index) {
   }
 }
 
-// 送出表單（目前只是前端 demo）
-function submitForm() {
-  alert('您的訊息已送出，我們將盡快與您聯繫！')
+async function submitForm() {
+  // 取得輸入欄位的值
+  const name = nameInput.value.trim()
+  const email = emailInput.value.trim()
+  const message = messageInput.value.trim()
 
-  console.log({
-    name: nameInput.value,
-    email: emailInput.value,
-    message: messageInput.value
-  })
+  // 簡單前端驗證
+  if (!name || !email || !message) {
+    alert('請完整填寫所有欄位')
+    return
+  }
 
-  nameInput.value = ''
-  emailInput.value = ''
-  messageInput.value = ''
+  try {
+    // 發送 POST 請求到後端
+    const response = await fetch('https://localhost:7018/api/address/contact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        message: message
+      })
+    })
+
+    if (!response.ok) {
+      throw new Error('網路錯誤或伺服器未回應')
+    }
+
+    const result = await response.json()
+    console.log('伺服器回傳:', result)
+
+    alert('您的訊息已成功送出，我們將盡快與您聯繫！')
+
+    // 清空欄位
+    nameInput.value = ''
+    emailInput.value = ''
+    messageInput.value = ''
+  } catch (error) {
+    console.error('送出失敗:', error)
+    alert('送出失敗，請稍後再試或檢查網路連線。')
+  }
 }
 
 // onMounted：1.拿本地JSON 2.拿API 3.merge
