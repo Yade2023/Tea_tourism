@@ -14,34 +14,35 @@ import '../assets/css/Footer.css';
 
       <!-- 首頁 -->
       <div class="footer-column">
-        <h4>首頁</h4>
+        <h4><a href="/#">首頁</a></h4>
       </div>
 
       <!-- 台灣茶知識庫 -->
       <div class="footer-column">
-        <h4>台灣茶知識庫</h4>
+        <h4><a href="/knowledge">台灣茶知識庫</a></h4>
       </div>
 
       <!-- 茶旅專區 -->
       <div class="footer-column">
-        <h4>茶旅專區</h4>
+        <h4><a href="/teaTourismArea">茶旅專區</a></h4>
       </div>
 
       <!-- 線上茶店 -->
       <div class="footer-column">
-        <h4>線上茶店</h4>
+        <h4><a href="/">線上茶店</a></h4>
       </div>
 
       <!-- 關於我們 -->
       <div class="footer-column">
+       <h4>關於我們</h4>
         <ul>
-          <li><a href="#">聯絡表單</a></li>
+          <li><a href="/address">聯絡表單</a></li>
         </ul>
       </div>
 
       <!-- 登入註冊 -->
       <div class="footer-column">
-        <h4>登入、註冊</h4>
+        <h4><a href="/login">登入、註冊</a></h4>
       </div>
     </div>
   </footer>
