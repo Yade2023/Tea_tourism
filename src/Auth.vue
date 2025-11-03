@@ -1,6 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import taiwanImg from './assets/img/taiwan.png'
+import { ref, computed } from 'vue'
 
 // 表單狀態
 const isLogin = ref(true) // true: 登陸, false: 註冊
@@ -8,17 +7,6 @@ const loading = ref(false)
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 const rememberMe = ref(false)
-
-// 動畫狀態
-const isLoading = ref(true)
-const mousePosition = ref({ x: 0, y: 0 })
-const characters = ref([
-  { id: 1, name: 'orange', x: 35, y: 40, lookingAt: 'center', isVisible: true },
-  { id: 2, name: 'purple', x: 50, y: 35, lookingAt: 'center', isVisible: true },
-  { id: 3, name: 'black', x: 40, y: 55, lookingAt: 'center', isVisible: true },
-  { id: 4, name: 'yellow', x: 55, y: 50, lookingAt: 'center', isVisible: true }
-])
-const isPasswordVisible = ref(false)
 const loginResult = ref(null) // 'success', 'error', null
 
 // 登陸表單
@@ -48,126 +36,25 @@ const toggleMode = () => {
 // 切換密碼顯示
 const togglePassword = () => {
   showPassword.value = !showPassword.value
-  isPasswordVisible.value = showPassword.value
-  
-  // 讓角色移開視線（害羞）
-  characters.value.forEach(char => {
-    char.lookingAt = 'away'
-  })
-  
-  // 1.5秒後回到中心
-  setTimeout(() => {
-    characters.value.forEach(char => {
-      char.lookingAt = 'center'
-    })
-  }, 1500)
 }
 
 const toggleConfirmPassword = () => {
   showConfirmPassword.value = !showConfirmPassword.value
-  isPasswordVisible.value = showConfirmPassword.value
-  
-  // 讓角色移開視線（害羞）
-  characters.value.forEach(char => {
-    char.lookingAt = 'away'
-  })
-  
-  // 1.5秒後回到中心
-  setTimeout(() => {
-    characters.value.forEach(char => {
-      char.lookingAt = 'center'
-    })
-  }, 1500)
-}
-
-// 鼠標跟隨效果
-const handleMouseMove = (event) => {
-  const rect = event.target.getBoundingClientRect()
-  mousePosition.value = {
-    x: ((event.clientX - rect.left) / rect.width) * 100,
-    y: ((event.clientY - rect.top) / rect.height) * 100
-  }
-  
-  // 只有在沒有其他互動時才跟隨鼠標
-  const hasActiveInteraction = characters.value.some(char => 
-    ['password', 'email', 'name', 'confirmPassword', 'away', 'jump', 'shake'].includes(char.lookingAt)
-  )
-  
-  if (!hasActiveInteraction) {
-    characters.value.forEach(char => {
-      char.lookingAt = 'mouse'
-    })
-  }
-}
-
-// 輸入框焦點效果
-const handleInputFocus = (fieldName) => {
-  characters.value.forEach(char => {
-    char.lookingAt = fieldName
-  })
-}
-
-// 輸入框失焦效果
-const handleInputBlur = () => {
-  // 回到跟隨鼠標狀態
-  characters.value.forEach(char => {
-    char.lookingAt = 'mouse'
-  })
-}
-
-// 輸入內容變化效果
-const handleInputChange = (fieldName) => {
-  characters.value.forEach(char => {
-    char.lookingAt = fieldName
-  })
-  
-  // 持續關注輸入框，不自動回到中心
-}
-
-// 載入動畫
-const startLoadingAnimation = () => {
-  isLoading.value = true
-  
-  // 角色彈出動畫
-  characters.value.forEach((char, index) => {
-    setTimeout(() => {
-      char.isVisible = true
-    }, index * 200)
-  })
-  
-  // 3秒後隱藏載入畫面
-  setTimeout(() => {
-    isLoading.value = false
-  }, 3000)
 }
 
 // 登陸成功動畫
 const showSuccessAnimation = () => {
   loginResult.value = 'success'
-  characters.value.forEach(char => {
-    char.lookingAt = 'jump'
-  })
-  
   setTimeout(() => {
     loginResult.value = null
-    characters.value.forEach(char => {
-      char.lookingAt = 'center'
-    })
   }, 2000)
 }
 
 // 登陸失敗動畫
 const showErrorAnimation = () => {
   loginResult.value = 'error'
-  characters.value.forEach(char => {
-    char.lookingAt = 'shake'
-  })
-  
   setTimeout(() => {
     loginResult.value = null
-    characters.value.forEach(char => {
-      char.lookingAt = 'center'
-    })
   }, 2000)
 }
 
@@ -276,84 +163,11 @@ const handleRegister = async () => {
 const currentForm = computed(() => isLogin.value ? loginForm.value : registerForm.value)
 const currentErrors = computed(() => isLogin.value ? loginErrors.value : registerErrors.value)
 
-// 組件掛載時啟動載入動畫
-onMounted(() => {
-  startLoadingAnimation()
-})
 </script>
 
 <template>
   <div class="auth-container">
-    <!-- 載入動畫 -->
-    <div v-if="isLoading" class="loading-overlay">
-      <div class="characters-container" @mousemove="handleMouseMove">
-        <div 
-          v-for="character in characters" 
-          :key="character.id"
-          :class="[
-            'character', 
-            character.name,
-            { 'visible': character.isVisible },
-            { 'looking-password': character.lookingAt === 'password' },
-            { 'looking-email': character.lookingAt === 'email' },
-            { 'looking-name': character.lookingAt === 'name' },
-            { 'looking-confirmPassword': character.lookingAt === 'confirmPassword' },
-            { 'looking-away': character.lookingAt === 'away' },
-            { 'looking-mouse': character.lookingAt === 'mouse' },
-            { 'jumping': character.lookingAt === 'jump' },
-            { 'shaking': character.lookingAt === 'shake' }
-          ]"
-          :style="{ 
-            left: character.x + '%', 
-            top: character.y + '%'
-          }"
-        >
-          <div class="character-body"></div>
-          <div class="character-eyes">
-            <div class="eye left-eye"></div>
-            <div class="eye right-eye"></div>
-          </div>
-          <div class="character-mouth"></div>
-        </div>
-      </div>
-      <div class="loading-text">載入中...</div>
-    </div>
-
-    <div class="auth-wrapper" :class="{ 'hidden': isLoading }">
-      <!-- 左側角色區域 -->
-      <div class="auth-image-section" @mousemove="handleMouseMove">
-        <div class="characters-container">
-          <div 
-            v-for="character in characters" 
-            :key="character.id"
-            :class="[
-              'character', 
-              character.name,
-              { 'visible': character.isVisible },
-            { 'looking-password': character.lookingAt === 'password' },
-            { 'looking-email': character.lookingAt === 'email' },
-            { 'looking-name': character.lookingAt === 'name' },
-            { 'looking-confirmPassword': character.lookingAt === 'confirmPassword' },
-            { 'looking-away': character.lookingAt === 'away' },
-            { 'looking-mouse': character.lookingAt === 'mouse' },
-            { 'jumping': character.lookingAt === 'jump' },
-            { 'shaking': character.lookingAt === 'shake' }
-            ]"
-            :style="{ 
-              left: character.x + '%', 
-              top: character.y + '%'
-            }"
-          >
-            <div class="character-body"></div>
-            <div class="character-eyes">
-              <div class="eye left-eye"></div>
-              <div class="eye right-eye"></div>
-            </div>
-            <div class="character-mouth"></div>
-          </div>
-        </div>
-      </div>
-      
+    <div class="auth-wrapper">
       <!-- 右側表單區域 -->
       <div class="auth-form-section">
         <div class="auth-form-container">
@@ -379,9 +193,6 @@ onMounted(() => {
                 type="text"
                 placeholder="Enter your name"
                 :class="{ error: registerErrors.name }"
-                @focus="handleInputFocus('name')"
-                @blur="handleInputBlur"
-                @input="handleInputChange('name')"
               />
               <span v-if="registerErrors.name" class="error-message">{{ registerErrors.name }}</span>
             </div>
@@ -395,9 +206,6 @@ onMounted(() => {
                 type="email"
                 placeholder="Enter your email"
                 :class="{ error: currentErrors.email }"
-                @focus="handleInputFocus('email')"
-                @blur="handleInputBlur"
-                @input="handleInputChange('email')"
               />
               <span v-if="currentErrors.email" class="error-message">{{ currentErrors.email }}</span>
             </div>
@@ -412,9 +220,6 @@ onMounted(() => {
                   :type="showPassword ? 'text' : 'password'"
                   placeholder="Enter your password"
                   :class="{ error: currentErrors.password }"
-                  @focus="handleInputFocus('password')"
-                  @blur="handleInputBlur"
-                  @input="handleInputChange('password')"
                 />
                 <button type="button" @click="togglePassword" class="password-toggle">
                   <span v-if="showPassword">👁️</span>
@@ -434,9 +239,6 @@ onMounted(() => {
                   :type="showConfirmPassword ? 'text' : 'password'"
                   placeholder="Confirm your password"
                   :class="{ error: registerErrors.confirmPassword }"
-                  @focus="handleInputFocus('confirmPassword')"
-                  @blur="handleInputBlur"
-                  @input="handleInputChange('confirmPassword')"
                 />
                 <button type="button" @click="toggleConfirmPassword" class="password-toggle">
                   <span v-if="showConfirmPassword">👁️</span>
@@ -461,12 +263,6 @@ onMounted(() => {
               <span v-if="loading">Processing...</span>
               <span v-else>{{ isLogin ? 'Log in' : 'Sign up' }}</span>
             </button>
-            
-            <!-- Google 登陸按鈕（僅登陸時顯示） -->
-            <button v-if="isLogin" type="button" class="google-btn">
-              <span class="google-icon">G</span>
-              Log In with Google
-            </button>
           </form>
           
           <!-- 切換模式 -->
@@ -485,265 +281,50 @@ onMounted(() => {
 </template>
 
 <style scoped>
+/* 重置樣式，確保不受全局樣式影響 */
 .auth-container {
   min-height: 100vh;
+  width: 100%;
   background: #f8f9fa;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  padding: 20px;
   position: relative;
-}
-
-/* 載入動畫樣式 */
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.characters-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-/* 表單中的角色容器 */
-.auth-image-section .characters-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.character {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  opacity: 0;
-  transform: scale(0);
-  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.character.visible {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.character-body {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.character.orange .character-body {
-  background: linear-gradient(135deg, #ff8c42, #ff6b35);
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-}
-
-.character.purple .character-body {
-  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-  border-radius: 20px;
-  height: 80px;
-}
-
-.character.black .character-body {
-  background: linear-gradient(135deg, #374151, #1f2937);
-  border-radius: 15px;
-  height: 70px;
-}
-
-.character.yellow .character-body {
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
-  border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
-  width: 80px;
-  height: 60px;
-}
-
-.character-eyes {
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-}
-
-.eye {
-  width: 8px;
-  height: 8px;
-  background: white;
-  border-radius: 50%;
-  position: relative;
-}
-
-.eye::after {
-  content: '';
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 4px;
-  height: 4px;
-  background: #000;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-}
-
-.character-mouth {
-  position: absolute;
-  bottom: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 10px;
-  border: 2px solid #000;
-  border-top: none;
-  border-radius: 0 0 20px 20px;
-  transition: all 0.3s ease;
-}
-
-/* 角色動畫 */
-.character.looking-password .character-eyes {
-  transform: translateX(-50%) translateX(10px);
-}
-
-.character.looking-password .character-mouth {
-  width: 15px;
-  height: 8px;
-}
-
-.character.looking-email .character-eyes {
-  transform: translateX(-50%) translateX(8px);
-}
-
-.character.looking-email .character-mouth {
-  width: 18px;
-  height: 9px;
-}
-
-.character.looking-name .character-eyes {
-  transform: translateX(-50%) translateX(6px);
-}
-
-.character.looking-name .character-mouth {
-  width: 16px;
-  height: 8px;
-}
-
-.character.looking-confirmPassword .character-eyes {
-  transform: translateX(-50%) translateX(12px);
-}
-
-.character.looking-confirmPassword .character-mouth {
-  width: 14px;
-  height: 7px;
-}
-
-.character.looking-away .character-eyes {
-  transform: translateX(-50%) translateX(-15px);
-}
-
-.character.looking-away .character-mouth {
-  width: 12px;
-  height: 6px;
-  border-radius: 0 0 15px 15px;
-}
-
-.character.looking-mouse .character-eyes {
-  transform: translateX(-50%) translateX(8px);
-}
-
-.character.looking-mouse .character-mouth {
-  width: 18px;
-  height: 9px;
-}
-
-.character.jumping {
-  animation: jump 0.6s ease-in-out;
-}
-
-.character.shaking {
-  animation: shake 0.5s ease-in-out;
-}
-
-@keyframes jump {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-20px) scale(1.1); }
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
-}
-
-.loading-text {
-  position: absolute;
-  bottom: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 24px;
-  color: #2c5530;
-  font-weight: bold;
-  animation: pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-.auth-wrapper.hidden {
-  opacity: 0;
-  pointer-events: none;
+  box-sizing: border-box;
+  font-size: 16px; /* 確保基本字體大小 */
 }
 
 .auth-wrapper {
   background: white;
-  border-radius: 0;
-  box-shadow: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   display: flex;
   width: 100%;
-  height: 100vh;
-}
-
-.auth-image-section {
-  flex: 1;
-  background: #f1f3f4;
-  position: relative;
-  display: flex;
-  align-items: center;
+  max-width: 500px;
+  min-height: auto;
+  box-sizing: border-box;
+  transform: scale(1); /* 確保沒有被縮放 */
   justify-content: center;
-  padding: 40px;
+  align-items: center;
 }
 
 .auth-form-section {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  padding: 50px;
   background: white;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .auth-form-container {
   width: 100%;
-  max-width: 350px;
+  max-width: 450px;
+  box-sizing: border-box;
+  font-size: 16px; /* 確保表單容器字體大小正常 */
 }
 
 .top-icon {
@@ -773,15 +354,17 @@ onMounted(() => {
 
 .auth-header h1 {
   color: #000;
-  font-size: 28px;
+  font-size: 28px !important;
   margin: 0 0 8px 0;
   font-weight: bold;
+  line-height: 1.2;
 }
 
 .auth-header p {
   color: #666;
-  font-size: 14px;
+  font-size: 14px !important;
   margin: 0;
+  line-height: 1.5;
 }
 
 .auth-form {
@@ -797,7 +380,8 @@ onMounted(() => {
   color: #000;
   font-weight: 500;
   margin-bottom: 6px;
-  font-size: 14px;
+  font-size: 14px !important;
+  line-height: 1.4;
 }
 
 .form-group input {
@@ -805,9 +389,12 @@ onMounted(() => {
   padding: 12px 16px;
   border: 1px solid #ddd;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 14px !important;
   transition: all 0.3s ease;
   box-sizing: border-box;
+  line-height: 1.5;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .form-group input:focus {
@@ -837,9 +424,10 @@ onMounted(() => {
 
 .error-message {
   color: #e74c3c;
-  font-size: 12px;
+  font-size: 12px !important;
   margin-top: 4px;
   display: block;
+  line-height: 1.4;
 }
 
 .form-options {
@@ -853,8 +441,9 @@ onMounted(() => {
   display: flex;
   align-items: center;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 14px !important;
   color: #666;
+  line-height: 1.5;
 }
 
 .checkbox-wrapper input[type="checkbox"] {
@@ -880,11 +469,15 @@ onMounted(() => {
   border: none;
   padding: 12px;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 14px !important;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 12px;
+  box-sizing: border-box;
+  line-height: 1.5;
+  min-height: 44px; /* 確保觸控目標足夠大 */
+  touch-action: manipulation; /* 改善移動端觸控體驗 */
 }
 
 .submit-btn:hover:not(:disabled) {
@@ -903,7 +496,7 @@ onMounted(() => {
   border: 1px solid #ddd;
   padding: 12px;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 14px !important;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -911,6 +504,10 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  box-sizing: border-box;
+  line-height: 1.5;
+  min-height: 44px; /* 確保觸控目標足夠大 */
+  touch-action: manipulation; /* 改善移動端觸控體驗 */
 }
 
 .google-btn:hover {
@@ -937,7 +534,8 @@ onMounted(() => {
 .auth-switch p {
   color: #666;
   margin: 0;
-  font-size: 14px;
+  font-size: 14px !important;
+  line-height: 1.5;
 }
 
 .switch-btn {
@@ -947,60 +545,267 @@ onMounted(() => {
   font-weight: 500;
   cursor: pointer;
   text-decoration: underline;
-  font-size: 14px;
+  font-size: 14px !important;
   margin-left: 5px;
+  line-height: 1.5;
 }
 
 .switch-btn:hover {
   color: #333;
 }
 
-/* 響應式設計 */
+/* 響應式設計 - 平板 (768px 以下) */
 @media (max-width: 768px) {
-  .auth-wrapper {
-    flex-direction: column;
-    width: 100%;
-    height: 100vh;
+  .auth-container {
+    padding: 15px;
+    align-items: flex-start;
+    padding-top: 40px;
   }
-  
-  .auth-image-section {
-    min-height: 200px;
-    padding: 20px;
+
+  .auth-wrapper {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   }
   
   .auth-form-section {
-    padding: 30px 20px;
-    flex: 1;
+    padding: 30px 24px;
+  }
+  
+  .auth-form-container {
+    max-width: 100%;
+  }
+
+  .auth-header {
+    margin-bottom: 24px;
   }
   
   .auth-header h1 {
-    font-size: 24px;
+    font-size: 24px !important;
+  }
+
+  .auth-header p {
+    font-size: 13px !important;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  .form-options {
+    flex-wrap: wrap;
+    gap: 12px;
   }
 }
 
+/* 響應式設計 - 手機 (480px 以下) */
 @media (max-width: 480px) {
   .auth-container {
     padding: 0;
+    align-items: flex-start;
+    padding-top: 20px;
+    min-height: 100vh;
   }
   
   .auth-wrapper {
     border-radius: 0;
     width: 100%;
-    height: 100vh;
+    max-width: 100%;
+    box-shadow: none;
+    min-height: calc(100vh - 20px);
   }
   
   .auth-form-section {
-    padding: 20px 15px;
+    padding: 24px 20px;
+    min-height: 100%;
+  }
+
+  .auth-form-container {
+    max-width: 100%;
+  }
+
+  .top-icon {
+    margin-bottom: 16px;
+  }
+
+  .cross-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
+  }
+  
+  .auth-header {
+    margin-bottom: 20px;
+  }
+
+  .auth-header h1 {
+    font-size: 22px !important;
+    margin-bottom: 6px;
+  }
+
+  .auth-header p {
+    font-size: 12px !important;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-group label {
+    font-size: 13px !important;
+    margin-bottom: 5px;
   }
   
   .form-group input {
-    padding: 10px 12px;
-    font-size: 14px;
+    padding: 14px 16px;
+    font-size: 16px !important; /* 防止 iOS 自動縮放 */
+    border-radius: 8px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .password-toggle {
+    right: 14px;
+    font-size: 18px;
+    padding: 4px;
+    touch-action: manipulation; /* 改善觸控體驗 */
+  }
+
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .checkbox-wrapper {
+    font-size: 13px !important;
+  }
+
+  .forgot-password {
+    font-size: 13px !important;
+    align-self: flex-end;
   }
   
   .submit-btn, .google-btn {
-    padding: 10px;
-    font-size: 14px;
+    padding: 14px;
+    font-size: 15px !important;
+    border-radius: 8px;
+    touch-action: manipulation; /* 改善觸控體驗 */
+    min-height: 48px; /* 觸控目標最小尺寸 */
+  }
+
+  .google-btn {
+    gap: 10px;
+  }
+
+  .google-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+  }
+
+  .auth-switch {
+    margin-top: 16px;
+  }
+
+  .auth-switch p {
+    font-size: 13px !important;
+    line-height: 1.6;
+  }
+
+  .switch-btn {
+    font-size: 13px !important;
+    padding: 4px 0;
+    touch-action: manipulation;
+  }
+
+  .error-message {
+    font-size: 11px !important;
+    margin-top: 3px;
   }
 }
+
+/* 響應式設計 - 小手機 (360px 以下) */
+@media (max-width: 360px) {
+  .auth-container {
+    padding-top: 15px;
+  }
+
+  .auth-form-section {
+    padding: 20px 16px;
+  }
+
+  .auth-header h1 {
+    font-size: 20px !important;
+  }
+
+  .auth-header p {
+    font-size: 11px !important;
+  }
+
+  .form-group input {
+    padding: 12px 14px;
+    font-size: 15px !important;
+  }
+
+  .submit-btn, .google-btn {
+    padding: 12px;
+    font-size: 14px !important;
+  }
+}
+
+/* 橫向模式優化 */
+@media (max-height: 600px) and (orientation: landscape) {
+  .auth-container {
+    align-items: flex-start;
+    padding: 10px;
+    padding-top: 20px;
+  }
+
+  .auth-form-section {
+    padding: 20px;
+  }
+
+  .auth-header {
+    margin-bottom: 16px;
+  }
+
+  .auth-header h1 {
+    font-size: 20px !important;
+    margin-bottom: 4px;
+  }
+
+  .auth-header p {
+    font-size: 11px !important;
+  }
+
+  .form-group {
+    margin-bottom: 12px;
+  }
+}
+
+/* 大螢幕優化 (1200px 以上) */
+@media (min-width: 1200px) {
+  .auth-wrapper {
+    max-width: 800px; /* 改大一些 */
+    margin: 0 auto;   /* 置中 */
+    max-height: 100vh;
+  }
+
+  .auth-form-container {
+    max-width: 700px; /* 調整成合適比例 */
+    max-height: 100vh;
+  }
+
+  .auth-header h1 {
+    font-size: 32px !important;
+  }
+
+  .auth-header p {
+    font-size: 15px !important;
+  }
+}
+
 </style>

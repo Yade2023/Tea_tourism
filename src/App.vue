@@ -57,29 +57,29 @@ const teaGardens = ref([
 // 台灣縣市列表及座標範圍（用於 SVG 地圖，座標為百分比 0-100）- 根據實際地理位置調整
 const cities = ref([
   // 北部區域 (粉色區域)
-  { name: '台北市', x: 63, y: 6, color: '#4a7c59' },
-  { name: '新北市', x: 62, y: 12, color: '#5a8c69' },
-  { name: '基隆市', x: 72, y: 8, color: '#6b8e6b' },
-  { name: '桃園市', x: 50, y: 15, color: '#2c5530' },
-  { name: '新竹市', x: 45, y: 22, color: '#4a7c59' },
-  { name: '宜蘭縣', x: 67, y: 27, color: '#5a8c69' },
+  { name: '台北市', x: 75, y: -22, color: '#4a7c59' },
+  { name: '新北市', x: 63, y: -20, color: '#5a8c69' },
+  { name: '基隆市', x: 90, y: -25, color: '#6b8e6b' },
+  { name: '桃園市', x: 50, y: -10, color: '#2c5530' },
+  { name: '新竹市', x: 40, y: 0, color: '#4a7c59' },
+  { name: '宜蘭縣', x: 85, y: 0, color: '#5a8c69' },
   
   // 中部區域 (橘色區域)
-  { name: '苗栗縣', x: 40, y: 28, color: '#6b8e6b' },
-  { name: '台中市', x: 36, y: 38, color: '#4a7c59' },
-  { name: '彰化縣', x: 30, y: 47, color: '#5a8c69' },
+  { name: '苗栗縣', x: 35, y: 10, color: '#6b8e6b' },
+  { name: '台中市', x: 30, y: 20, color: '#4a7c59' },
+  { name: '彰化縣', x: 20, y: 30, color: '#5a8c69' },
   { name: '南投縣', x: 48, y: 45, color: '#6b8e6b' },
-  { name: '雲林縣', x: 28, y: 53, color: '#4a7c59' },
-  { name: '嘉義市', x: 30, y: 60, color: '#5a8c69' },
+  { name: '雲林縣', x: 15, y: 40, color: '#4a7c59' },
+  { name: '嘉義市', x: 15, y: 55, color: '#5a8c69' },
   
   // 東部區域 (淺綠色區域)
-  { name: '花蓮縣', x: 62, y: 50, color: '#4a7c59' },
-  { name: '台東縣', x: 53, y: 70, color: '#5a8c69' },
+  { name: '花蓮縣', x: 74, y: 30, color: '#4a7c59' },
+  { name: '台東縣', x: 53, y: 92, color: '#5a8c69' },
   
   // 南部區域 (淺黃色區域)
-  { name: '台南市', x: 34, y: 70, color: '#6b8e6b' },
-  { name: '高雄市', x: 36, y: 80, color: '#4a7c59' },
-  { name: '屏東縣', x: 44, y: 95, color: '#5a8c69' }
+  { name: '台南市', x: 20, y: 70, color: '#6b8e6b' },
+  { name: '高雄市', x: 20, y: 95, color: '#4a7c59' },
+  { name: '屏東縣', x: 38, y: 125, color: '#5a8c69' }
 ])
 
 // 縣市描述資料
@@ -618,7 +618,7 @@ onUnmounted(() => {
 }
 
 .text-content h1 {
-  font-size: 18rem;
+  font-size: 2.5rem;
   color: #1a1a1a;
   margin-bottom: 1.2rem;
   font-weight: 700;
@@ -628,7 +628,7 @@ onUnmounted(() => {
 }
 
 .text-content .subtitle {
-  font-size: 10rem;
+  font-size: 1.5rem;
   color: #666666;
   margin-bottom: 2rem;
   font-weight: 400;
@@ -637,7 +637,7 @@ onUnmounted(() => {
 }
 
 .text-content p {
-  font-size: 6rem;
+  font-size: 1rem;
   line-height: 1.8;
   color: #4a4a4a;
   margin-bottom: 1.8rem;
@@ -770,7 +770,7 @@ onUnmounted(() => {
 }
 
 .text-block h2 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: #1a1a1a;
   margin-bottom: 20px;
   font-weight: 600;
@@ -778,7 +778,7 @@ onUnmounted(() => {
 }
 
 .text-block p {
-  font-size: 3rem;
+  font-size: 1rem;
   line-height: 1.8;
   color: #4a4a4a;
   margin-bottom: 20px;
@@ -818,7 +818,7 @@ onUnmounted(() => {
   padding: 20px 15px;
   text-align: left;
   font-weight: 600;
-  font-size: 6rem;
+  font-size: 1rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   height: 60px;
   vertical-align: middle;
@@ -839,7 +839,7 @@ onUnmounted(() => {
 .events-table td {
   padding: 18px 15px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  font-size: 4rem;
+  font-size: 0.95rem;
   color: #4a4a4a;
   height: 65px;
   vertical-align: middle;
@@ -905,7 +905,7 @@ onUnmounted(() => {
   color: #1a1a1a;
   border-radius: 8px;
   cursor: pointer;
-  font-size:5rem;
+  font-size: 1rem;
   font-weight: 500;
   transition: all 0.2s ease;
 }
@@ -936,7 +936,7 @@ onUnmounted(() => {
   color: #4a4a4a;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 5rem;
+  font-size: 1rem;
   font-weight: 600;
   transition: all 0.2s ease;
   display: flex;
@@ -988,7 +988,7 @@ onUnmounted(() => {
 
 .map-header h3 {
   color: #1a1a1a;
-  font-size: 5rem;
+  font-size: 1.5rem;
   margin-bottom: 12px;
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -996,7 +996,7 @@ onUnmounted(() => {
 
 .selected-city {
   color: #666666;
-  font-size: 5rem;
+  font-size: 0.95rem;
   margin: 0;
   font-weight: 400;
 }
@@ -1004,7 +1004,7 @@ onUnmounted(() => {
 .selected-city span {
   color: #1a1a1a;
   font-weight: 600;
-  font-size: 5rem;
+  font-size: 1rem;
   padding: 6px 14px;
   background: #f5f5f5;
   border-radius: 8px;
@@ -1115,7 +1115,7 @@ onUnmounted(() => {
   color: #4a4a4a;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 5.5rem;
+  font-size: 0.9rem;
   font-weight: 500;
   transition: all 0.2s ease;
   min-width: 85px;
