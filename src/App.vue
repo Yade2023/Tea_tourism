@@ -1,9 +1,9 @@
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue'
 // 如果需要import圖片
-import taiwanImg from './assets/img/taiwan.jpeg'
+import taiwanImg from './assets/img/taiwan.png'
 import taiwanAdminImg from './assets/img/taiwan-admin.svg'
-import taiwanSilhouette from './assets/img/taiwan.jpeg'
+import taiwanSilhouette from './assets/img/taiwan.png'
 
 // 輪播相關
 const currentSlide = ref(0)
@@ -18,8 +18,6 @@ const totalPages = ref(6)
 
 // 地圖相關
 const currentLocation = ref('桃園市')
-const isSatellite = ref(false)
-const map = ref(null)
 const selectedCity = ref('桃園市')
 const teaGardens = ref([
   {
@@ -56,33 +54,168 @@ const teaGardens = ref([
   }
 ])
 
-// 台灣縣市列表及座標範圍（用於 SVG 地圖，座標為百分比 0-100）- 僅本島縣市，座標已分散
+// 台灣縣市列表及座標範圍（用於 SVG 地圖，座標為百分比 0-100）- 根據實際地理位置調整
 const cities = ref([
-  { name: '台北市', x: 42, y: 22, color: '#4a7c59' },
-  { name: '新北市', x: 38, y: 26, color: '#5a8c69' },
-  { name: '桃園市', x: 36, y: 30, color: '#2c5530' },
-  { name: '新竹縣', x: 40, y: 34, color: '#6b8e6b' },
-  { name: '新竹市', x: 41, y: 35, color: '#4a7c59' },
-  { name: '苗栗縣', x: 36, y: 40, color: '#5a8c69' },
-  { name: '台中市', x: 30, y: 48, color: '#6b8e6b' },
-  { name: '彰化縣', x: 28, y: 52, color: '#4a7c59' },
-  { name: '南投縣', x: 42, y: 54, color: '#5a8c69' },
-  { name: '雲林縣', x: 26, y: 56, color: '#6b8e6b' },
-  { name: '嘉義縣', x: 28, y: 60, color: '#4a7c59' },
-  { name: '嘉義市', x: 30, y: 61, color: '#5a8c69' },
-  { name: '台南市', x: 28, y: 66, color: '#6b8e6b' },
-  { name: '高雄市', x: 32, y: 72, color: '#4a7c59' },
-  { name: '屏東縣', x: 36, y: 78, color: '#5a8c69' },
-  { name: '宜蘭縣', x: 58, y: 32, color: '#6b8e6b' },
-  { name: '花蓮縣', x: 72, y: 46, color: '#4a7c59' },
-  { name: '台東縣', x: 80, y: 68, color: '#5a8c69' },
-  { name: '基隆市', x: 46, y: 18, color: '#6b8e6b' }
+  // 北部區域 (粉色區域)
+  { name: '台北市', x: 63, y: 6, color: '#4a7c59' },
+  { name: '新北市', x: 62, y: 12, color: '#5a8c69' },
+  { name: '基隆市', x: 72, y: 8, color: '#6b8e6b' },
+  { name: '桃園市', x: 50, y: 15, color: '#2c5530' },
+  { name: '新竹市', x: 45, y: 22, color: '#4a7c59' },
+  { name: '宜蘭縣', x: 67, y: 27, color: '#5a8c69' },
+  
+  // 中部區域 (橘色區域)
+  { name: '苗栗縣', x: 40, y: 28, color: '#6b8e6b' },
+  { name: '台中市', x: 36, y: 38, color: '#4a7c59' },
+  { name: '彰化縣', x: 30, y: 47, color: '#5a8c69' },
+  { name: '南投縣', x: 48, y: 45, color: '#6b8e6b' },
+  { name: '雲林縣', x: 28, y: 53, color: '#4a7c59' },
+  { name: '嘉義市', x: 30, y: 60, color: '#5a8c69' },
+  
+  // 東部區域 (淺綠色區域)
+  { name: '花蓮縣', x: 62, y: 50, color: '#4a7c59' },
+  { name: '台東縣', x: 53, y: 70, color: '#5a8c69' },
+  
+  // 南部區域 (淺黃色區域)
+  { name: '台南市', x: 34, y: 70, color: '#6b8e6b' },
+  { name: '高雄市', x: 36, y: 80, color: '#4a7c59' },
+  { name: '屏東縣', x: 44, y: 95, color: '#5a8c69' }
 ])
+
+// 縣市描述資料
+const cityDescriptions = {
+  '台北市': {
+    title: '台北茶鄉',
+    subtitle: '山城之上的茶香記憶',
+    description1: '台北文山區自古便是包種茶的發源地。山巒環抱、霧氣繚繞，茶樹沐浴於溫潤氣候之中，茶香清雅淡柔，湯色明亮透澈。',
+    description2: '行走於貓空山徑，茶香隨風輕拂，茶舍錯落於綠意之間，靜謐而悠然。每一壺文山包種茶，都是城市與自然最和諧的交響。',
+    quote: '「霧繞山城香入夢，一盞清心見人情」'
+  },
+  '新北市': {
+    title: '新北茶鄉',
+    subtitle: '探索台灣茶葉的故鄉',
+    description1: '新北自清代起便開始種茶，是台灣北部茶文化的發源地之一。山巒起伏、氣候涼爽，孕育出香氣馥郁、滋味清新的好茶。坪林、石碇一帶茶園層疊，綠意連綿，成就了文山包種茶的典雅韻味。',
+    description2: '漫步山間，霧氣瀰漫，茶香隨風流轉。茶農以專注的手藝守護土地，也傳承著這份屬於北台灣的茶之魂。',
+    quote: '「茶香飄逸滿山間，綠意盎然映眼簾」'
+  },
+  '桃園市': {
+    title: '桃園茶鄉',
+    subtitle: '細品拉拉山的雲霧甘露',
+    description1: '桃園山區自古便以高山茶聞名，拉拉山、復興區一帶雲霧繚繞、氣候涼爽，孕育出香氣清雅、滋味回甘的茶葉。當地茶農秉持傳統製茶工藝，結合現代技術，讓茶香更添層次。',
+    description2: '漫步於山徑間，茶園綿延如畫，微風拂過茶樹，清香隨風而來。這裡的每一口茶，都蘊含著土地的溫度與職人的心意。',
+    quote: '「雲霧深處藏甘露，一壺桃香沁人心」'
+  },
+  '新竹市': {
+    title: '新竹茶鄉',
+    subtitle: '山風輕拂的蜜香韻',
+    description1: '新竹北埔與峨眉地區，是東方美人茶的重要產地。茶園坐落山坡，陽光與山風交錯，讓茶葉散發淡淡蜜果香。',
+    description2: '茶農順應自然節氣採製，細心揉焙，使茶湯柔和清甜、韻味深長。那一抹香氣，藏著丘陵間的溫柔與歲月的堅定。',
+    quote: '「微風拂過葉初展，一壺蜜韻沁心間」'
+  },
+  '基隆市': {
+    title: '基隆茶鄉',
+    subtitle: '海霧山嶺的獨特氣息',
+    description1: '基隆山區雲霧繚繞、濕潤多雨，孕育出別具風味的在地小葉種茶。海風帶來鹹潤氣息，使茶香中多了一份柔順與清透。',
+    description2: '登上暖暖與七堵山巒，海景與茶園相映成趣。品茗之際，彷彿能嚐到山的靜謐與海的呼吸。',
+    quote: '「霧起潮聲共入香，一啜山海韻悠長」'
+  },
+  '宜蘭縣': {
+    title: '宜蘭茶鄉',
+    subtitle: '蘭陽山水的自然芬芳',
+    description1: '宜蘭的冬山、員山地區，以有機與自然農法聞名。茶園依山傍水，晨霧繚繞，使茶香格外清新。',
+    description2: '走進茶鄉，處處可見茶樹與山林共生的景致。每一口茶，都彷彿能嘗到山泉的甘甜與海風的氣息。',
+    quote: '「霧鎖蘭陽茶初綻，一啜清芳入心間」'
+  },
+  '苗栗縣': {
+    title: '苗栗茶鄉',
+    subtitle: '客家山城的樸實韻味',
+    description1: '苗栗是東方美人茶的故鄉，茶園坐落在山坡間，蟬鳴與風聲相伴。被小綠葉蟬輕咬過的嫩葉，製成的茶湯蜜香芬芳、入口柔順。',
+    description2: '走進這片客家茶鄉，濃濃人情與茶香交織。每一壺茶，都是時間與土地共同釀成的溫度。',
+    quote: '「蜜韻潤喉心自暖，山風輕語話人間」'
+  },
+  '台中市': {
+    title: '台中茶鄉',
+    subtitle: '谷關山間的清新韻味',
+    description1: '台中的東勢、和平一帶山巒起伏、氣候宜人，孕育出香氣柔和、滋味鮮爽的高山茶。這裡的茶園與林木相伴，茶香中帶著自然的氣息。',
+    description2: '茶農以傳統工法製茶，注重每個細節，讓一壺好茶蘊含山林的純粹。登高俯瞰，滿山翠綠，茶香隨風流轉。',
+    quote: '「山風吹綠滿茶嶺，一壺清香潤人心」'
+  },
+  '彰化縣': {
+    title: '彰化茶鄉',
+    subtitle: '山腳茶園的純樸香氣',
+    description1: '彰化八卦山脈西麓，日照充足、氣候溫和，是中台灣少見的平原茶區。茶園多以小農經營，專注於自然農法與傳統製茶工藝，香氣樸實、滋味柔和。',
+    description2: '走入芬園、社頭山區，茶園與稻田交錯，構成一幅恬靜的鄉村畫。這裡的茶，不張揚，卻在淡淡清香中，傳遞最真實的土地氣息。',
+    quote: '「山風輕拂香盈袖，一啜人情最純然」'
+  },
+  '南投縣': {
+    title: '南投茶鄉',
+    subtitle: '高山雲霧孕好茶',
+    description1: '南投是台灣著名的高山茶故鄉，從鹿谷凍頂到魚池紅茶，皆享譽國內外。海拔高、日夜溫差大，使茶葉香氣濃郁、滋味醇厚。',
+    description2: '茶園沿山坡層層疊疊，如詩如畫。走進茶鄉，耳邊傳來揉茶的節奏，鼻尖縈繞著淡淡茶香。每一片茶葉，都是職人與山林對話的結晶。',
+    quote: '「霧起山巒翠如畫，一啜南投見匠心」'
+  },
+  '雲林縣': {
+    title: '雲林茶鄉',
+    subtitle: '平原裡的暖陽茶香',
+    description1: '雲林古坑以綠茶與凍頂烏龍聞名。這裡日照充足、雨量適中，孕育出香氣清亮、口感柔和的茶葉。',
+    description2: '茶鄉小路蜿蜒，茶農笑語回盪。每一道焙茶工序，都是對土地最深的致敬。',
+    quote: '「陽光灑落茶正熟，香氣悠悠滿山谷」'
+  },
+  '嘉義市': {
+    title: '嘉義茶鄉',
+    subtitle: '阿里山雲巔的清香記憶',
+    description1: '嘉義的阿里山茶以「香、甘、潤」聞名，茶園多分布於中高海拔地區。陽光與雲霧交錯，造就茶湯金黃透亮、回甘悠長的特質。',
+    description2: '登山遠眺，層層茶園與雲海相映成趣；近觀茶農輕捻嫩芽，那份專注與堅持，是對自然最深的敬意。',
+    quote: '「雲上飄香阿里山，一盞清心韻千回」'
+  },
+  '台南市': {
+    title: '台南茶鄉',
+    subtitle: '古都茶香的溫潤氣息',
+    description1: '台南白河與東山地區，以東山碧螺春著稱。茶園環繞在蓮花與果樹之間，花香、果香與茶香交融，滋味甘潤清新。',
+    description2: '午後的微風帶著茶香穿過山谷，古樸的茶舍中，一壺熱茶靜靜散發著時間的溫度。',
+    quote: '「花影搖曳香滿室，一啜東山意綿長」'
+  },
+  '高雄市': {
+    title: '高雄茶鄉',
+    subtitle: '南方山嶺的溫厚茶魂',
+    description1: '高雄六龜、甲仙地區山勢高聳，氣候溫潤。茶園錯落山坡，製成的茶湯香氣濃郁、口感厚實，帶著南方土地的熱情與厚度。',
+    description2: '茶香隨風流轉，映襯著藍天綠嶺。這裡的每一口茶，都是陽光與汗水交織的結晶。',
+    quote: '「南風拂葉香滿懷，一盞濃情暖心懷」'
+  },
+  '屏東縣': {
+    title: '屏東茶鄉',
+    subtitle: '山海之間的清新調和',
+    description1: '屏東霧台與三地門一帶，海風與山霧交錯，孕育出獨特的原鄉茶香。茶湯清亮爽口，帶著淡淡果韻與花香。',
+    description2: '部落茶農以自然方式耕作，保留茶葉最純粹的氣息。每一杯茶，都是山林靈氣的延續。',
+    quote: '「山海交融香入夢，一啜南境見真情」'
+  },
+  '花蓮縣': {
+    title: '花蓮茶鄉',
+    subtitle: '東岸山谷的清澈韻味',
+    description1: '花蓮瑞穗、鳳林地區茶園依山傍谷，山風吹拂，溪水滋潤。茶湯色澤清透，滋味甘甜，宛如山林的呼吸。',
+    description2: '在這裡，茶不只是飲品，更是自然的回聲。啜飲之間，彷彿能聽見土地的心跳。',
+    quote: '「山谷輕語風作伴，一壺花蓮見真純」'
+  },
+  '台東縣': {
+    title: '台東茶鄉',
+    subtitle: '日出之地的溫柔茶韻',
+    description1: '台東鹿野與關山地區，以紅烏龍聞名。茶園沐浴晨曦，香氣帶著果甜與蜜香，茶湯琥珀閃耀，回甘悠遠。',
+    description2: '在山與海之間，茶香輕飄，風帶著日光的暖意。這一壺紅烏龍，盛滿台東的自在與寧靜。',
+    quote: '「旭日映紅茶湯暖，一飲東岸好時光」'
+  }
+}
+
+// 計算當前選中縣市的描述
+const currentCityDescription = computed(() => {
+  return cityDescriptions[selectedCity.value] || cityDescriptions['桃園市']
+})
 
 // 點擊縣市
 const selectCity = (cityName) => {
   selectedCity.value = cityName
   currentLocation.value = cityName
+  // 點擊縣市時，切換到該縣市的詳細地圖
+  showFullTaiwanMap.value = false
   console.log('選擇縣市:', cityName)
 }
 
@@ -187,27 +320,43 @@ const goToPage = (page) => {
   }
 }
 
-// 地圖相關函數
-const initMap = () => {
-  // 這裡將初始化 Google Map
-  // 需要 Google Maps API key
-  console.log('初始化地圖...')
+// 各縣市 Google Maps 嵌入 URL 映射
+const cityMapUrls = {
+  '台北市': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3616.8339104475767!2d121.5877101!3d24.9717649!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3468002c22bb355f%3A0x3906dbd9519c9f89!2zMTE26Ie65YyX5biC5paH5bGx5Y2A5oyH5Y2X6Lev5LiJ5q61Mzjlt7cxOeiZnw!5e0!3m2!1szh-TW!2stw!4v1762137493565!5m2!1szh-TW!2stw',
+  '新北市': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3617.914272249667!2d121.7095509!3d24.934990199999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3467ff4f4079502d%3A0x20d7e7f9aa47285a!2zMjMy5paw5YyX5biC5Z2q5p6X5Y2A5YyX5a6c6Lev5YWr5q61MjYy6Jmf!5e0!3m2!1szh-TW!2stw!4v1762137728466!5m2!1szh-TW!2stw',
+  '桃園市': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115871.08064518555!2d121.17593769726561!3d24.830656100000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34683cf195555555%3A0x89b9b5e74173dd9f!2z56aP5rqQ6Iy25bug!5e0!3m2!1szh-TW!2stw!4v1762140352785!5m2!1szh-TW!2stw',
+  '新竹市': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115943.70104827506!2d120.98774337402419!3d24.752936515706732!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3468493227e1dd09%3A0xead6b87038d4a03d!2z5b6Q6ICA6Imv6Iy25ZyS!5e0!3m2!1szh-TW!2stw!4v1762140278243!5m2!1szh-TW!2stw',
+  '基隆市': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1849463.3411500254!2d119.31079225625!3d25.127809400000018!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x345d521895d54285%3A0xcc3e2d5271d676c0!2z6Iy257Gz55Sf6Iy26KGMLeWfuumahuiMtuiRieihjA!5e0!3m2!1szh-TW!2stw!4v1762140226363!5m2!1szh-TW!2stw',
+  '宜蘭縣': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d232173.8568976679!2d121.42946074797926!3d24.598977876887297!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34680afda522fc3d%3A0x65cec0b8c7600bcd!2z546J6Jit6Iy25ZyS!5e0!3m2!1szh-TW!2stw!4v1762140847065!5m2!1szh-TW!2stw',
+  '苗栗縣': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3631.7511683105954!2d120.77416339999998!3d24.459417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34690713912f4a0d%3A0x416c3b1694d9e172!2z5Y-w54Gj6L6y5p6XIOmKhemRvOiMtuW7oA!5e0!3m2!1szh-TW!2stw!4v1762137805805!5m2!1szh-TW!2stw',
+  '台中市': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3637.894767141052!2d121.24298002963869!3d24.24545907029677!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3468f34ce037528d%3A0x189eb8b21ea5bdca!2z562R5reo6Iy26IuRIFNlcmVuaXR5IFRlYSDvvIjpoJDntITliLbvvIk!5e0!3m2!1szh-TW!2stw!4v1762137954834!5m2!1szh-TW!2stw',
+  '彰化縣': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d930920.6100371872!2d120.37946798329428!3d24.297377636769756!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3469397fa8540e59%3A0x4009e261ae6d67f9!2z5qKF6Iqx6bm_6Iy26KGM!5e0!3m2!1szh-TW!2stw!4v1762140495371!5m2!1szh-TW!2stw',
+  '南投縣': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d116706.28744914358!2d120.7831023972656!3d23.9225227!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3468d79b7e7b0c2f%3A0x3066282f2c8c4381!2zSHVnb3N1beWSjOiPk-ajruael--9nOe0heiMtuingOWFieiMtuW7oC_ntIXojLblsIjploDlupcv5LiL5Y2I6Iy2L0RJWeiqsueoiy_nlbbml6Xlj6_ku6XpoJDntIRESVnvvIzoq4vlhYjkvobpm7vmiJbmmK_oqaLllY_lrpjmlrlsaW5lfg!5e0!3m2!1szh-TW!2stw!4v1762140684329!5m2!1szh-TW!2stw',
+  '雲林縣': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d116924.69892709839!2d120.57746324956261!3d23.679646821187557!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346ec54c9c7443fb%3A0x4770e8d5e1715fc8!2z6Zuy5ba65LmL5LiY!5e0!3m2!1szh-TW!2stw!4v1762140621994!5m2!1szh-TW!2stw',
+  '嘉義市': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d466823.6634910882!2d120.53585841425705!3d23.92293391811733!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346ee817ee56be05%3A0x8fc9680b68ac84e8!2z6Zi_6YeM5bGx6KeA5YWJ6Iy25ZyS77y75b6h57Wx6IyX5ZyS77y9WXUgVHVuZyBNaW5nIFl1YW4!5e0!3m2!1szh-TW!2stw!4v1762140763994!5m2!1szh-TW!2stw',
+  '台南市': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d235033.1184759658!2d119.87680959453122!3d23.0093574!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e763f6353ac73%3A0x68f99c941da622fe!2z5Y-w5Y2X5Y2X5bGx6Iy25ZyS772c5Y-w54Gj6Iy26JGJ5om555m86Zu25ZSu44CB6Iy26JGJ5a6i6KO95YyWT0VN44CB6Iy25YyF5Luj5bel44CB5Ya35rOh6Iy244CB6Iqx6Iy26Iy25YyF44CB56qo6KO96Iy25Yqg5bel54OY54SZ!5e0!3m2!1szh-TW!2stw!4v1762138067653!5m2!1szh-TW!2stw',
+  '高雄市': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.8701105927153!2d120.66330629999999!3d23.0285409!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e5b561fbfdac7%3A0xcf7802ede7df0386!2z5qyj5ZyS6KO96Iy2!5e0!3m2!1szh-TW!2stw!4v1762137879230!5m2!1szh-TW!2stw',
+  '屏東縣': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d58952.30656732456!2d120.46477054863277!3d22.55967819999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ee1b7e3ea699933%3A0xd48fcdc1af1886cf!2z5paf6Iy257ej6Iy25qWtIOWPquaMkeWQhOiMtuWNgOesrOS4gOWQjeeahOWlveiMtg!5e0!3m2!1szh-TW!2stw!4v1762138201712!5m2!1szh-TW!2stw',
+  '花蓮縣': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d943236.9167210467!2d119.84656468982983!3d22.55967649746449!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346f468012aa3397%3A0xa08b788412382f62!2z5ZiJ6IyX6Iy25ZyS!5e0!3m2!1szh-TW!2stw!4v1762138251651!5m2!1szh-TW!2stw',
+  '台東縣': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d117659.68403034004!2d121.03974523137491!3d22.844478953709004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346fa506902e17a7%3A0xd428d83156951a1a!2z56Kn6Ji_5ZyS6IyX6Iy25Z2KIEJpbHVveXVhbiBSZWQgT29sb25nIFRlYSB8IOe0heeDj-m-jeWwiOizow!5e0!3m2!1szh-TW!2stw!4v1762138287100!5m2!1szh-TW!2stw'
 }
 
-const centerMap = () => {
-  console.log('回到地圖中心')
-  // 實際實現會移動地圖到桃園市中心
-}
+// 預設的全台地圖 URL（載入時顯示）
+const defaultTaiwanMapUrl = 'https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1575047.3017064694!2d121.29109931970946!3d23.52115776149224!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1szh-TW!2stw!4v1762141297654!5m2!1szh-TW!2stw'
 
-const toggleSatellite = () => {
-  isSatellite.value = !isSatellite.value
-  console.log('切換地圖模式:', isSatellite.value ? '衛星模式' : '地圖模式')
-}
+// 是否顯示全台地圖
+const showFullTaiwanMap = ref(true)
 
-const showAllTeaGardens = () => {
-  console.log('顯示所有茶園:', teaGardens.value)
-  // 實際實現會在地圖上顯示所有茶園標記
-}
+// 計算當前選中縣市的地圖 URL
+const currentMapUrl = computed(() => {
+  // 如果顯示全台地圖，返回全台地圖 URL
+  if (showFullTaiwanMap.value) {
+    return defaultTaiwanMapUrl
+  }
+  // 否則返回選中縣市的地圖
+  return cityMapUrls[selectedCity.value] || cityMapUrls['桃園市']
+})
+
 
 const prevPage = () => {
   if (currentPage.value > 1) {
@@ -269,40 +418,16 @@ onUnmounted(() => {
                   
                   <!-- 縣市區域標記 -->
                   <g v-for="city in cities" :key="city.name" class="city-marker-group">
-                    <!-- 外圈光暈（僅選中時顯示） -->
-                    <circle 
-                      v-if="city.name === selectedCity"
-                      :cx="city.x" 
-                      :cy="city.y" 
-                      :r="6"
-                      :fill="city.color"
-                      opacity="0.3"
-                      class="city-glow"
-                    />
-                    
-                    <!-- 中圈（僅選中時顯示） -->
-                    <circle 
-                      v-if="city.name === selectedCity"
-                      :cx="city.x" 
-                      :cy="city.y" 
-                      :r="4.5"
-                      :fill="city.color"
-                      opacity="0.5"
-                      class="city-ring"
-                    />
-                    
                     <!-- 主標記圓圈 -->
                     <circle 
                       :cx="city.x" 
                       :cy="city.y" 
-                      :r="city.name === selectedCity ? 3.5 : 2.5"
-                      :fill="city.name === selectedCity ? 'url(#cityGradient)' : city.color"
-                      :stroke="city.name === selectedCity ? '#ffffff' : '#ffffff'"
-                      :stroke-width="city.name === selectedCity ? 0.6 : 0.4"
+                      :r="city.name === selectedCity ? 2 : 1.5"
+                      :fill="city.color"
+                      stroke="#ffffff"
+                      stroke-width="0.3"
                       class="city-area"
-                      :class="{ 'selected': city.name === selectedCity }"
                       @click="selectCity(city.name)"
-                      filter="url(#glow)"
                       style="cursor: pointer;"
                     />
                     
@@ -310,39 +435,11 @@ onUnmounted(() => {
                     <circle 
                       :cx="city.x" 
                       :cy="city.y" 
-                      :r="city.name === selectedCity ? 1.2 : 0.9"
+                      :r="0.6"
                       fill="#ffffff"
-                      opacity="0.9"
+                      opacity="0.8"
                       class="city-dot"
                     />
-                    
-                    <!-- 縣市名稱標籤 -->
-                    <g class="city-label">
-                      <!-- 文字背景（陰影） -->
-                      <rect 
-                        :x="city.x - 8" 
-                        :y="city.y + 4" 
-                        width="16" 
-                        height="5" 
-                        rx="2"
-                        fill="rgba(255, 255, 255, 0.95)"
-                        opacity="0.9"
-                        filter="url(#shadow)"
-                      />
-                      <!-- 縣市名稱文字 -->
-                      <text 
-                        :x="city.x" 
-                        :y="city.y + 7.5" 
-                        text-anchor="middle" 
-                        font-size="4" 
-                        :fill="city.name === selectedCity ? '#2c5530' : '#4a4a4a'"
-                        font-weight="bold"
-                        pointer-events="none"
-                        class="city-name-text"
-                      >
-                        {{ city.name }}
-                      </text>
-                    </g>
                   </g>
                 </svg>
               </div>
@@ -363,11 +460,11 @@ onUnmounted(() => {
         <!-- 右側內容區 -->
         <div class="right-content">
           <div class="text-content">
-            <h1>桃園茶鄉</h1>
-            <p class="subtitle">探索台灣茶葉的故鄉</p>
-            <p>桃園擁有豐富的茶葉文化底蘊，從清朝時期開始種植茶葉，至今已有數百年歷史。這裡的茶園分布在山區，氣候涼爽，土壤肥沃，非常適合茶樹生長。</p>
-            <p>漫步在桃園的茶園中，可以感受到大自然的寧靜與美好。茶農們用心照料每一株茶樹，確保茶葉的品質，傳承著這份珍貴的茶文化。</p>
-            <p>「茶香飄逸滿山間，綠意盎然映眼簾」</p>
+            <h1>{{ currentCityDescription.title }}</h1>
+            <p class="subtitle">{{ currentCityDescription.subtitle }}</p>
+            <p>{{ currentCityDescription.description1 }}</p>
+            <p>{{ currentCityDescription.description2 }}</p>
+            <p>{{ currentCityDescription.quote }}</p>
           </div>
           
           <!-- Google Map 區塊 -->
@@ -376,17 +473,16 @@ onUnmounted(() => {
               <h3>地圖導覽</h3>
               <p class="map-location">顯示區域：{{ selectedCity }}</p>
             </div>
-            <div id="google-map" class="google-map"></div>
-            <div class="map-controls">
-              <button class="map-control-btn" @click="centerMap">
-                <span>📍</span> 回到中心
-              </button>
-              <button class="map-control-btn" @click="toggleSatellite">
-                <span>🛰️</span> {{ isSatellite ? '地圖模式' : '衛星模式' }}
-              </button>
-              <button class="map-control-btn" @click="showAllTeaGardens">
-                <span>🌿</span> 顯示所有茶園
-              </button>
+            <div class="google-map">
+              <iframe 
+                :src="currentMapUrl" 
+                width="100%" 
+                height="100%" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+              </iframe>
             </div>
           </div>
         </div>
@@ -464,41 +560,31 @@ onUnmounted(() => {
 
 .main-container {
   width: 100%;
-  padding: 80px 60px;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 60px 40px;
+  background: #fafafa;
   min-height: 100vh;
 }
 
 .unified-content {
   display: flex;
-  align-items: flex-start;
-  gap: 60px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 25px;
-  padding: 50px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  align-items: stretch;
+  gap: 40px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   position: relative;
   overflow: hidden;
 }
 
-.unified-content::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #2c5530, #4a7c59, #6b8e6b);
-  border-radius: 25px 25px 0 0;
-}
-
 .right-content {
-  flex: 1;
+  flex: 0 0 60%;
   display: flex;
   flex-direction: column;
   gap: 30px;
+  align-items: stretch;
+  min-height: 0;
 }
 
 .white-bg {
@@ -517,59 +603,48 @@ onUnmounted(() => {
 }
 
 .text-content {
-  flex: 1;
+  flex: 1 1 50%;
+  min-height: 0;
   text-align: left;
   position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 32px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .text-content h1 {
-  font-size: 3rem;
-  color: #2c5530;
-  margin-bottom: 1.5rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #2c5530, #4a7c59);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 4px 8px rgba(44, 85, 48, 0.1);
+  font-size: 18rem;
+  color: #1a1a1a;
+  margin-bottom: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   position: relative;
-}
-
-.text-content h1::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 0;
-  width: 60px;
-  height: 4px;
-  background: linear-gradient(90deg, #4a7c59, #6b8e6b);
-  border-radius: 2px;
+  line-height: 1.1;
 }
 
 .text-content .subtitle {
-  font-size: 1.4rem;
-  color: #4a7c59;
-  font-style: italic;
+  font-size: 10rem;
+  color: #666666;
   margin-bottom: 2rem;
-  font-weight: 500;
-  opacity: 0.9;
+  font-weight: 400;
+  opacity: 0.8;
+  letter-spacing: 0.01em;
 }
 
 .text-content p {
-  font-size: 1.15rem;
-  line-height: 1.9;
-  color: #444;
-  margin-bottom: 1.5rem;
+  font-size: 6rem;
+  line-height: 1.8;
+  color: #4a4a4a;
+  margin-bottom: 1.8rem;
   position: relative;
-  padding-left: 25px;
-}
-
-.text-content p::before {
-  content: '🍃';
-  position: absolute;
-  left: 0;
-  top: 0;
-  font-size: 1.2rem;
+  padding-left: 0;
+  font-weight: 300;
+  letter-spacing: 0.01em;
 }
 
 
@@ -618,7 +693,7 @@ onUnmounted(() => {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  font-size: 28px;
+  font-size: 36px;
   font-weight: bold;
   color: #ffffff;
   cursor: pointer;
@@ -695,14 +770,15 @@ onUnmounted(() => {
 }
 
 .text-block h2 {
-  font-size: 2rem;
-  color: #2c5530;
-  margin-bottom: 25px;
-  font-weight: bold;
+  font-size: 2.5rem;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .text-block p {
-  font-size: 1.1rem;
+  font-size: 3rem;
   line-height: 1.8;
   color: #4a4a4a;
   margin-bottom: 20px;
@@ -712,8 +788,8 @@ onUnmounted(() => {
 /* 活動表格樣式 */
 .events-table-container {
   width: 100%;
-  background-color: #f8f9fa;
-  padding: 80px 40px;
+  background-color: #fafafa;
+  padding: 60px 40px;
 }
 
 
@@ -728,21 +804,22 @@ onUnmounted(() => {
   width: 100%;
   border-collapse: collapse;
   background-color: #ffffff;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   min-height: 600px;
   table-layout: fixed;
 }
 
 .events-table th {
-  background-color: #ffffff;
-  color: #2c5530;
+  background-color: #fafafa;
+  color: #1a1a1a;
   padding: 20px 15px;
   text-align: left;
-  font-weight: bold;
-  font-size: 1.1rem;
-  border-bottom: 2px solid #2c5530;
+  font-weight: 600;
+  font-size: 6rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   height: 60px;
   vertical-align: middle;
 }
@@ -761,8 +838,8 @@ onUnmounted(() => {
 
 .events-table td {
   padding: 18px 15px;
-  border-bottom: 1px solid #e0e0e0;
-  font-size: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  font-size: 4rem;
   color: #4a4a4a;
   height: 65px;
   vertical-align: middle;
@@ -773,6 +850,7 @@ onUnmounted(() => {
 .events-table tbody tr {
   height: 65px;
   display: table-row;
+  transition: background-color 0.2s ease;
 }
 
 .events-table tbody tr:nth-child(odd) {
@@ -780,11 +858,11 @@ onUnmounted(() => {
 }
 
 .events-table tbody tr:nth-child(even) {
-  background-color: #f8f9fa;
+  background-color: #fafafa;
 }
 
 .events-table tbody tr:hover {
-  background-color: #e8f5e8;
+  background-color: #f5f5f5;
 }
 
 .events-table tbody tr:last-child td {
@@ -792,17 +870,17 @@ onUnmounted(() => {
 }
 
 .events-table td:first-child {
-  font-weight: 600;
-  color: #2c5530;
+  font-weight: 500;
+  color: #1a1a1a;
 }
 
 .events-table td:nth-child(2) {
-  color: #6b8e6b;
+  color: #666666;
 }
 
 .events-table td:nth-child(3) {
-  color: #8b4513;
-  font-weight: 500;
+  color: #666666;
+  font-weight: 400;
 }
 
 /* 頁碼導覽樣式 */
@@ -821,29 +899,28 @@ onUnmounted(() => {
 }
 
 .pagination-btn {
-  padding: 12px 20px;
+  padding: 10px 18px;
   background-color: #ffffff;
-  border: 2px solid #2c5530;
-  color: #2c5530;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #1a1a1a;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size:5rem;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .pagination-btn:hover:not(:disabled) {
-  background-color: #2c5530;
+  background-color: #1a1a1a;
   color: #ffffff;
-  transform: translateY(-2px);
+  border-color: #1a1a1a;
 }
 
 .pagination-btn:disabled {
-  background-color: #f5f5f5;
-  border-color: #cccccc;
+  background-color: #fafafa;
+  border-color: rgba(0, 0, 0, 0.06);
   color: #999999;
   cursor: not-allowed;
-  transform: none;
 }
 
 .page-numbers {
@@ -852,131 +929,104 @@ onUnmounted(() => {
 }
 
 .page-number {
-  width: 45px;
+  width: 80px;
   height: 45px;
   background-color: #ffffff;
-  border: 2px solid #e0e0e0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   color: #4a4a4a;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
+  font-size: 5rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .page-number:hover {
-  border-color: #2c5530;
-  color: #2c5530;
-  transform: translateY(-2px);
+  background-color: #f5f5f5;
+  border-color: rgba(0, 0, 0, 0.15);
+  color: #1a1a1a;
 }
 
 .page-number.active {
-  background-color: #2c5530;
-  border-color: #2c5530;
+  background-color: #1a1a1a;
+  border-color: #1a1a1a;
   color: #ffffff;
 }
 
 .page-info {
-  color: #6b8e6b;
-  font-size: 1rem;
-  font-weight: 500;
+  color: #666666;
+  font-size: 1.4rem;
+  font-weight: 400;
 }
 
 /* 地圖樣式 */
 .map-container {
-  width: 50vw;
-  min-width: 500px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 249, 250, 0.9));
-  padding: 25px;
-  border-radius: 20px;
-  border: 2px solid rgba(44, 85, 48, 0.15);
-  box-shadow: 0 8px 32px rgba(44, 85, 48, 0.1);
+  flex: 0 0 40%;
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   position: relative;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.map-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #2c5530, #4a7c59, #6b8e6b);
-  border-radius: 20px 20px 0 0;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 0;
 }
 
 .map-header {
-  margin-bottom: 25px;
+  margin-bottom: 24px;
   text-align: center;
   position: relative;
   z-index: 1;
+  flex-shrink: 0;
 }
 
 .map-header h3 {
-  color: #2c5530;
-  font-size: 1.6rem;
+  color: #1a1a1a;
+  font-size: 5rem;
   margin-bottom: 12px;
-  font-weight: 800;
-  background: linear-gradient(135deg, #2c5530, #4a7c59);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 2px 4px rgba(44, 85, 48, 0.1);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .selected-city {
-  color: #6b8e6b;
-  font-size: 1.05rem;
+  color: #666666;
+  font-size: 5rem;
   margin: 0;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .selected-city span {
-  color: #2c5530;
-  font-weight: bold;
-  font-size: 1.2rem;
-  padding: 4px 12px;
-  background: linear-gradient(135deg, #e8f5e8, #d4e8d4);
-  border-radius: 12px;
+  color: #1a1a1a;
+  font-weight: 600;
+  font-size: 5rem;
+  padding: 6px 14px;
+  background: #f5f5f5;
+  border-radius: 8px;
   display: inline-block;
-  box-shadow: 0 2px 8px rgba(44, 85, 48, 0.15);
 }
 
 .taiwan-map-wrapper {
   width: 100%;
-  height: 500px;
-  background: linear-gradient(135deg, #f5f9f5, #e8f4f0);
-  border-radius: 20px;
-  border: 2px solid rgba(44, 85, 48, 0.2);
-  padding: 15px;
+  flex: 1;
+  min-height: 600px;
+  background: #fafafa;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 
-    inset 0 2px 10px rgba(0, 0, 0, 0.05),
-    0 4px 20px rgba(44, 85, 48, 0.1);
   margin-bottom: 20px;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
 }
 
-.map-background-pattern {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    radial-gradient(circle at 20% 50%, rgba(44, 85, 48, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(74, 124, 89, 0.03) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
-}
 
 .taiwan-silhouette-container {
   position: relative;
@@ -996,6 +1046,13 @@ onUnmounted(() => {
   position: relative;
   z-index: 1;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  image-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .city-markers-overlay {
@@ -1026,84 +1083,20 @@ onUnmounted(() => {
 }
 
 .city-marker-group {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.city-glow {
-  animation: ripple 2s ease-in-out infinite;
-}
-
-.city-ring {
-  animation: pulse-ring 1.5s ease-in-out infinite;
+  transition: opacity 0.2s ease;
 }
 
 .city-area {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.2s ease;
   cursor: pointer;
 }
 
 .city-area:hover {
-  transform: scale(1.2);
-  filter: brightness(1.2) drop-shadow(0 0 8px rgba(44, 85, 48, 0.5));
-}
-
-.city-area.selected {
-  animation: selected-pulse 2s ease-in-out infinite;
-  transform: scale(1.15);
+  opacity: 0.8;
 }
 
 .city-dot {
-  transition: all 0.3s ease;
-}
-
-.city-label {
-  transition: all 0.3s ease;
-  opacity: 0.9;
-}
-
-.city-marker-group:hover .city-label {
-  opacity: 1;
-}
-
-.city-name-text {
-  transition: all 0.3s ease;
-}
-
-@keyframes ripple {
-  0% {
-    transform: scale(1);
-    opacity: 0.3;
-  }
-  50% {
-    transform: scale(1.3);
-    opacity: 0.1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0.3;
-  }
-}
-
-@keyframes pulse-ring {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.5;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.3;
-  }
-}
-
-@keyframes selected-pulse {
-  0%, 100% {
-    transform: scale(1.15);
-    filter: brightness(1) drop-shadow(0 0 6px rgba(44, 85, 48, 0.4));
-  }
-  50% {
-    transform: scale(1.2);
-    filter: brightness(1.1) drop-shadow(0 0 10px rgba(44, 85, 48, 0.6));
-  }
+  pointer-events: none;
 }
 
 .city-list {
@@ -1111,95 +1104,53 @@ onUnmounted(() => {
   flex-wrap: wrap;
   gap: 8px;
   justify-content: center;
-  margin-top: 15px;
+  margin-top: auto;
+  padding-top: 15px;
 }
 
 .city-button {
-  padding: 10px 20px;
-  background: linear-gradient(135deg, #ffffff, #f8f9fa);
-  border: 2px solid #e0e0e0;
+  padding: 8px 16px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   color: #4a4a4a;
-  border-radius: 25px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 5.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
   min-width: 85px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.city-button::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(44, 85, 48, 0.1);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
-}
-
-.city-button:hover::before {
-  width: 300px;
-  height: 300px;
-}
 
 .city-button:hover {
-  background: linear-gradient(135deg, #e8f5e8, #d4e8d4);
-  border-color: #6b8e6b;
-  color: #2c5530;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(44, 85, 48, 0.2);
+  background: #f5f5f5;
+  border-color: rgba(0, 0, 0, 0.15);
+  color: #1a1a1a;
 }
 
 .city-button.active {
-  background: linear-gradient(135deg, #2c5530, #4a7c59);
-  border-color: #2c5530;
+  background: #1a1a1a;
+  border-color: #1a1a1a;
   color: #ffffff;
-  font-weight: bold;
-  box-shadow: 
-    0 4px 12px rgba(44, 85, 48, 0.4),
-    inset 0 2px 4px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
-  position: relative;
-}
-
-.city-button.active::after {
-  content: '✓';
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.8rem;
-  opacity: 0.8;
+  font-weight: 600;
 }
 
 /* Google Map 區塊樣式 */
 .google-map-container {
   width: 100%;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 249, 250, 0.9));
-  padding: 25px;
-  border-radius: 20px;
-  border: 2px solid rgba(44, 85, 48, 0.15);
-  box-shadow: 0 8px 32px rgba(44, 85, 48, 0.1);
-  margin-top: 30px;
+  flex: 1 1 50%;
+  min-height: 0;
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   position: relative;
   overflow: hidden;
-}
-
-.google-map-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #2c5530, #4a7c59, #6b8e6b);
-  border-radius: 20px 20px 0 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .google-map-header {
@@ -1207,98 +1158,48 @@ onUnmounted(() => {
   text-align: center;
   position: relative;
   z-index: 1;
+  flex-shrink: 0;
 }
 
 .google-map-header h3 {
-  color: #2c5530;
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  font-weight: 800;
-  background: linear-gradient(135deg, #2c5530, #4a7c59);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1a1a1a;
+  font-size: 32px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .map-location {
-  color: #6b8e6b;
-  font-size: 1rem;
+  color: #666666;
+  font-size: 24px;
   margin: 0;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .map-location span {
-  color: #2c5530;
-  font-weight: bold;
+  color: #1a1a1a;
+  font-weight: 600;
 }
 
 .google-map {
   width: 100%;
-  height: 400px;
-  background: linear-gradient(135deg, #f0f2f5, #e8f4f8);
-  border-radius: 15px;
-  border: 2px solid rgba(44, 85, 48, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #666;
-  font-size: 18px;
+  flex: 1;
+  min-height: 0;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
   position: relative;
   overflow: hidden;
-  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
   margin-bottom: 15px;
+  background: #fafafa;
 }
 
-.google-map::before {
-  content: '🗺️ Google Map 將在此顯示';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 20px 30px;
+.google-map iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
   border-radius: 15px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(44, 85, 48, 0.2);
-  font-weight: 500;
-  color: #2c5530;
 }
 
-.map-controls {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.map-control-btn {
-  padding: 10px 20px;
-  background: linear-gradient(135deg, #ffffff, #f8f9fa);
-  border: 2px solid #e0e0e0;
-  color: #4a4a4a;
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.map-control-btn:hover {
-  background: linear-gradient(135deg, #e8f5e8, #d4e8d4);
-  border-color: #6b8e6b;
-  color: #2c5530;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(44, 85, 48, 0.2);
-}
-
-.map-control-btn span {
-  font-size: 1.1rem;
-}
 
 @media (max-width: 768px) {
   .main-container {
@@ -1308,12 +1209,21 @@ onUnmounted(() => {
   
   .unified-content {
     flex-direction: column;
-    padding: 30px 20px;
-    gap: 30px;
+    padding: 20px 15px;
+    gap: 20px;
+    overflow-x: hidden;
+  }
+  
+  .map-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 15px;
   }
   
   .right-content {
-    gap: 30px;
+    width: 100%;
+    overflow-x: hidden;
+    gap: 20px;
   }
   
   .text-content {
@@ -1322,6 +1232,21 @@ onUnmounted(() => {
   
   .text-content h1 {
     font-size: 2.5rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  .text-content .subtitle {
+    font-size: 1.8rem;
+  }
+  
+  .text-content p {
+    font-size: 1.4rem;
+    line-height: 1.6;
+  }
+  
+  .text-content p::before {
+    font-size: 1.2rem;
   }
   
   .text-content h1::after {
@@ -1333,27 +1258,24 @@ onUnmounted(() => {
     width: 80vw;
   }
   
-  .map-container {
-    padding: 20px 15px;
-    border-radius: 15px;
-  }
   
   .map-header h3 {
-    font-size: 1.3rem;
+    font-size: 1.8rem;
   }
   
   .selected-city {
-    font-size: 0.95rem;
+    font-size: 1.2rem;
   }
   
   .selected-city span {
-    font-size: 1.05rem;
+    font-size: 1.3rem;
     padding: 3px 10px;
   }
   
   .taiwan-map-wrapper {
-    height: 320px;
-    padding: 15px;
+    min-height: 250px;
+    max-height: 300px;
+    padding: 10px;
     border-radius: 15px;
   }
   
@@ -1362,10 +1284,10 @@ onUnmounted(() => {
   }
   
   .city-button {
-    padding: 8px 14px;
-    font-size: 0.8rem;
-    min-width: 70px;
-    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    min-width: 60px;
+    border-radius: 15px;
   }
   
   .city-list {
@@ -1379,7 +1301,7 @@ onUnmounted(() => {
   .carousel-btn {
     width: 50px;
     height: 50px;
-    font-size: 24px;
+    font-size: 30px;
     border-width: 2px;
   }
   
@@ -1398,25 +1320,33 @@ onUnmounted(() => {
   }
   
   .text-block h2 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
   }
   
   .text-block p {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
   
   .events-table-container {
-    padding: 60px 20px;
+    padding: 40px 15px;
+    overflow-x: auto;
+  }
+  
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
   
   .events-table th {
     padding: 15px 10px;
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
   
   .events-table td {
     padding: 15px 10px;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
   
   .pagination-container {
@@ -1430,17 +1360,17 @@ onUnmounted(() => {
   
   .pagination-btn {
     padding: 10px 16px;
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   
   .page-number {
-    width: 40px;
-    height: 40px;
-    font-size: 0.9rem;
+    width: 45px;
+    height: 45px;
+    font-size: 1rem;
   }
   
   .page-info {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   
   .map-container {
@@ -1458,13 +1388,17 @@ onUnmounted(() => {
     padding: 20px;
   }
   
+  .google-map-header h3 {
+    font-size: 24px;
+  }
+  
+  .map-location {
+    font-size: 18px;
+  }
+  
   .google-map {
     height: 300px;
   }
   
-  .map-control-btn {
-    padding: 8px 16px;
-    font-size: 0.85rem;
-  }
 }
 </style>
