@@ -1,5 +1,21 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+
+// Props：可選的登入/註冊成功後跳轉路徑
+const props = defineProps({
+  redirectAfterLogin: {
+    type: String,
+    default: null
+  },
+  redirectAfterRegister: {
+    type: String,
+    default: null
+  }
+})
+
+const router = useRouter()
+const route = useRoute()
 
 // 表單狀態
 const isLogin = ref(true) // true: 登陸, false: 註冊
@@ -133,7 +149,12 @@ const handleLogin = async () => {
     if (isValid) {
       showSuccessAnimation()
       setTimeout(() => {
-        alert('登陸成功！歡迎回來！')
+        // 優先順序：1. props.redirectAfterLogin 2. 路由查詢參數 redirect 3. 預設跳轉路徑
+        const redirectPath = props.redirectAfterLogin || route.query.redirect || '/' // 預設跳轉到首頁，您可以修改這裡
+        
+        // 執行跳轉
+        router.push(redirectPath)
+        // 可以在這裡添加其他成功後的邏輯，例如儲存用戶信息等
       }, 1000)
     } else {
       showErrorAnimation()
@@ -154,7 +175,17 @@ const handleRegister = async () => {
     loading.value = false
     showSuccessAnimation()
     setTimeout(() => {
-      alert('註冊成功！歡迎加入台灣茶葉旅遊！')
+      // 優先順序：1. props.redirectAfterRegister 2. 路由查詢參數 redirect 3. 不跳轉
+      const redirectPath = props.redirectAfterRegister || route.query.redirect
+      
+      // 如果指定了跳轉路徑，則執行跳轉
+      if (redirectPath && typeof redirectPath === 'string') {
+        router.push(redirectPath)
+      } else {
+        // 如果沒有指定跳轉路徑，只顯示成功訊息，不跳轉
+        alert('註冊成功！歡迎加入台灣茶葉旅遊！')
+        // 可以在這裡添加其他成功後的邏輯，例如儲存用戶信息等
+      }
     }, 1000)
   }, 1000)
 }
