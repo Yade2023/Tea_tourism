@@ -25,14 +25,15 @@ onMounted(() => {
         </router-link>
         <div>
           <router-link to="/knowledge">台灣茶知識庫</router-link>
-          <router-link to="/teachers">茶旅專區</router-link>
+          <router-link to="/teaTourismArea">茶旅專區</router-link>
           <router-link to="/services">線上茶店</router-link>
           <router-link to="/address">關於我們</router-link>
         </div>
         <div class="nav-icons">
           <a href="#" class="icon-btn search" title="搜尋"></a>
           <a href="/store" class="icon-btn cart" title="購物"></a>
-          <a href="/login" class="icon-btn user" title="登入"></a>
+          <router-link to="/login"  class="icon-btn user" title="登入"></router-link>
+          <!-- <a href="/login" class="icon-btn user" title="登入"></a> -->
         </div>
         <svg class="navbar-wave" viewBox="0 0 1440 70" preserveAspectRatio="none">
           <path d="M0,0 L1440,0 L1440,55 

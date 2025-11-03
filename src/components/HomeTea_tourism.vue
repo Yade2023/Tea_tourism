@@ -94,6 +94,7 @@ onMounted(async () => {
           <p class="card-text">
             <small class="text-muted" style="white-space: pre-line;">
               {{ homeData.featureSpot.info }}
+              網址: <a href="https://travel.tycg.gov.tw">https://travel.tycg.gov.tw</a>
             </small>
           </p>
         </div>

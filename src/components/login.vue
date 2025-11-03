@@ -1,6 +1,5 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import taiwanImg from './assets/img/taiwan.jpeg'
 
 // 表單狀態
 const isLogin = ref(true) // true: 登陸, false: 註冊
@@ -49,12 +48,12 @@ const toggleMode = () => {
 const togglePassword = () => {
   showPassword.value = !showPassword.value
   isPasswordVisible.value = showPassword.value
-  
+
   // 讓角色移開視線（害羞）
   characters.value.forEach(char => {
     char.lookingAt = 'away'
   })
-  
+
   // 1.5秒後回到中心
   setTimeout(() => {
     characters.value.forEach(char => {
@@ -66,12 +65,12 @@ const togglePassword = () => {
 const toggleConfirmPassword = () => {
   showConfirmPassword.value = !showConfirmPassword.value
   isPasswordVisible.value = showConfirmPassword.value
-  
+
   // 讓角色移開視線（害羞）
   characters.value.forEach(char => {
     char.lookingAt = 'away'
   })
-  
+
   // 1.5秒後回到中心
   setTimeout(() => {
     characters.value.forEach(char => {
@@ -87,12 +86,12 @@ const handleMouseMove = (event) => {
     x: ((event.clientX - rect.left) / rect.width) * 100,
     y: ((event.clientY - rect.top) / rect.height) * 100
   }
-  
+
   // 只有在沒有其他互動時才跟隨鼠標
-  const hasActiveInteraction = characters.value.some(char => 
+  const hasActiveInteraction = characters.value.some(char =>
     ['password', 'email', 'name', 'confirmPassword', 'away', 'jump', 'shake'].includes(char.lookingAt)
   )
-  
+
   if (!hasActiveInteraction) {
     characters.value.forEach(char => {
       char.lookingAt = 'mouse'
@@ -120,21 +119,21 @@ const handleInputChange = (fieldName) => {
   characters.value.forEach(char => {
     char.lookingAt = fieldName
   })
-  
+
   // 持續關注輸入框，不自動回到中心
 }
 
 // 載入動畫
 const startLoadingAnimation = () => {
   isLoading.value = true
-  
+
   // 角色彈出動畫
   characters.value.forEach((char, index) => {
     setTimeout(() => {
       char.isVisible = true
     }, index * 200)
   })
-  
+
   // 3秒後隱藏載入畫面
   setTimeout(() => {
     isLoading.value = false
@@ -147,7 +146,7 @@ const showSuccessAnimation = () => {
   characters.value.forEach(char => {
     char.lookingAt = 'jump'
   })
-  
+
   setTimeout(() => {
     loginResult.value = null
     characters.value.forEach(char => {
@@ -162,7 +161,7 @@ const showErrorAnimation = () => {
   characters.value.forEach(char => {
     char.lookingAt = 'shake'
   })
-  
+
   setTimeout(() => {
     loginResult.value = null
     characters.value.forEach(char => {
@@ -182,50 +181,50 @@ const clearForm = () => {
 // 表單驗證
 const validateLoginForm = () => {
   const errors = {}
-  
+
   if (!loginForm.value.email) {
     errors.email = '請輸入電子郵件'
   } else if (!/\S+@\S+\.\S+/.test(loginForm.value.email)) {
     errors.email = '請輸入有效的電子郵件格式'
   }
-  
+
   if (!loginForm.value.password) {
     errors.password = '請輸入密碼'
   } else if (loginForm.value.password.length < 6) {
     errors.password = '密碼至少需要6個字符'
   }
-  
+
   loginErrors.value = errors
   return Object.keys(errors).length === 0
 }
 
 const validateRegisterForm = () => {
   const errors = {}
-  
+
   if (!registerForm.value.name) {
     errors.name = '請輸入姓名'
   } else if (registerForm.value.name.length < 2) {
     errors.name = '姓名至少需要2個字符'
   }
-  
+
   if (!registerForm.value.email) {
     errors.email = '請輸入電子郵件'
   } else if (!/\S+@\S+\.\S+/.test(registerForm.value.email)) {
     errors.email = '請輸入有效的電子郵件格式'
   }
-  
+
   if (!registerForm.value.password) {
     errors.password = '請輸入密碼'
   } else if (registerForm.value.password.length < 6) {
     errors.password = '密碼至少需要6個字符'
   }
-  
+
   if (!registerForm.value.confirmPassword) {
     errors.confirmPassword = '請確認密碼'
   } else if (registerForm.value.password !== registerForm.value.confirmPassword) {
     errors.confirmPassword = '密碼不一致'
   }
-  
+
   registerErrors.value = errors
   return Object.keys(errors).length === 0
 }
@@ -233,16 +232,16 @@ const validateRegisterForm = () => {
 // 提交表單
 const handleLogin = async () => {
   if (!validateLoginForm()) return
-  
+
   loading.value = true
-  
+
   // 模擬API請求
   setTimeout(() => {
     loading.value = false
-    
+
     // 模擬登陸結果（這裡可以根據實際驗證邏輯修改）
     const isValid = loginForm.value.email === 'test@example.com' && loginForm.value.password === 'password123'
-    
+
     if (isValid) {
       showSuccessAnimation()
       setTimeout(() => {
@@ -259,9 +258,9 @@ const handleLogin = async () => {
 
 const handleRegister = async () => {
   if (!validateRegisterForm()) return
-  
+
   loading.value = true
-  
+
   // 模擬API請求
   setTimeout(() => {
     loading.value = false
@@ -287,27 +286,22 @@ onMounted(() => {
     <!-- 載入動畫 -->
     <div v-if="isLoading" class="loading-overlay">
       <div class="characters-container" @mousemove="handleMouseMove">
-        <div 
-          v-for="character in characters" 
-          :key="character.id"
-          :class="[
-            'character', 
-            character.name,
-            { 'visible': character.isVisible },
-            { 'looking-password': character.lookingAt === 'password' },
-            { 'looking-email': character.lookingAt === 'email' },
-            { 'looking-name': character.lookingAt === 'name' },
-            { 'looking-confirmPassword': character.lookingAt === 'confirmPassword' },
-            { 'looking-away': character.lookingAt === 'away' },
-            { 'looking-mouse': character.lookingAt === 'mouse' },
-            { 'jumping': character.lookingAt === 'jump' },
-            { 'shaking': character.lookingAt === 'shake' }
-          ]"
-          :style="{ 
-            left: character.x + '%', 
+        <div v-for="character in characters" :key="character.id" :class="[
+          'character',
+          character.name,
+          { 'visible': character.isVisible },
+          { 'looking-password': character.lookingAt === 'password' },
+          { 'looking-email': character.lookingAt === 'email' },
+          { 'looking-name': character.lookingAt === 'name' },
+          { 'looking-confirmPassword': character.lookingAt === 'confirmPassword' },
+          { 'looking-away': character.lookingAt === 'away' },
+          { 'looking-mouse': character.lookingAt === 'mouse' },
+          { 'jumping': character.lookingAt === 'jump' },
+          { 'shaking': character.lookingAt === 'shake' }
+        ]" :style="{
+            left: character.x + '%',
             top: character.y + '%'
-          }"
-        >
+          }">
           <div class="character-body"></div>
           <div class="character-eyes">
             <div class="eye left-eye"></div>
@@ -323,13 +317,10 @@ onMounted(() => {
       <!-- 左側角色區域 -->
       <div class="auth-image-section" @mousemove="handleMouseMove">
         <div class="characters-container">
-          <div 
-            v-for="character in characters" 
-            :key="character.id"
-            :class="[
-              'character', 
-              character.name,
-              { 'visible': character.isVisible },
+          <div v-for="character in characters" :key="character.id" :class="[
+            'character',
+            character.name,
+            { 'visible': character.isVisible },
             { 'looking-password': character.lookingAt === 'password' },
             { 'looking-email': character.lookingAt === 'email' },
             { 'looking-name': character.lookingAt === 'name' },
@@ -338,12 +329,10 @@ onMounted(() => {
             { 'looking-mouse': character.lookingAt === 'mouse' },
             { 'jumping': character.lookingAt === 'jump' },
             { 'shaking': character.lookingAt === 'shake' }
-            ]"
-            :style="{ 
-              left: character.x + '%', 
+          ]" :style="{
+              left: character.x + '%',
               top: character.y + '%'
-            }"
-          >
+            }">
             <div class="character-body"></div>
             <div class="character-eyes">
               <div class="eye left-eye"></div>
@@ -353,7 +342,7 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      
+
       <!-- 右側表單區域 -->
       <div class="auth-form-section">
         <div class="auth-form-container">
@@ -361,61 +350,41 @@ onMounted(() => {
           <div class="top-icon">
             <div class="cross-icon">+</div>
           </div>
-          
+
           <!-- 標題 -->
           <div class="auth-header">
             <h1>{{ isLogin ? 'Welcome back!' : 'Join us!' }}</h1>
             <p>{{ isLogin ? 'Please enter your details' : 'Please create your account' }}</p>
           </div>
-          
+
           <!-- 表單 -->
           <form @submit.prevent="isLogin ? handleLogin() : handleRegister()" class="auth-form">
             <!-- 註冊時顯示姓名欄位 -->
             <div v-if="!isLogin" class="form-group">
               <label for="name">Name</label>
-              <input
-                id="name"
-                v-model="registerForm.name"
-                type="text"
-                placeholder="Enter your name"
-                :class="{ error: registerErrors.name }"
-                @focus="handleInputFocus('name')"
-                @blur="handleInputBlur"
-                @input="handleInputChange('name')"
-              />
+              <input id="name" v-model="registerForm.name" type="text" placeholder="Enter your name"
+                :class="{ error: registerErrors.name }" @focus="handleInputFocus('name')" @blur="handleInputBlur"
+                @input="handleInputChange('name')" />
               <span v-if="registerErrors.name" class="error-message">{{ registerErrors.name }}</span>
             </div>
-            
+
             <!-- 電子郵件 -->
             <div class="form-group">
               <label for="email">Email</label>
-              <input
-                id="email"
-                v-model="currentForm.email"
-                type="email"
-                placeholder="Enter your email"
-                :class="{ error: currentErrors.email }"
-                @focus="handleInputFocus('email')"
-                @blur="handleInputBlur"
-                @input="handleInputChange('email')"
-              />
+              <input id="email" v-model="currentForm.email" type="email" placeholder="Enter your email"
+                :class="{ error: currentErrors.email }" @focus="handleInputFocus('email')" @blur="handleInputBlur"
+                @input="handleInputChange('email')" />
               <span v-if="currentErrors.email" class="error-message">{{ currentErrors.email }}</span>
             </div>
-            
+
             <!-- 密碼 -->
             <div class="form-group">
               <label for="password">Password</label>
               <div class="password-input-wrapper">
-                <input
-                  id="password"
-                  v-model="currentForm.password"
-                  :type="showPassword ? 'text' : 'password'"
-                  placeholder="Enter your password"
-                  :class="{ error: currentErrors.password }"
-                  @focus="handleInputFocus('password')"
-                  @blur="handleInputBlur"
-                  @input="handleInputChange('password')"
-                />
+                <input id="password" v-model="currentForm.password" :type="showPassword ? 'text' : 'password'"
+                  placeholder="Enter your password" :class="{ error: currentErrors.password }"
+                  @focus="handleInputFocus('password')" @blur="handleInputBlur"
+                  @input="handleInputChange('password')" />
                 <button type="button" @click="togglePassword" class="password-toggle">
                   <span v-if="showPassword">👁️</span>
                   <span v-else>👁️‍🗨️</span>
@@ -423,29 +392,24 @@ onMounted(() => {
               </div>
               <span v-if="currentErrors.password" class="error-message">{{ currentErrors.password }}</span>
             </div>
-            
+
             <!-- 確認密碼（僅註冊時顯示） -->
             <div v-if="!isLogin" class="form-group">
               <label for="confirmPassword">Confirm Password</label>
               <div class="password-input-wrapper">
-                <input
-                  id="confirmPassword"
-                  v-model="registerForm.confirmPassword"
-                  :type="showConfirmPassword ? 'text' : 'password'"
-                  placeholder="Confirm your password"
-                  :class="{ error: registerErrors.confirmPassword }"
-                  @focus="handleInputFocus('confirmPassword')"
-                  @blur="handleInputBlur"
-                  @input="handleInputChange('confirmPassword')"
-                />
+                <input id="confirmPassword" v-model="registerForm.confirmPassword"
+                  :type="showConfirmPassword ? 'text' : 'password'" placeholder="Confirm your password"
+                  :class="{ error: registerErrors.confirmPassword }" @focus="handleInputFocus('confirmPassword')"
+                  @blur="handleInputBlur" @input="handleInputChange('confirmPassword')" />
                 <button type="button" @click="toggleConfirmPassword" class="password-toggle">
                   <span v-if="showConfirmPassword">👁️</span>
                   <span v-else>👁️‍🗨️</span>
                 </button>
               </div>
-              <span v-if="registerErrors.confirmPassword" class="error-message">{{ registerErrors.confirmPassword }}</span>
+              <span v-if="registerErrors.confirmPassword" class="error-message">{{ registerErrors.confirmPassword
+                }}</span>
             </div>
-            
+
             <!-- 選項區域（僅登陸時顯示） -->
             <div v-if="isLogin" class="form-options">
               <label class="checkbox-wrapper">
@@ -455,20 +419,20 @@ onMounted(() => {
               </label>
               <a href="#" class="forgot-password">Forgot password?</a>
             </div>
-            
+
             <!-- 提交按鈕 -->
             <button type="submit" class="submit-btn" :disabled="loading">
               <span v-if="loading">Processing...</span>
               <span v-else>{{ isLogin ? 'Log in' : 'Sign up' }}</span>
             </button>
-            
+
             <!-- Google 登陸按鈕（僅登陸時顯示） -->
             <button v-if="isLogin" type="button" class="google-btn">
               <span class="google-icon">G</span>
               Log In with Google
             </button>
           </form>
-          
+
           <!-- 切換模式 -->
           <div class="auth-switch">
             <p>
@@ -681,14 +645,31 @@ onMounted(() => {
 }
 
 @keyframes jump {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-20px) scale(1.1); }
+
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-20px) scale(1.1);
+  }
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  75% {
+    transform: translateX(5px);
+  }
 }
 
 .loading-text {
@@ -703,8 +684,15 @@ onMounted(() => {
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .auth-wrapper.hidden {
@@ -962,17 +950,17 @@ onMounted(() => {
     width: 100%;
     height: 100vh;
   }
-  
+
   .auth-image-section {
     min-height: 200px;
     padding: 20px;
   }
-  
+
   .auth-form-section {
     padding: 30px 20px;
     flex: 1;
   }
-  
+
   .auth-header h1 {
     font-size: 24px;
   }
@@ -982,23 +970,24 @@ onMounted(() => {
   .auth-container {
     padding: 0;
   }
-  
+
   .auth-wrapper {
     border-radius: 0;
     width: 100%;
     height: 100vh;
   }
-  
+
   .auth-form-section {
     padding: 20px 15px;
   }
-  
+
   .form-group input {
     padding: 10px 12px;
     font-size: 14px;
   }
-  
-  .submit-btn, .google-btn {
+
+  .submit-btn,
+  .google-btn {
     padding: 10px;
     font-size: 14px;
   }

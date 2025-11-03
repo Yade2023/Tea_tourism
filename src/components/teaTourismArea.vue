@@ -1,9 +1,9 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 // 如果需要import圖片
-import taiwanImg from './assets/img/taiwan.jpeg'
-import taiwanAdminImg from './assets/img/taiwan-admin.svg'
-import taiwanSilhouette from './assets/img/taiwan.jpeg'
+import taiwanImg from '../assets/img/taiwan.jpeg'
+import taiwanAdminImg from '../assets/img/taiwan-admin.svg'
+import taiwanSilhouette from '../assets/img/taiwan.jpeg'
 
 // 輪播相關
 const currentSlide = ref(0)
@@ -238,128 +238,82 @@ onUnmounted(() => {
       <div class="unified-content">
         <!-- 台灣縣市地圖區塊（左上角） -->
         <div class="map-container">
-            <div class="map-header">
-              <h3>選擇縣市</h3>
-              <p class="selected-city">目前選擇：<span>{{ selectedCity }}</span></p>
-            </div>
-            <div class="taiwan-map-wrapper">
-              <div class="map-background-pattern"></div>
-              <div class="taiwan-silhouette-container">
-                <!-- 台灣本島剪影圖片 -->
-                <img :src="taiwanSilhouette" alt="台灣本島" class="taiwan-silhouette" />
-                
-                <!-- 縣市標記覆蓋層 -->
-                <svg class="city-markers-overlay" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-                  <defs>
-                    <linearGradient id="cityGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" style="stop-color:#4a7c59;stop-opacity:1" />
-                      <stop offset="100%" style="stop-color:#2c5530;stop-opacity:1" />
-                    </linearGradient>
-                    <filter id="glow">
-                      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                      <feMerge>
-                        <feMergeNode in="coloredBlur"/>
-                        <feMergeNode in="SourceGraphic"/>
-                      </feMerge>
-                    </filter>
-                    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                      <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.3"/>
-                    </filter>
-                  </defs>
-                  
-                  <!-- 縣市區域標記 -->
-                  <g v-for="city in cities" :key="city.name" class="city-marker-group">
-                    <!-- 外圈光暈（僅選中時顯示） -->
-                    <circle 
-                      v-if="city.name === selectedCity"
-                      :cx="city.x" 
-                      :cy="city.y" 
-                      :r="6"
-                      :fill="city.color"
-                      opacity="0.3"
-                      class="city-glow"
-                    />
-                    
-                    <!-- 中圈（僅選中時顯示） -->
-                    <circle 
-                      v-if="city.name === selectedCity"
-                      :cx="city.x" 
-                      :cy="city.y" 
-                      :r="4.5"
-                      :fill="city.color"
-                      opacity="0.5"
-                      class="city-ring"
-                    />
-                    
-                    <!-- 主標記圓圈 -->
-                    <circle 
-                      :cx="city.x" 
-                      :cy="city.y" 
-                      :r="city.name === selectedCity ? 3.5 : 2.5"
-                      :fill="city.name === selectedCity ? 'url(#cityGradient)' : city.color"
-                      :stroke="city.name === selectedCity ? '#ffffff' : '#ffffff'"
-                      :stroke-width="city.name === selectedCity ? 0.6 : 0.4"
-                      class="city-area"
-                      :class="{ 'selected': city.name === selectedCity }"
-                      @click="selectCity(city.name)"
-                      filter="url(#glow)"
-                      style="cursor: pointer;"
-                    />
-                    
-                    <!-- 內部小圓點 -->
-                    <circle 
-                      :cx="city.x" 
-                      :cy="city.y" 
-                      :r="city.name === selectedCity ? 1.2 : 0.9"
-                      fill="#ffffff"
-                      opacity="0.9"
-                      class="city-dot"
-                    />
-                    
-                    <!-- 縣市名稱標籤 -->
-                    <g class="city-label">
-                      <!-- 文字背景（陰影） -->
-                      <rect 
-                        :x="city.x - 8" 
-                        :y="city.y + 4" 
-                        width="16" 
-                        height="5" 
-                        rx="2"
-                        fill="rgba(255, 255, 255, 0.95)"
-                        opacity="0.9"
-                        filter="url(#shadow)"
-                      />
-                      <!-- 縣市名稱文字 -->
-                      <text 
-                        :x="city.x" 
-                        :y="city.y + 7.5" 
-                        text-anchor="middle" 
-                        font-size="4" 
-                        :fill="city.name === selectedCity ? '#2c5530' : '#4a4a4a'"
-                        font-weight="bold"
-                        pointer-events="none"
-                        class="city-name-text"
-                      >
-                        {{ city.name }}
-                      </text>
-                    </g>
+          <div class="map-header">
+            <h3>選擇縣市</h3>
+            <p class="selected-city">目前選擇：<span>{{ selectedCity }}</span></p>
+          </div>
+          <div class="taiwan-map-wrapper">
+            <div class="map-background-pattern"></div>
+            <div class="taiwan-silhouette-container">
+              <!-- 台灣本島剪影圖片 -->
+              <img :src="taiwanSilhouette" alt="台灣本島" class="taiwan-silhouette" />
+
+              <!-- 縣市標記覆蓋層 -->
+              <svg class="city-markers-overlay" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMidYMid meet">
+                <defs>
+                  <linearGradient id="cityGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#4a7c59;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#2c5530;stop-opacity:1" />
+                  </linearGradient>
+                  <filter id="glow">
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+                    <feMerge>
+                      <feMergeNode in="coloredBlur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.3" />
+                  </filter>
+                </defs>
+
+                <!-- 縣市區域標記 -->
+                <g v-for="city in cities" :key="city.name" class="city-marker-group">
+                  <!-- 外圈光暈（僅選中時顯示） -->
+                  <circle v-if="city.name === selectedCity" :cx="city.x" :cy="city.y" :r="6" :fill="city.color"
+                    opacity="0.3" class="city-glow" />
+
+                  <!-- 中圈（僅選中時顯示） -->
+                  <circle v-if="city.name === selectedCity" :cx="city.x" :cy="city.y" :r="4.5" :fill="city.color"
+                    opacity="0.5" class="city-ring" />
+
+                  <!-- 主標記圓圈 -->
+                  <circle :cx="city.x" :cy="city.y" :r="city.name === selectedCity ? 3.5 : 2.5"
+                    :fill="city.name === selectedCity ? 'url(#cityGradient)' : city.color"
+                    :stroke="city.name === selectedCity ? '#ffffff' : '#ffffff'"
+                    :stroke-width="city.name === selectedCity ? 0.6 : 0.4" class="city-area"
+                    :class="{ 'selected': city.name === selectedCity }" @click="selectCity(city.name)"
+                    filter="url(#glow)" style="cursor: pointer;" />
+
+                  <!-- 內部小圓點 -->
+                  <circle :cx="city.x" :cy="city.y" :r="city.name === selectedCity ? 1.2 : 0.9" fill="#ffffff"
+                    opacity="0.9" class="city-dot" />
+
+                  <!-- 縣市名稱標籤 -->
+                  <g class="city-label">
+                    <!-- 文字背景（陰影） -->
+                    <rect :x="city.x - 8" :y="city.y + 4" width="16" height="5" rx="2" fill="rgba(255, 255, 255, 0.95)"
+                      opacity="0.9" filter="url(#shadow)" />
+                    <!-- 縣市名稱文字 -->
+                    <text :x="city.x" :y="city.y + 7.5" text-anchor="middle" font-size="4"
+                      :fill="city.name === selectedCity ? '#2c5530' : '#4a4a4a'" font-weight="bold"
+                      pointer-events="none" class="city-name-text">
+                      {{ city.name }}
+                    </text>
                   </g>
-                </svg>
-              </div>
-            </div>
-            <div class="city-list">
-              <button 
-                v-for="city in cities" 
-                :key="city.name"
-                class="city-button"
-                :class="{ 'active': city.name === selectedCity }"
-                @click="selectCity(city.name)"
-              >
-                {{ city.name }}
-              </button>
+                </g>
+              </svg>
             </div>
           </div>
-          
+          <div class="city-list">
+            <button v-for="city in cities" :key="city.name" class="city-button"
+              :class="{ 'active': city.name === selectedCity }" @click="selectCity(city.name)">
+              {{ city.name }}
+            </button>
+          </div>
+        </div>
+
         <!-- 右側內容區 -->
         <div class="right-content">
           <div class="text-content">
@@ -369,7 +323,7 @@ onUnmounted(() => {
             <p>漫步在桃園的茶園中，可以感受到大自然的寧靜與美好。茶農們用心照料每一株茶樹，確保茶葉的品質，傳承著這份珍貴的茶文化。</p>
             <p>「茶香飄逸滿山間，綠意盎然映眼簾」</p>
           </div>
-          
+
           <!-- Google Map 區塊 -->
           <div class="google-map-container">
             <div class="google-map-header">
@@ -391,61 +345,48 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
-      
-    
-    
-    
+
+
+
+
       <!-- 活動資訊表格 -->
       <div class="events-table-container">
         <div class="table-wrapper">
           <table class="events-table">
-          <thead>
-            <tr>
-              <th>活動標題</th>
-              <th>主辦單位</th>
-              <th>活動日期</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="event in currentPageEvents" :key="event.title">
-              <td>{{ event.title }}</td>
-              <td>{{ event.organizer }}</td>
-              <td>{{ event.date }}</td>
-            </tr>
-          </tbody>
+            <thead>
+              <tr>
+                <th>活動標題</th>
+                <th>主辦單位</th>
+                <th>活動日期</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="event in currentPageEvents" :key="event.title">
+                <td>{{ event.title }}</td>
+                <td>{{ event.organizer }}</td>
+                <td>{{ event.date }}</td>
+              </tr>
+            </tbody>
           </table>
         </div>
-        
+
         <!-- 頁碼導覽 -->
         <div class="pagination-container">
           <div class="pagination">
-            <button 
-              class="pagination-btn prev-btn" 
-            @click="prevPage"
-            :disabled="currentPage === 1"
-          >
-            ‹ 
-          </button>
-          
-          <div class="page-numbers">
-            <button 
-              v-for="page in totalPages" 
-              :key="page"
-              class="page-number"
-              :class="{ active: currentPage === page }"
-              @click="goToPage(page)"
-            >
-              {{ page }}
+            <button class="pagination-btn prev-btn" @click="prevPage" :disabled="currentPage === 1">
+              ‹
             </button>
-          </div>
-          
-          <button 
-            class="pagination-btn next-btn" 
-            @click="nextPage"
-            :disabled="currentPage === totalPages"
-          >
-             ›
-          </button>
+
+            <div class="page-numbers">
+              <button v-for="page in totalPages" :key="page" class="page-number"
+                :class="{ active: currentPage === page }" @click="goToPage(page)">
+                {{ page }}
+              </button>
+            </div>
+
+            <button class="pagination-btn next-btn" @click="nextPage" :disabled="currentPage === totalPages">
+              ›
+            </button>
           </div>
         </div>
       </div>
@@ -957,7 +898,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 
+  box-shadow:
     inset 0 2px 10px rgba(0, 0, 0, 0.05),
     0 4px 20px rgba(44, 85, 48, 0.1);
   margin-bottom: 20px;
@@ -971,7 +912,7 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: 
+  background-image:
     radial-gradient(circle at 20% 50%, rgba(44, 85, 48, 0.03) 0%, transparent 50%),
     radial-gradient(circle at 80% 80%, rgba(74, 124, 89, 0.03) 0%, transparent 50%);
   pointer-events: none;
@@ -1074,10 +1015,12 @@ onUnmounted(() => {
     transform: scale(1);
     opacity: 0.3;
   }
+
   50% {
     transform: scale(1.3);
     opacity: 0.1;
   }
+
   100% {
     transform: scale(1);
     opacity: 0.3;
@@ -1085,10 +1028,13 @@ onUnmounted(() => {
 }
 
 @keyframes pulse-ring {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
     opacity: 0.5;
   }
+
   50% {
     transform: scale(1.1);
     opacity: 0.3;
@@ -1096,10 +1042,13 @@ onUnmounted(() => {
 }
 
 @keyframes selected-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1.15);
     filter: brightness(1) drop-shadow(0 0 6px rgba(44, 85, 48, 0.4));
   }
+
   50% {
     transform: scale(1.2);
     filter: brightness(1.1) drop-shadow(0 0 10px rgba(44, 85, 48, 0.6));
@@ -1161,7 +1110,7 @@ onUnmounted(() => {
   border-color: #2c5530;
   color: #ffffff;
   font-weight: bold;
-  box-shadow: 
+  box-shadow:
     0 4px 12px rgba(44, 85, 48, 0.4),
     inset 0 2px 4px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
@@ -1305,163 +1254,163 @@ onUnmounted(() => {
     padding: 40px 20px;
     background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
   }
-  
+
   .unified-content {
     flex-direction: column;
     padding: 30px 20px;
     gap: 30px;
   }
-  
+
   .right-content {
     gap: 30px;
   }
-  
+
   .text-content {
     text-align: center;
   }
-  
+
   .text-content h1 {
     font-size: 2.5rem;
   }
-  
+
   .text-content h1::after {
     left: 50%;
     transform: translateX(-50%);
   }
-  
+
   .taiwan-image {
     width: 80vw;
   }
-  
+
   .map-container {
     padding: 20px 15px;
     border-radius: 15px;
   }
-  
+
   .map-header h3 {
     font-size: 1.3rem;
   }
-  
+
   .selected-city {
     font-size: 0.95rem;
   }
-  
+
   .selected-city span {
     font-size: 1.05rem;
     padding: 3px 10px;
   }
-  
+
   .taiwan-map-wrapper {
     height: 320px;
     padding: 15px;
     border-radius: 15px;
   }
-  
+
   .taiwan-map {
     max-width: 100%;
   }
-  
+
   .city-button {
     padding: 8px 14px;
     font-size: 0.8rem;
     min-width: 70px;
     border-radius: 20px;
   }
-  
+
   .city-list {
     gap: 6px;
   }
-  
+
   .carousel-slide {
     height: 400px;
   }
-  
+
   .carousel-btn {
     width: 50px;
     height: 50px;
     font-size: 24px;
     border-width: 2px;
   }
-  
+
   .prev-btn {
     left: 10px;
   }
-  
+
   .next-btn {
     right: 10px;
   }
-  
+
   .dual-text-container {
     flex-direction: column;
     padding: 60px 20px;
     gap: 30px;
   }
-  
+
   .text-block h2 {
     font-size: 1.5rem;
   }
-  
+
   .text-block p {
     font-size: 1rem;
   }
-  
+
   .events-table-container {
     padding: 60px 20px;
   }
-  
+
   .events-table th {
     padding: 15px 10px;
     font-size: 1rem;
   }
-  
+
   .events-table td {
     padding: 15px 10px;
     font-size: 0.9rem;
   }
-  
+
   .pagination-container {
     margin-top: 30px;
     gap: 15px;
   }
-  
+
   .pagination {
     gap: 8px;
   }
-  
+
   .pagination-btn {
     padding: 10px 16px;
     font-size: 0.9rem;
   }
-  
+
   .page-number {
     width: 40px;
     height: 40px;
     font-size: 0.9rem;
   }
-  
+
   .page-info {
     font-size: 0.9rem;
   }
-  
+
   .map-container {
     width: 100%;
     min-width: unset;
   }
-  
+
   .taiwan-map-wrapper {
     height: 300px;
     padding: 15px;
   }
-  
+
   .google-map-container {
     margin-top: 20px;
     padding: 20px;
   }
-  
+
   .google-map {
     height: 300px;
   }
-  
+
   .map-control-btn {
     padding: 8px 16px;
     font-size: 0.85rem;
