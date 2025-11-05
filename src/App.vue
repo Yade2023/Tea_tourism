@@ -34,7 +34,7 @@ onMounted(() => {
           <router-link to="/knowledge">台灣茶知識庫</router-link>
           <router-link to="/teaTourismArea">茶旅專區</router-link>
           <router-link to="/services">線上茶店</router-link>
-          <router-link to="/address">關於我們</router-link>
+          <router-link to="/address">Q&A/聯絡我們</router-link>
         </div>
         <div class="nav-icons">
           <a href="#" role="button" class="icon-btn search" @click="toggleSearch" title="搜尋"></a>

@@ -2,12 +2,28 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import '../assets/css/HomeTea_tourism.css'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import localJsonUrl from '../assets/json/HomeTea_tourism.json'
 // 合併工具：用 API 值覆蓋預設，但不覆蓋成 null / "" / undefined
 import { mergeDefault } from '../assets/js/mergeDefault.js'
 
 const homeData = ref(null)
+
+// 隨機排序函數
+const shuffleArray = (array) => {
+  const shuffled = [...array]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+      ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled
+}
+
+// 隨機取3個知識卡片的計算屬性
+const randomKnowledgeCards = computed(() => {
+  if (!homeData.value?.knowledgeCards) return []
+  return shuffleArray(homeData.value.knowledgeCards).slice(0, 3)
+})
 
 onMounted(async () => {
   // 1. 先一定抓到本地預設資料
@@ -66,6 +82,7 @@ onMounted(async () => {
     <div class="carBoby">
       <!-- ＝＝＝＝ 第一段：茶與旅 (左右圖文區) ＝＝＝＝ -->
       <div class="card mb-3">
+        <h2 style="text-align: center;">{{ homeData.introBlock.title }}</h2>
         <div class="row g-0">
           <div class="col-md-5">
             <img :src="homeData.introBlock.leftImage" class="img-fluid" alt="intro image" />
@@ -82,7 +99,9 @@ onMounted(async () => {
       </div>
 
       <!-- ＝＝＝＝ 第二段：大溪茶廠 故事區塊 ＝＝＝＝ -->
+
       <div class="card mb-3">
+        <h2 style="text-align: center;">本月精選旅遊區</h2>
         <img :src="homeData.featureSpot.mainImage" class="card-img-top" alt="feature main" />
         <div class="card-img-overlay">
           <h5 class="card-title">{{ homeData.featureSpot.title }}</h5>
@@ -101,16 +120,19 @@ onMounted(async () => {
       </div>
 
       <!-- ＝＝＝＝ 第三段：三張知識卡片 ＝＝＝＝ -->
+      <div class="text-center mb-3">
+        <h2>精選文章</h2>
+      </div>
       <div class="card-group">
-        <div class="card me-3" v-for="(kItem, kIdx) in homeData.knowledgeCards" :key="'know-' + kIdx">
-          <a href="#">
+        <div class="card me-3" v-for="(kItem, kIdx) in randomKnowledgeCards" :key="'know-' + kIdx">
+          <a :href="kItem.footer">
             <img :src="kItem.img" class="card-img-top" alt="knowledge img" />
           </a>
           <div class="card-body">
-            <h5 class="card-title">{{ kItem.title }}</h5>
+            <h3 class="card-title">{{ kItem.title }}</h3>
             <p class="card-text">{{ kItem.text }}</p>
             <p class="card-text">
-              <small class="text-muted">{{ kItem.footer }}</small>
+              <small class="text-muted">來源:<a :href="kItem.footer">{{ kItem.footer }}</a></small>
             </p>
           </div>
         </div>
