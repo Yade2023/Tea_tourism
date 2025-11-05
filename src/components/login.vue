@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import teaServingBg from '../assets/images/index_img/teaserving.png'
 
 const router = useRouter()
 
@@ -65,12 +66,12 @@ const togglePassword = () => {
     char.lookingAt = 'away'
   })
 
-  // 1.5秒後回到中心
+  // 1.6秒後回到中心
   setTimeout(() => {
     characters.value.forEach(char => {
       char.lookingAt = 'center'
     })
-  }, 1500)
+  }, 1600)
 }
 
 const toggleConfirmPassword = () => {
@@ -560,6 +561,8 @@ onMounted(() => {
   z-index: 1000;
 }
 
+
+
 .characters-container {
   position: relative;
   width: 100%;
@@ -572,7 +575,9 @@ onMounted(() => {
   position: relative;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #faf8f3, #f5f0e8);
+  /* 在主畫面區塊加入背景圖（以漸層疊加圖片，確保文字/角色可讀） */
+  background: linear-gradient(135deg, rgba(250,248,243,0.8), rgba(245,240,232,0.8)), url('/src/images/原始圖/teaserving.png') no-repeat center center;
+  background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
