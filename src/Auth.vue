@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+// 導入認證服務，用於與後端資料庫通訊
+import { login, register } from './services/authService.js'
 
 // Props：可選的登入/註冊成功後跳轉路徑
 const props = defineProps({
@@ -135,45 +137,70 @@ const validateRegisterForm = () => {
 
 // 提交表單
 const handleLogin = async () => {
+  // 先進行表單驗證，如果驗證失敗則不繼續執行
   if (!validateLoginForm()) return
   
+  // 設定載入狀態為 true，顯示載入中的 UI
   loading.value = true
   
-  // 模擬API請求
-  setTimeout(() => {
+  try {
+    // 呼叫認證服務的 login 函數，發送登入請求到後端 API
+    // 這個函數會向後端發送 POST 請求到 /auth/login 端點
+    // 後端會查詢資料庫驗證用戶的帳號密碼
+    const response = await login(
+      loginForm.value.email,
+      loginForm.value.password
+    )
+    
+    // 登入成功：後端返回了 token 和用戶資訊
+    // token 已經自動儲存在 localStorage 中（由 authService 處理）
     loading.value = false
+    showSuccessAnimation()
     
-    // 模擬登陸結果（這裡可以根據實際驗證邏輯修改）
-    const isValid = loginForm.value.email === 'test@example.com' && loginForm.value.password === 'password123'
+    setTimeout(() => {
+      // 優先順序：1. props.redirectAfterLogin 2. 路由查詢參數 redirect 3. 預設跳轉路徑
+      const redirectPath = props.redirectAfterLogin || route.query.redirect || '/'
+      
+      // 執行跳轉到指定頁面
+      router.push(redirectPath)
+    }, 1000)
     
-    if (isValid) {
-      showSuccessAnimation()
-      setTimeout(() => {
-        // 優先順序：1. props.redirectAfterLogin 2. 路由查詢參數 redirect 3. 預設跳轉路徑
-        const redirectPath = props.redirectAfterLogin || route.query.redirect || '/' // 預設跳轉到首頁，您可以修改這裡
-        
-        // 執行跳轉
-        router.push(redirectPath)
-        // 可以在這裡添加其他成功後的邏輯，例如儲存用戶信息等
-      }, 1000)
-    } else {
-      showErrorAnimation()
-      setTimeout(() => {
-        alert('登陸失敗！請檢查帳號密碼！')
-      }, 1000)
-    }
-  }, 1000)
+  } catch (error) {
+    // 登入失敗：處理錯誤情況
+    loading.value = false
+    showErrorAnimation()
+    
+    // 顯示錯誤訊息給用戶
+    // error.message 來自後端 API 返回的錯誤訊息
+    setTimeout(() => {
+      const errorMessage = error.message || '登入失敗！請檢查帳號密碼！'
+      alert(errorMessage)
+    }, 1000)
+  }
 }
 
 const handleRegister = async () => {
+  // 先進行表單驗證，如果驗證失敗則不繼續執行
   if (!validateRegisterForm()) return
   
+  // 設定載入狀態為 true，顯示載入中的 UI
   loading.value = true
   
-  // 模擬API請求
-  setTimeout(() => {
+  try {
+    // 呼叫認證服務的 register 函數，發送註冊請求到後端 API
+    // 這個函數會向後端發送 POST 請求到 /auth/register 端點
+    // 後端會將新用戶資料存入資料庫（通常會檢查 email 是否已存在）
+    const response = await register(
+      registerForm.value.name,
+      registerForm.value.email,
+      registerForm.value.password
+    )
+    
+    // 註冊成功：後端已將用戶資料存入資料庫
+    // 如果後端自動登入，token 已經自動儲存在 localStorage 中
     loading.value = false
     showSuccessAnimation()
+    
     setTimeout(() => {
       // 優先順序：1. props.redirectAfterRegister 2. 路由查詢參數 redirect 3. 不跳轉
       const redirectPath = props.redirectAfterRegister || route.query.redirect
@@ -184,10 +211,20 @@ const handleRegister = async () => {
       } else {
         // 如果沒有指定跳轉路徑，只顯示成功訊息，不跳轉
         alert('註冊成功！歡迎加入台灣茶葉旅遊！')
-        // 可以在這裡添加其他成功後的邏輯，例如儲存用戶信息等
       }
     }, 1000)
-  }, 1000)
+    
+  } catch (error) {
+    // 註冊失敗：處理錯誤情況（例如：email 已被使用）
+    loading.value = false
+    showErrorAnimation()
+    
+    // 顯示錯誤訊息給用戶
+    setTimeout(() => {
+      const errorMessage = error.message || '註冊失敗！請檢查輸入的資訊！'
+      alert(errorMessage)
+    }, 1000)
+  }
 }
 
 // 計算屬性

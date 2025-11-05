@@ -1,12 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import App from '../App.vue'
+import Travel from '../Travel.vue'
 import Auth from '../Auth.vue'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: App
+    component: Travel
+  },
+  {
+    path: '/travel',
+    name: 'Travel',
+    component: Travel
   },
   {
     path: '/auth',
