@@ -9,6 +9,16 @@ import { mergeDefault } from '../assets/js/mergeDefault.js'
 
 const homeData = ref(null)
 
+// 控制開場動畫顯示的狀態：預設為 false，待頁面載入完成後再觸發
+const showAnimation = ref(false)
+
+// 將動畫中使用的三張圖片轉為瀏覽器可讀取的 URL
+// 這些圖片放在 assets/img 資料夾中，請依實際檔名調整路徑
+// 在專案中 HomeTea_tourism.vue 位於 src/components，故需往上一層至 src 再進入 assets/img
+const img1 = new URL('../assets/img/2.png', import.meta.url).href // 行走採茶人的背景圖
+const img2 = new URL('../assets/img/1.png', import.meta.url).href // 茶芽或 LOGO 圖
+const img3 = new URL('../assets/img/3.png', import.meta.url).href // 合成後的茶旅標誌
+
 // 隨機排序函數
 const shuffleArray = (array) => {
   const shuffled = [...array]
@@ -44,11 +54,30 @@ onMounted(async () => {
     // 4. API 壞掉 → 純預設
     console.warn('⚠️ API 失敗，使用純預設 JSON：', err)
   }
+
+  // 頁面載入完成後才顯示開場動畫。先將動畫顯示，待一段時間後再關閉。
+  // 在組件掛載（資料載入完畢）後，顯示動畫層
+  showAnimation.value = true
+  // 動畫總長約 4.5 秒，這邊設定為 5 秒，確保動畫播放完整後再關閉
+  setTimeout(() => {
+    showAnimation.value = false
+  }, 5000)
 })
 </script>
 
 
 <template>
+  <!-- 開場動畫層：兩張圖片聚合成第三張後移動到左上方 LOGO -->
+  <div v-if="showAnimation" class="intro-animation">
+    <div class="animation-container">
+      <!-- 採茶人圖片從左側進入 -->
+      <img :src="img1" class="animation-img img1" alt="採茶人圖片" />
+      <!-- 茶芽圖片從右側進入 -->
+      <img :src="img2" class="animation-img img2" alt="茶芽圖片" />
+      <!-- 合成後的茶旅標誌在中間顯示並移動至左上角 -->
+      <img :src="img3" class="animation-img img3" alt="茶旅標誌" />
+    </div>
+  </div>
   <!-- 如果 homeData 已經有資料了才畫畫面 -->
   <div v-if="homeData" class="home-page">
     <!-- ＝＝＝＝ 輪播區 carousel ＝＝＝＝ -->
@@ -156,3 +185,117 @@ onMounted(async () => {
     資料載入中...
   </div>
 </template>
+
+<!-- 這裡加入開場動畫的樣式，使用 scoped 避免影響其他元素 -->
+<style scoped>
+/* 覆蓋整個螢幕的開場動畫層 */
+.intro-animation {
+  position: fixed;
+  inset: 0;
+  /* 背景透明以便首頁內容先顯示，再於其上播放動畫 */
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  pointer-events: none;
+}
+
+/* 動畫容器，用來定位三張圖片 */
+.intro-animation .animation-container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+}
+
+/* 基本動畫圖片樣式 */
+.intro-animation .animation-img {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+}
+
+/* 採茶人圖片從左側進入並淡出 */
+.intro-animation .img1 {
+  left: -150px;
+  width: 150px;
+  animation:
+    moveFromLeft 2s forwards,
+    fadeOut 1s forwards 2s;
+  opacity: 1;
+}
+
+/* 茶芽圖片從右側進入並淡出 */
+.intro-animation .img2 {
+  right: -150px;
+  width: 150px;
+  animation:
+    moveFromRight 2s forwards,
+    fadeOut 1s forwards 2s;
+  opacity: 1;
+}
+
+/* 合成後的茶旅標誌淡入並移動至左上角縮小 */
+.intro-animation .img3 {
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  transform: translate(-50%, -50%);
+  animation:
+    fadeIn 1s forwards 2s,
+    moveToLogo 1.5s forwards 3s;
+}
+
+/* 從左側移動至中間的關鍵幀 */
+@keyframes moveFromLeft {
+  to {
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+}
+
+/* 從右側移動至中間的關鍵幀 */
+@keyframes moveFromRight {
+  to {
+    right: 50%;
+    transform: translate(50%, -50%);
+    opacity: 1;
+  }
+}
+
+/* 淡出圖片 */
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+/* 淡入圖片 */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* 將合成圖片移動到左上角並縮小的關鍵幀 */
+@keyframes moveToLogo {
+  from {
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+  to {
+    top: -210px;
+    left: -545px;
+    width: 100px;
+    height: 100px;
+    transform: none;
+    opacity: 1;
+  }
+}
+</style>
