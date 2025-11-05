@@ -1,9 +1,16 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted ,ref } from 'vue';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
 import Footer from './components/Footer.vue'
 import './assets/css/App.css';
+
+const showInput = ref(false);
+const keyword = ref('');
+
+const toggleSearch = () => {
+  showInput.value = !showInput.value;
+};
 
 // 導入導航欄滾動功能
 onMounted(() => {
@@ -30,9 +37,11 @@ onMounted(() => {
           <router-link to="/address">關於我們</router-link>
         </div>
         <div class="nav-icons">
-          <a href="#" class="icon-btn search" title="搜尋"></a>
+          <a href="#" role="button" class="icon-btn search" @click="toggleSearch" title="搜尋"></a>
+          <!-- 搜尋輸入框 -->
+          <!-- <input v-if="showInput" v-model="keyword" type="text" placeholder="輸入搜尋內容..." class="search-input" /> -->
           <a href="/store" class="icon-btn cart" title="購物"></a>
-          <router-link to="/login"  class="icon-btn user" title="登入"></router-link>
+          <router-link to="/login" class="icon-btn user" title="登入"></router-link>
           <!-- <a href="/login" class="icon-btn user" title="登入"></a> -->
         </div>
         <svg class="navbar-wave" viewBox="0 0 1440 70" preserveAspectRatio="none">
