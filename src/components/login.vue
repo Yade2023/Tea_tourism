@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import teaServingBg from '../assets/images/index_img/teaserving.png'
 
 const router = useRouter()
 
