@@ -249,6 +249,50 @@
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%235c5b57" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>') center/contain no-repeat;
 }
 
+/* 用戶帳號顯示 */
+.user-email {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #5c5b57;
+  padding: 0.5rem 0.8rem;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: background 0.3s, transform 0.2s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-email:hover {
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+/* 登出按鈕 */
+.logout-btn {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  background: #d16d8a;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: background 0.3s, transform 0.2s;
+  white-space: nowrap;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-btn:hover {
+  background: #b85a73;
+  transform: translateY(-1px);
+}
+
 /* ===== 響應式設計優化 ===== */
 
 /* 大螢幕優化 (≥1200px) */
