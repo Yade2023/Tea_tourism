@@ -5,6 +5,57 @@ import taiwanImg from './assets/img/taiwan.png'
 import taiwanAdminImg from './assets/img/taiwan-admin.svg'
 import taiwanSilhouette from './assets/img/taiwan.png'
 
+import Keelung01 from './assets/img/keelung01.jpg'
+import Keelung02 from './assets/img/keelung02.jpg'
+import Keelung03 from './assets/img/keelung03.jpg'
+import Taipei01 from './assets/img/taipei01.jpg'
+import Taipei02 from './assets/img/taipei02.jpg'
+import Taipei03 from './assets/img/taipei03.webp'
+import NewTaipei01 from './assets/img/newtaipei01.jpg'
+import NewTaipei02 from './assets/img/newtaipei02.jpg'
+import NewTaipei03 from './assets/img/newtaipei03.jpg'
+import Taoyuan01 from './assets/img/taoyuan01.jpg'
+import Taoyuan02 from './assets/img/taoyuan02.jpg'
+import Taoyuan03 from './assets/img/taoyuan03.jpg'
+import Hsinchu01 from './assets/img/hsinchu01.jpg'
+import Hsinchu02 from './assets/img/hsinchu02.jpg'
+import Hsinchu03 from './assets/img/hsinchu03.jpg'
+import Miaoli01 from './assets/img/miaoli01.jpg'
+import Miaoli02 from './assets/img/miaoli02.jpeg'
+import Miaoli03 from './assets/img/miaoli03.jpg'
+import Taichung01 from './assets/img/taichung01.jpeg'
+import Taichung02 from './assets/img/taichung02.jpg'
+import Taichung03 from './assets/img/taichung03.jpg'
+import Changhua01 from './assets/img/changhua01.jpg'
+import Changhua02 from './assets/img/changhua02.jpg'
+import Changhua03 from './assets/img/changhua03.jpg'
+import Nantou01 from './assets/img/nantou01.jpg'
+import Nantou02 from './assets/img/nantou02.jpg'
+import Nantou03 from './assets/img/nantou03.jpg'
+import Yunlin01 from './assets/img/yunlin01.jpg'
+import Yunlin02 from './assets/img/yunlin02.jpg'
+import Yunlin03 from './assets/img/yunlin03.jpg'
+import Chiayi01 from './assets/img/chiayi01.jpg'
+import Chiayi02 from './assets/img/chiayi02.jpg'
+import Chiayi03 from './assets/img/chiayi03.jpg'
+import Tainan01 from './assets/img/tainan01.jpg'
+import Tainan02 from './assets/img/tainan02.jpg'
+import Tainan03 from './assets/img/tainan03.jpg'
+import Kaohsiung01 from './assets/img/kaohsiung01.jpg'
+import Kaohsiung02 from './assets/img/kaohsiung02.jpg'
+import Kaohsiung03 from './assets/img/kaohsiung03.jpg'
+import Pingtung01 from './assets/img/pingtung01.jpg'
+import Pingtung02 from './assets/img/pingtung02.jpg'
+import Pingtung03 from './assets/img/pingtung03.jpg'
+import Hualien01 from './assets/img/hualien01.jpg'
+import Hualien02 from './assets/img/hualien02.jpg'
+import Hualien03 from './assets/img/hualien03.jpg'
+import Taitung01 from './assets/img/taitung01.jpg'
+import Taitung02 from './assets/img/taitung02.jpg'
+import Taitung03 from './assets/img/taitung03.jpg'
+import Yilan01 from './assets/img/yilan01.jpg'
+import Yilan02 from './assets/img/yilan02.jpg'
+import Yilan03 from './assets/img/yilan03.jpg'
 // 輪播相關
 const currentSlide = ref(0)
 const slides = ref([
@@ -71,7 +122,7 @@ const cities = ref([
   { name: '彰化縣', x: 20, y: 30, color: '#5a8c69' },
   { name: '南投縣', x: 48, y: 45, color: '#6b8e6b' },
   { name: '雲林縣', x: 15, y: 40, color: '#4a7c59' },
-  { name: '嘉義市', x: 15, y: 55, color: '#5a8c69' },
+  { name: '嘉義縣', x: 15, y: 55, color: '#5a8c69' },
   
   // 東部區域 (淺綠色區域)
   { name: '花蓮縣', x: 74, y: 30, color: '#4a7c59' },
@@ -302,9 +353,20 @@ const pagesWithLocations = computed(() => {
 })
 
 // 口風琴可見的城市：選取時只顯示該城市；未選取時顯示全部
+// 當所有手風琴都收起來時，顯示所有城市
 const visibleCities = computed(() => {
+  // 檢查是否有任何手風琴是打開的
+  const hasOpenAccordion = Object.values(accordionOpenMap.value).some(open => open === true)
+  
+  // 如果有選中城市，且沒有打開的手風琴，顯示所有城市
+  // 如果有選中城市，且有打開的手風琴，只顯示選中的城市
   if (selectedCity.value) {
-    return cities.value.filter(c => c.name === selectedCity.value)
+    if (hasOpenAccordion) {
+      return cities.value.filter(c => c.name === selectedCity.value)
+    } else {
+      // 所有手風琴都收起來時，顯示所有城市
+      return cities.value
+    }
   }
   return cities.value
 })
@@ -530,6 +592,29 @@ const mapSectionRef = ref(null)
 // 事件點擊時的自訂地圖覆蓋 URL（優先於縣市地圖）
 const overrideMapUrl = ref(null)
 
+// 每個縣市的三張輪播圖片配置
+// 請在這裡為每個縣市添加三張圖片的路徑
+const cityImages = ref({
+  '基隆市': [Keelung01, Keelung02, Keelung03],
+  '台北市': [taiwanImg, taiwanAdminImg, taiwanSilhouette],
+  '新北市': [taiwanImg, taiwanAdminImg, taiwanSilhouette],
+  '桃園市': [taiwanImg, taiwanAdminImg, taiwanSilhouette],
+  '新竹市': [taiwanImg, taiwanAdminImg, taiwanSilhouette],
+  '新竹縣': [taiwanImg, taiwanAdminImg, taiwanSilhouette],
+  '苗栗縣': [taiwanImg, taiwanAdminImg, taiwanSilhouette],
+  '台中市': [taiwanImg, taiwanAdminImg, taiwanSilhouette],
+  '彰化縣': [taiwanImg, taiwanAdminImg, taiwanSilhouette],
+  '南投縣': [taiwanImg, taiwanAdminImg, taiwanSilhouette],
+  '雲林縣': [taiwanImg, taiwanAdminImg, taiwanSilhouette],
+  '嘉義縣': [taiwanImg, taiwanAdminImg, taiwanSilhouette],
+  '台南市': [taiwanImg, taiwanAdminImg, taiwanSilhouette],
+  '高雄市': [taiwanImg, taiwanAdminImg, taiwanSilhouette],
+  '屏東縣': [taiwanImg, taiwanAdminImg, taiwanSilhouette],
+  '花蓮縣': [taiwanImg, taiwanAdminImg, taiwanSilhouette],
+  '台東縣': [taiwanImg, taiwanAdminImg, taiwanSilhouette],
+  '宜蘭縣': [taiwanImg, taiwanAdminImg, taiwanSilhouette]
+})
+
 // 城市 -> 三個店家的資料（請依需求填入實際連結與描述）
 const cityStores = ref({
   '基隆市': [
@@ -572,49 +657,49 @@ const cityStores = ref({
     { name: '員林山腳路選茶小店', feature: '單品烏龍、手沖紅茶', description: '員林山腳路沿線散布風格小店，茶飲店主打單品烏龍與手沖紅茶，強調產地資訊與輕食搭配。適合以單車或步行慢慢探店，比較不同焙度與海拔的風味差異。傍晚時分坐在騎樓下喝茶看車流，是員林最在地的日常風景。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7291.643643759438!2d120.56378567091838!3d23.966740004764937!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346937302c1a580f%3A0x52f91d24cc37bde4!2z6aaZ6aaZ6Iy25qWtWGlhbmd0ZWEt5ZOh5p6X5peX6Imm5bqX77yI6aCQ57SE5Yi277yJ!5e0!3m2!1szh-TW!2stw!4v1762413114828!5m2!1szh-TW!2stw' }
   ],
   '南投縣': [
-    { name: '日月老茶廠',feature: '紅玉（台茶18號）、阿薩姆、紅韻',  description: '創立於 1959 年的日月老茶廠，是台灣紅茶的重要基地。保留木造廠房與古董機具，館內提供導覽、製茶展示與評茶體驗。魚池得天獨厚的氣候與土壤賦予紅玉薄荷與肉桂調性，茶湯醇厚清甜。建議安排『環潭騎行＋茶廠導覽＋紅茶品評』的一日行程，深入認識魚池紅茶。', mapUrl: '' },
-    { name: '凍頂茶區 × 龍鳳峽步道',feature: '凍頂烏龍、熟香烏龍',  description: '鹿谷凍頂以烏龍茶聞名，香氣厚實、喉韻綿長。可循龍鳳峽步道俯瞰層層茶園，途中造訪茶莊進行『輕焙×中焙』對比試飲，理解焙火對香氣與口感的影響。亦可預約手作揉捻體驗，從茶園到茶桌一次走完，適合對工藝有興趣的茶迷。', mapUrl: '' },
-    { name: '杉林溪高山茶園', feature: '高山烏龍、清香金萱', description: '杉林溪海拔高、雲霧濃，孕育清透花香與甘醇的高山茶。園區林相多變，沿溪谷步道可見瀑布、苔蘚與巨木。建議先走松瀧岩步道，再到茶莊做『金萱×烏龍』盲品；若遇到採收期，還能觀看茶農忙碌身影，感受高山茶的一年四季。', mapUrl: '' }
+    { name: '日月老茶廠',feature: '紅玉（台茶18號）、阿薩姆、紅韻',  description: '創立於 1959 年的日月老茶廠，是台灣紅茶的重要基地。保留木造廠房與古董機具，館內提供導覽、製茶展示與評茶體驗。魚池得天獨厚的氣候與土壤賦予紅玉薄荷與肉桂調性，茶湯醇厚清甜。建議安排『環潭騎行＋茶廠導覽＋紅茶品評』的一日行程，深入認識魚池紅茶。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3647.9377359545233!2d120.92070820735168!3d23.891826484953583!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3468d64c409b94a3%3A0xc85ae6d33f31ca69!2z5pel5pyI6ICB6Iy25bug!5e0!3m2!1szh-TW!2stw!4v1762479323949!5m2!1szh-TW!2stw' },
+    { name: '凍頂茶區 × 龍鳳峽步道',feature: '凍頂烏龍、熟香烏龍',  description: '鹿谷凍頂以烏龍茶聞名，香氣厚實、喉韻綿長。可循龍鳳峽步道俯瞰層層茶園，途中造訪茶莊進行『輕焙×中焙』對比試飲，理解焙火對香氣與口感的影響。亦可預約手作揉捻體驗，從茶園到茶桌一次走完，適合對工藝有興趣的茶迷。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29217.31161665787!2d120.73741382612208!3d23.741532183464876!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346ed24ac7688763%3A0xceaaf45d37e3027c!2z6bm_6IyX5YeN6aCC6Iy2!5e0!3m2!1szh-TW!2stw!4v1762479391298!5m2!1szh-TW!2stw' },
+    { name: '杉林溪高山茶園', feature: '高山烏龍、清香金萱', description: '杉林溪海拔高、雲霧濃，孕育清透花香與甘醇的高山茶。園區林相多變，沿溪谷步道可見瀑布、苔蘚與巨木。建議先走松瀧岩步道，再到茶莊做『金萱×烏龍』盲品；若遇到採收期，還能觀看茶農忙碌身影，感受高山茶的一年四季。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29211.62861381992!2d120.67964027910159!3d23.766857400000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346ed27f1e5c1f85%3A0xf87f142c102acfe2!2z5p2J5p6X5rqq6auY5bGx6Iy2IOmHkeeJjOWkp-izng!5e0!3m2!1szh-TW!2stw!4v1762479439587!5m2!1szh-TW!2stw' }
   ],
   '雲林縣': [
-    { name: '華山茶園步道',feature: '烏龍、金萱、翠玉（華山茶）',  description: '古坑華山除咖啡聞名外，山坡亦有茶園分布。華山步道穿梭林蔭與茶田之間，沿途設觀景平台與在地小茶館，提供清香系台灣烏龍。建議清晨登高看雲瀑，午後坐進窗邊以『清香×輕焙』對比，感受不同焙度的香氣層次，是雲林近郊的輕茶旅選擇。', mapUrl: '' },
-    { name: '草嶺石壁生態茶園',feature: '高山烏龍、金萱',  description: '草嶺石壁位於阿里山山脈支稜，雲霧終日纏繞，茶園散落山坡。沿產業道路可見層層梯田與雲海，偶有雉雞與藍腹鷴出沒。多數茶農提供莊園茶試飲與簡餐，建議注意山區天候與路況，安排半日或一日慢行程。', mapUrl: '' },
-    { name: '林內鄉親水公園 × 茶風散步', feature: '在地小農烏龍、花草調飲', description: '林內以綠地與自行車道著稱，親水公園周邊聚落有小型茶飲與甜點店，主打在地小農茶款與花草調飲。適合安排親子踏青、騎行與午後午茶，體驗『日常散步×輕品茶』的雲林步調。', mapUrl: '' }
+    { name: '華山茶園步道',feature: '烏龍、金萱、翠玉（華山茶）',  description: '古坑華山除咖啡聞名外，山坡亦有茶園分布。華山步道穿梭林蔭與茶田之間，沿途設觀景平台與在地小茶館，提供清香系台灣烏龍。建議清晨登高看雲瀑，午後坐進窗邊以『清香×輕焙』對比，感受不同焙度的香氣層次，是雲林近郊的輕茶旅選擇。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d17392.149014228504!2d120.59317677505527!3d23.59540343909285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346ec6b278751315%3A0x9a2817ea83a0a509!2z6I-v5bGxNC0y6Jmf5q2l6YGT!5e0!3m2!1szh-TW!2stw!4v1762479493363!5m2!1szh-TW!2stw' },
+    { name: '草嶺石壁生態茶園',feature: '高山烏龍、金萱',  description: '草嶺石壁位於阿里山山脈支稜，雲霧終日纏繞，茶園散落山坡。沿產業道路可見層層梯田與雲海，偶有雉雞與藍腹鷴出沒。多數茶農提供莊園茶試飲與簡餐，建議注意山區天候與路況，安排半日或一日慢行程。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d20679.710036897763!2d120.69662771440639!3d23.615419560119708!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346edb727dc56e45%3A0x76dcb8f59da4f797!2z6I2J5ba655-z5aOB5qOu5p6X55mC55mS5Z-65Zyw!5e0!3m2!1szh-TW!2stw!4v1762479536501!5m2!1szh-TW!2stw' },
+    { name: '林內鄉親水公園 × 茶風散步', feature: '在地小農烏龍、花草調飲', description: '林內以綠地與自行車道著稱，親水公園周邊聚落有小型茶飲與甜點店，主打在地小農茶款與花草調飲。適合安排親子踏青、騎行與午後午茶，體驗『日常散步×輕品茶』的雲林步調。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d58431.99670742603!2d120.57162795691232!3d23.747386749285536!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346ecbff1f8690c3%3A0x2f0faf57317cede5!2z5p6X5YWn5YWs5ZyS!5e0!3m2!1szh-TW!2stw!4v1762479579971!5m2!1szh-TW!2stw' }
   ],
   '嘉義縣': [
-    { name: '梅山太平茶園 × 太平雲梯',feature: '阿里山高山烏龍、金萱、紅茶',  description: '太平雲梯銜接山脊視野，俯瞰茶園聚落與雲海。周邊茶莊提供莊園級高山烏龍與金萱，並可預約採茶、揉捻體驗。建議清晨上橋看雲瀑，午后入茶莊做『清香×輕焙』盲品，理解高山風土。', mapUrl: '' },
-    { name: '阿里山茶園公路線',feature: '阿里山高山烏龍、金萱',  description: '台18線沿途分布隙頂、石桌等茶區，雲霧繚繞、日夜溫差大，使茶湯甘甜細緻。可於觀景平台遠望茶梯，並進入茶農工坊了解採收與焙火差異。建議搭配祝山觀日出與奮起湖老街。', mapUrl: '' },
-    { name: '觸口茶旅驛站 × 逐鹿部落', feature: '高山烏龍、在地特色紅茶', description: '觸口為阿里山門戶，結合逐鹿部落文化展演與在地茶飲。旅人可在驛站品飲阿里山茶並選購伴手禮，再前往部落體驗射箭、手作，形成自然與人文兼具的半日行程。', mapUrl: '' }
+    { name: '梅山太平茶園 × 太平雲梯',feature: '阿里山高山烏龍、金萱、紅茶',  description: '太平雲梯銜接山脊視野，俯瞰茶園聚落與雲海。周邊茶莊提供莊園級高山烏龍與金萱，並可預約採茶、揉捻體驗。建議清晨上橋看雲瀑，午后入茶莊做『清香×輕焙』盲品，理解高山風土。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7314.373840982492!2d120.59397336294853!3d23.5617292892656!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346ec119c7000003%3A0xda8e3412bda787b0!2z5ZiJ576p5qKF5bGx5aSq5bmz6Zuy5qKv!5e0!3m2!1szh-TW!2stw!4v1762479615135!5m2!1szh-TW!2stw' },
+    { name: '阿里山茶園公路線',feature: '阿里山高山烏龍、金萱',  description: '台18線沿途分布隙頂、石桌等茶區，雲霧繚繞、日夜溫差大，使茶湯甘甜細緻。可於觀景平台遠望茶梯，並進入茶農工坊了解採收與焙火差異。建議搭配祝山觀日出與奮起湖老街。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14643.72846271318!2d120.6441163564171!3d23.426819266840695!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346ee93c4fee3c65%3A0x5d2717dd24d6467!2zVGVhIGFuZCBNaXN0IFRyYWlsIOiMtumcp-S5i-mBkw!5e0!3m2!1szh-TW!2stw!4v1762479654222!5m2!1szh-TW!2stw' },
+    { name: '觸口茶旅驛站 × 逐鹿部落', feature: '高山烏龍、在地特色紅茶', description: '觸口為阿里山門戶，結合逐鹿部落文化展演與在地茶飲。旅人可在驛站品飲阿里山茶並選購伴手禮，再前往部落體驗射箭、手作，形成自然與人文兼具的半日行程。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3660.5984735320117!2d120.604000412866!3d23.438867498931593!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346eebc035279193%3A0x4df89a3393521eac!2z6Ke45Y-jLeWkqemVt-WcsOS5hemiqOaZr-WNgA!5e0!3m2!1szh-TW!2stw!4v1762479721842!5m2!1szh-TW!2stw' }
   ],
   '台南市': [
-    { name: '東山茶咖共融小旅行',feature: '烏龍、紅茶（山區小農茶）',  description: '東山丘陵除咖啡外亦有茶園分布，小農茶館提供清香烏龍與手作紅茶。建議沿175線安排山區景觀＋茶咖雙享，午後於觀景台遠眺曾文溪谷。適合駕車慢遊。', mapUrl: '' },
-    { name: '梅嶺步道 × 山茶午后',feature: '清香烏龍、花草調飲',  description: '梅嶺以梅季聞名，步道綠蔭涼爽。沿線可見小茶館供應清香烏龍與花草調飲，適合『步道健行＋下午茶』。梅季人潮旺，建議平日前往。', mapUrl: '' },
-    { name: '關子嶺溫泉 × 茶香慢旅', feature: '在地烏龍、紅茶（輕焙）', description: '安排『泥漿溫泉＋茶館午茶』的療癒行程，先在老溫泉旅館放鬆，再到山區茶館品飲輕焙烏龍或紅茶，感受溫泉與茶香交替的慢活節奏。', mapUrl: '' }
+    { name: '東山茶咖共融小旅行',feature: '烏龍、紅茶（山區小農茶）',  description: '東山丘陵除咖啡外亦有茶園分布，小農茶館提供清香烏龍與手作紅茶。建議沿175線安排山區景觀＋茶咖雙享，午後於觀景台遠眺曾文溪谷。適合駕車慢遊。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14655.488221066345!2d120.3967296466695!3d23.320400489841862!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e8f0e3064d83b%3A0xb2b97a75c60f8599!2z5p2x5bGx5pmu5rSx6Iy26I6K!5e0!3m2!1szh-TW!2stw!4v1762479824609!5m2!1szh-TW!2stw' },
+    { name: '梅嶺步道 × 山茶午后',feature: '清香烏龍、花草調飲',  description: '梅嶺以梅季聞名，步道綠蔭涼爽。沿線可見小茶館供應清香烏龍與花草調飲，適合『步道健行＋下午茶』。梅季人潮旺，建議平日前往。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3667.632085984069!2d120.55769977114555!3d23.183624418430444!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346ef512c31a0929%3A0xd01ed114bce09349!2z5qKF5bOw5Y-k6YGT!5e0!3m2!1szh-TW!2stw!4v1762479860435!5m2!1szh-TW!2stw' },
+    { name: '關子嶺溫泉 × 茶香慢旅', feature: '在地烏龍、紅茶（輕焙）', description: '安排『泥漿溫泉＋茶館午茶』的療癒行程，先在老溫泉旅館放鬆，再到山區茶館品飲輕焙烏龍或紅茶，感受溫泉與茶香交替的慢活節奏。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7326.832569875222!2d120.50275780744892!3d23.336928286390425!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e8d9d8c65f349%3A0xc92a0af1d5ce932a!2z6Zec5a2Q5ba65rqr5rOJ!5e0!3m2!1szh-TW!2stw!4v1762479905164!5m2!1szh-TW!2stw' }
   ],
   '高雄市': [
-    { name: '高雄高山茶線 × 寒溪呢步道',feature: '高山烏龍、紅茶（原鄉茶）',  description: '沿南橫梅山口上行可見原鄉茶園，空氣清冷、雲瀑壯觀。可走寒溪呢步道看谷地雲海，回到部落茶屋飲高山烏龍或紅茶，體驗原民文化與茶風土。', mapUrl: '' },
-    { name: '寶來溫泉 × 山茶午茶',feature: '清香烏龍、紅茶',  description: '寶來以溫泉與山谷景致著稱，周邊茶屋供應清香烏龍與手作紅茶。建議安排溫泉泡湯後的山茶午茶，或沿荖濃溪谷散步。', mapUrl: '' },
-    { name: '甲仙山城 × 小農茶館', feature: '在地小農烏龍、紅茶', description: '甲仙山城緩坡小路間有風格小茶館，供應在地小農茶款。可搭配附近步道與特色小吃，形成半日小旅行。', mapUrl: '' }
+    { name: '高雄高山茶線 × 寒溪呢步道',feature: '高山烏龍、紅茶（原鄉茶）',  description: '沿南橫梅山口上行可見原鄉茶園，空氣清冷、雲瀑壯觀。可走寒溪呢步道看谷地雲海，回到部落茶屋飲高山烏龍或紅茶，體驗原民文化與茶風土。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5185.955395503147!2d120.80013250809364!3d23.20578768347712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346efb0026c20c9d%3A0x773acb31e3150096!2z5Y6f5aeL6Ieq54S26auU6amX!5e0!3m2!1szh-TW!2stw!4v1762480007208!5m2!1szh-TW!2stw' },
+    { name: '寶來溫泉 × 山茶午茶',feature: '清香烏龍、紅茶',  description: '寶來以溫泉與山谷景致著稱，周邊茶屋供應清香烏龍與手作紅茶。建議安排溫泉泡湯後的山茶午茶，或沿荖濃溪谷散步。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3669.7072934822104!2d120.69756255190323!3d23.107808542563035!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e583cf111aadd%3A0xec4c68cbe33cd37b!2z5a-25L6G5rqr5rOJ6KGX5Y2A!5e0!3m2!1szh-TW!2stw!4v1762480067908!5m2!1szh-TW!2stw' },
+    { name: '甲仙山城 × 小農茶館', feature: '在地小農烏龍、紅茶', description: '甲仙山城緩坡小路間有風格小茶館，供應在地小農茶款。可搭配附近步道與特色小吃，形成半日小旅行。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3670.263278458279!2d120.58645562034602!3d23.08745616025757!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e5e90f7d1d3fd%3A0x6ab71159eddcbe83!2z6Zmz5a625Y-L5ZaE6aaZ6I2J5ZySKOeUsuS7mSk!5e0!3m2!1szh-TW!2stw!4v1762480145899!5m2!1szh-TW!2stw' }
   ],
   '屏東縣': [
-    { name: '霧台神山 × 茶文化散步',feature: '高山烏龍、紅茶（部落茶）',  description: '霧台群山雲霧繚繞，部落茶屋供應原鄉風味茶飲與手作點心。建議參與部落導覽、手作與茶席，在百合花季或雲海季感受山城靜美。', mapUrl: '' },
-    { name: '琉璃珠文化園區 × 山茶午后',feature: '小農烏龍、花草調飲',  description: '三地門以琉璃珠與排灣文化著名，園區周邊小店提供在地茶飲與甜點。可結合文化手作與山景品茗，適合親子與文化愛好者。', mapUrl: '' },
-    { name: '東源森林 × 小村茶室', feature: '清香烏龍、紅茶', description: '東源森林保留自然湧泉與濕地生態，村內有小茶室供應清香烏龍與紅茶。建議晨間繞行濕地、午後入茶室看山光雲影。', mapUrl: '' }
+    { name: '霧台神山 × 茶文化散步',feature: '高山烏龍、紅茶（部落茶）',  description: '霧台群山雲霧繚繞，部落茶屋供應原鄉風味茶飲與手作點心。建議參與部落導覽、手作與茶席，在百合花季或雲海季感受山城靜美。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3679.4121744178647!2d120.72470043827089!3d22.750080114513512!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e379079dce675%3A0xe976a33be95c9cf!2z56We5bGx6YOo6JC9!5e0!3m2!1szh-TW!2stw!4v1762480184500!5m2!1szh-TW!2stw' },
+    { name: '琉璃珠文化園區 × 山茶午后',feature: '小農烏龍、花草調飲',  description: '三地門以琉璃珠與排灣文化著名，園區周邊小店提供在地茶飲與甜點。可結合文化手作與山景品茗，適合親子與文化愛好者。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3680.3100707279127!2d120.6512924142509!3d22.716713706139807!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e3962c8c9fc29%3A0x8eccd78997b5f73d!2z5LiJ5Zyw6ZaA5paH5YyW6aSo!5e0!3m2!1szh-TW!2stw!4v1762480285868!5m2!1szh-TW!2stw' },
+    { name: '東源森林 × 小村茶室', feature: '清香烏龍、紅茶', description: '東源森林保留自然湧泉與濕地生態，村內有小茶室供應清香烏龍與紅茶。建議晨間繞行濕地、午後入茶室看山光雲影。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3693.9139423254956!2d120.85214857589536!3d22.205376546328253!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3471cd03b9278d6d%3A0x2cf947cf45259c!2z5p2x5rqQ5qOu5p6X6YGK5qiC5Y2AKOmmqOmmmeajruaelyk!5e0!3m2!1szh-TW!2stw!4v1762480317227!5m2!1szh-TW!2stw' }
   ],
   '台東縣': [
-    { name: '鹿野紅烏龍茶園',feature: '紅烏龍、蜜香紅茶',  description: '鹿野高台周邊為台東代表茶區，日照充足、日夜溫差大，孕育香濃回甘的紅烏龍。可於茶園品飲並了解重發酵與焙火的製程，建議串聯熱氣球季與龍田綠色隧道。', mapUrl: '' },
-    { name: '布農部落 × 山茶文化體驗',feature: '小農烏龍、紅茶（部落茶）',  description: '延平山區部落結合農耕體驗與茶席，分享原鄉茶飲與在地餐食。可安排族語歌舞、手作課程與茶席對談，體驗部落生活美學。', mapUrl: '' },
-    { name: '池上慢行 × 田園茶點', feature: '清香烏龍、花草調飲', description: '稻田與山脈環抱的池上小鎮，午後在田間小茶室享用清香烏龍與輕甜點，騎單車繞行大坡池與伯朗大道，感受東台灣的從容步調。', mapUrl: '' }
+    { name: '鹿野紅烏龍茶園',feature: '紅烏龍、蜜香紅茶',  description: '鹿野高台周邊為台東代表茶區，日照充足、日夜溫差大，孕育香濃回甘的紅烏龍。可於茶園品飲並了解重發酵與焙火的製程，建議串聯熱氣球季與龍田綠色隧道。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5197.402477260313!2d121.1142330327756!3d22.908998322976785!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346fa506902e17a7%3A0xd428d83156951a1a!2z56Kn6Ji_5ZyS6IyX6Iy25Z2KIEJpbHVveXVhbiBSZWQgT29sb25nIFRlYSB8IOe0heeDj-m-jeWwiOizow!5e0!3m2!1szh-TW!2stw!4v1762480357164!5m2!1szh-TW!2stw' },
+    { name: '布農部落 × 山茶文化體驗',feature: '小農烏龍、紅茶（部落茶）',  description: '延平山區部落結合農耕體驗與茶席，分享原鄉茶飲與在地餐食。可安排族語歌舞、手作課程與茶席對談，體驗部落生活美學。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1837.5897925187674!2d121.08944093458419!3d22.906746068140375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346faef11fcb890f%3A0x8f22157fc6b0f7!2z5biD6L6y6YOo6JC95LyR6ZaS6L6y5aC0!5e0!3m2!1szh-TW!2stw!4v1762480394154!5m2!1szh-TW!2stw' },
+    { name: '池上慢行 × 田園茶點', feature: '清香烏龍、花草調飲', description: '稻田與山脈環抱的池上小鎮，午後在田間小茶室享用清香烏龍與輕甜點，騎單車繞行大坡池與伯朗大道，感受東台灣的從容步調。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7338.777203047436!2d121.20780578840908!3d23.119466942486174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346f0c8addc26d5f%3A0xee172e4e91a0aa48!2z5pus56mA5aC06Kmx5qGR6bq75bel5Z2K77yG5pus56mA5aC05rCR5a6_77yG6Ka66Iy25bel5L2c5a6kICjlu7rorbDpoJDntIQp!5e0!3m2!1szh-TW!2stw!4v1762480457548!5m2!1szh-TW!2stw' }
   ],
   '花蓮縣': [
-    { name: '鯉魚潭環潭茶旅',feature: '清香烏龍、紅茶（在地小農）',  description: '環潭步道綠意盎然，沿線小店提供在地小農茶與甜點。建議晨划獨木舟、午后湖畔茶席，傍晚看山影入水，是花蓮最溫柔的茶旅節奏。', mapUrl: '' },
-    { name: '金針山雲海 × 茶香小店',feature: '清香烏龍、金萱',  description: '花季外的六十石山依舊雲海繚繞，山腰間有供應清香烏龍與金萱的茶香小店。建議清晨登高觀雲海、午後坐進茶席看山光流轉。', mapUrl: '' },
-    { name: '砂卡礑步道 × 山谷茶席', feature: '清香烏龍、紅茶', description: '太魯閣峽谷清澈溪流旁的步道，林蔭深邃、岩壁壯麗。行程結束後在山谷茶席喝一杯清香烏龍，讓山風與茶香洗去疲憊。', mapUrl: '' }
+    { name: '鯉魚潭環潭茶旅',feature: '清香烏龍、紅茶（在地小農）',  description: '環潭步道綠意盎然，沿線小店提供在地小農茶與甜點。建議晨划獨木舟、午后湖畔茶席，傍晚看山影入水，是花蓮最溫柔的茶旅節奏。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d49066.199726207065!2d121.48254521529645!3d23.929759237982257!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3468a3b3def39091%3A0x6b9af522ca92e240!2z6a-J6a2a5r2t6aKo5pmv6YGK5oap5Y2A!5e0!3m2!1szh-TW!2stw!4v1762480494364!5m2!1szh-TW!2stw' },
+    { name: '金針山雲海 × 茶香小店',feature: '清香烏龍、金萱',  description: '花季外的六十石山依舊雲海繚繞，山腰間有供應清香烏龍與金萱的茶香小店。建議清晨登高觀雲海、午後坐進茶席看山光流轉。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14666.632983358748!2d121.29811886759046!3d23.21912215979002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346f6c5c3c213529%3A0x98227cc5e43ddaf0!2z5YWt5Y2B55-z5bGx6YeR6Yed6Iqx5rW3!5e0!3m2!1szh-TW!2stw!4v1762480554075!5m2!1szh-TW!2stw' },
+    { name: '砂卡礑步道 × 山谷茶席', feature: '清香烏龍、紅茶', description: '太魯閣峽谷清澈溪流旁的步道，林蔭深邃、岩壁壯麗。行程結束後在山谷茶席喝一杯清香烏龍，讓山風與茶香洗去疲憊。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2574.0518943576644!2d121.61138216845515!3d24.16264438065084!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34689b985a2388cf%3A0xdd64e8b10911fe28!2z56CC5Y2h56SR5q2l6YGT!5e0!3m2!1szh-TW!2stw!4v1762480585449!5m2!1szh-TW!2stw' }
   ],
   '宜蘭縣': [
-    { name: '望龍埤湖畔茶點',feature: '包種、翠玉、清香烏龍',  description: '員山望龍埤群山環抱、湖光如鏡，湖畔咖啡茶點店提供清爽包種與輕食。建議環湖散步或走林中步道，午後在窗邊啜飲淡雅花香的茶湯。', mapUrl: '' },
-    { name: '五峰旗瀑布 × 茶食午后',feature: '包種、清香烏龍、花草茶',  description: '五峰旗瀑布清涼宜人，沿線店家供應包種與花草茶輕食。可串聯礁溪溫泉，安排『步道＋溫泉＋午茶』的放鬆行程。', mapUrl: '' },
-    { name: '外澳沙灘 × 海風茶席', feature: '清香烏龍、冷泡茶', description: '面對龜山島的外澳海灘，黃昏時分於海邊臨時茶席啜飲冷泡茶，聽浪聲、看日落。適合衝浪後或散步後的清爽茶時光。', mapUrl: '' }
+    { name: '望龍埤湖畔茶點',feature: '包種、翠玉、清香烏龍',  description: '員山望龍埤群山環抱、湖光如鏡，湖畔咖啡茶點店提供清爽包種與輕食。建議環湖散步或走林中步道，午後在窗邊啜飲淡雅花香的茶湯。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3622.5953522928326!2d121.69582862566357!3d24.775059493344198!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3467e34ba1b07a5f%3A0x340f9e9994cdf40f!2z5pyb6b6N5Z-k!5e0!3m2!1szh-TW!2stw!4v1762480631000!5m2!1szh-TW!2stw' },
+    { name: '五峰旗瀑布 × 茶食午后',feature: '包種、清香烏龍、花草茶',  description: '五峰旗瀑布清涼宜人，沿線店家供應包種與花草茶輕食。可串聯礁溪溫泉，安排『步道＋溫泉＋午茶』的放鬆行程。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3620.8667225336058!2d121.74447767595159!3d24.834231046305515!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3467fbbf44b2bb5b%3A0xba349d16eecc911d!2z5LqU5bOw5peX54CR5biD!5e0!3m2!1szh-TW!2stw!4v1762480659233!5m2!1szh-TW!2stw' },
+    { name: '外澳沙灘 × 海風茶席', feature: '清香烏龍、冷泡茶', description: '面對龜山島的外澳海灘，黃昏時分於海邊臨時茶席啜飲冷泡茶，聽浪聲、看日落。適合衝浪後或散步後的清爽茶時光。', mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14478.362298471044!2d121.83277166307461!3d24.877829413334705!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3467f7a7b0c983c3%3A0x76e26a6834543402!2z5aSW5r6z5rKZ54GY!5e0!3m2!1szh-TW!2stw!4v1762480685235!5m2!1szh-TW!2stw' }
   ]
   // 其餘城市請依需要補上 3 筆
 })
@@ -645,8 +730,12 @@ const expandOnlyCity = (cityName) => {
 const rebuildSlidesFromCity = (cityName) => {
   const stores = (cityStores.value[cityName] || []).slice(0, 3)
   if (!stores.length) return
+  
+  // 獲取該縣市的三張圖片，如果沒有配置則使用預設圖片
+  const cityImgs = cityImages.value[cityName] || [taiwanImg, taiwanAdminImg, taiwanSilhouette]
+  
   slides.value = stores.map((s, idx) => ({
-    src: idx === 0 ? taiwanImg : (idx === 1 ? taiwanAdminImg : taiwanSilhouette),
+    src: cityImgs[idx] || taiwanImg, // 使用對應縣市的圖片
     alt: s.name,
     title: s.name,
     description: s.description || '',
@@ -667,6 +756,20 @@ const scrollToMap = async () => {
   await nextTick()
   if (mapSectionRef.value) {
     mapSectionRef.value.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
+
+// 處理口風琴點擊事件
+const handleAccordionClick = async (cityName) => {
+  const wasOpen = accordionOpenMap.value[cityName]
+  // 切換手風琴狀態
+  accordionOpenMap.value[cityName] = !wasOpen
+  
+  // 如果點擊後手風琴收起來了，滾動到地圖
+  if (wasOpen) {
+    // 手風琴從打開變為收起來
+    await nextTick()
+    scrollToMap()
   }
 }
 
@@ -883,7 +986,7 @@ onUnmounted(() => {
             >
               <button 
                 class="accordion-header" 
-                @click="accordionOpenMap[city.name] = !accordionOpenMap[city.name]"
+                @click="handleAccordionClick(city.name)"
                 :aria-expanded="accordionOpenMap[city.name]"
               >
                 <span class="accordion-title">{{ city.name }} 精選店家（3）</span>
@@ -895,7 +998,7 @@ onUnmounted(() => {
                     v-for="(store, idx) in (cityStores[city.name] || [])"
                     :key="store.name || idx"
                     class="store-item"
-                    @click="() => { selectedCity = city.name; rebuildSlidesFromCity(city.name); currentSlide = idx; applySlideEffects(); }"
+                    @click="() => { selectedCity = city.name; rebuildSlidesFromCity(city.name); currentSlide = idx; applySlideEffects(); scrollToMap(); }"
                   >
                     <div class="store-name">{{ store.name || '（待填店名）' }}</div>
                     <div class="store-spec">{{ store.feature || '（待填特色）' }}</div>
@@ -1164,6 +1267,9 @@ onUnmounted(() => {
 
 .accordion {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .accordion-item {
@@ -1171,6 +1277,7 @@ onUnmounted(() => {
   border-radius: 10px;
   background: #ffffff;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .accordion-header {
@@ -1183,11 +1290,28 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  font-size: 1.05rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  transition: background-color 0.2s ease;
+}
+
+.accordion-header:hover {
+  background: #f0f0f0;
+}
+
+.accordion-title {
+  color: #1a1a1a;
+  font-weight: 600;
+  font-size: 1.15rem;
+  letter-spacing: 0.01em;
 }
 
 .accordion-arrow {
   transition: transform 0.2s ease;
+  color: #1a1a1a;
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 
 .accordion-arrow.open {
@@ -1214,16 +1338,20 @@ onUnmounted(() => {
 }
 
 .store-item {
-  padding: 12px 14px;
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 14px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 8px;
   background: #fff;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .store-item:hover {
   background: #f5f5f5;
+  border-color: rgba(74, 124, 89, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
 }
 
 .store-item:active {
@@ -1233,12 +1361,24 @@ onUnmounted(() => {
 .store-name {
   font-weight: 600;
   color: #1a1a1a;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  letter-spacing: 0.01em;
+}
+
+.store-spec {
+  color: #4a7c59;
+  font-size: 0.98rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  letter-spacing: 0.01em;
 }
 
 .store-desc {
-  color: #666666;
-  font-size: 0.95rem;
+  color: #4a4a4a;
+  font-size: 1rem;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
 }
 
 .events-table {
