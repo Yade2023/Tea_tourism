@@ -1,0 +1,78 @@
+{
+  "carousel": [
+    { "img": "./src/assets/images/index_img/carousel01.jpg" },
+    { "img": "./src/assets/images/index_img/carousel02.jpg" },
+    { "img": "./src/assets/images/index_img/carousel03.jpg" }
+  ],
+  "introBlock": {
+    "leftImage": "./src/assets/images/index_img/茶景.jpg",
+    "title": "茶與旅",
+    "text": "茶，不只是飲品，\n更是一段文化的旅程。\n我們以旅為名，走訪茶山，\n記錄台灣茶的靜與深。"
+  },
+  "featureSpot": {
+    "mainImage": "./src/assets/images/index_img/daxitea.jpg",
+    "title": "大溪茶廠",
+    "desc": "大溪茶廠創建於1926年，是台灣現存最古老的茶廠之一。這座歷史悠久的建築見證了台灣茶業的興衰，至今仍保持著傳統的製茶工藝。茶廠座落在桃園大溪的山間，四周綠意盎然，空氣清新怡人。在這裡，您可以深度體驗從採茶、製茶到品茶的完整過程，感受茶葉在時光中沉澱的醇厚韻味。走進大溪茶廠，彷彿走進了一座茶文化的博物館，每一個角落都訴說著台灣茶的故事。",
+    "info": "地址: 335桃園市大溪區復興路二段732巷80號\n營業時間: 週一至週五 9:30-17:30 (國定假日依官方公告)\n電話: 03-382-5089\n"
+  },
+  "knowledgeCards": [
+    {
+      "img": "./src/assets/images/index_img/抹茶.jpg",
+      "title": "抹茶不等於綠茶？5分鐘看懂抹茶、煎茶與綠茶差別",
+      "text": "抹茶、煎茶與一般綠茶雖然皆屬於不發酵茶類的一員，但在栽培方式、殺菁與後製工藝、飲用方式與營養成分等方面有明顯差異。",
+      "footer": "https://tastetaiwantea.com/matcha-vs-green-tea-5-minute-guide/"
+    },
+    {
+      "img": "./src/assets/images/index_img/茶禁忌.jpg",
+      "title": "錯誤喝茶習慣恐害身體！喝茶禁忌」",
+      "text": "許多人以為喝茶對身體有益、能代替開水、甚至可任意大量飲用，然而醫師與營養師提醒喝茶也有禁忌，錯誤喝法可能造成胃腸刺激、睡眠中斷、鐵質吸收受阻、腎臟負擔等風險。",
+      "footer": "https://tastetaiwantea.com/tea-drinking-taboo-wrong-habits-health-risk/"
+    },
+    {
+      "img": "./src/assets/images/index_img/包種茶故鄉.jpg",
+      "title": "坪林 文山包種茶的故鄉",
+      "text": "林是北台灣最具代表性的茶鄉，以「文山包種茶」聞名。當地有全台唯一的坪林茶業博物館，館內展示茶的歷史、製茶工序與器具演變，是入門茶文化的最佳起點。",
+      "footer": "https://tastetaiwantea.com/taiwan-north-tea-culture-tour/"
+    },
+    {
+      "img": "./src/assets/images/index_img/六大茶類分類法.jpg",
+      "title": "六大茶類的重要性與分類法",
+      "text": "六大茶類，指的是依據茶葉氧化發酵程度及製程工藝，包括綠茶、白茶、黃茶、青茶、紅茶與黑茶。。",
+      "footer": "https://tastetaiwantea.com/taiwan-tea-categorization-guide/"
+    },
+    {
+      "img": "./src/assets/images/index_img/茶對健康有幫助.jpg",
+      "title": "為什麼茶對健康有幫助？",
+      "text": "茶葉中含有數百種化合物，其中最具代表性的包括 茶多酚(兒茶素群)、生物鹼（咖啡因、茶鹼）、胺基酸（特別是茶胺酸）、芳香揮發物、維生素與礦物質等。",
+      "footer": "https://tastetaiwantea.com/tea-health-benefits-nutrition-best-taiwan-tea/"
+    },
+    {
+      "img": "./src/assets/images/index_img/喝幾杯茶最剛好.jpg",
+      "title": "一天喝幾杯茶最剛好？",
+      "text": "喝茶雖然是日常生活常見的習慣，但一天喝幾杯茶才剛好，怎樣喝才健康，並沒有絕對答案。",
+      "footer": "https://tastetaiwantea.com/best-time-and-amount-to-drink-tea-for-health/"
+    }
+  ],
+  "shopItems": [
+    {
+      "img": "./src/assets/images/index_img/joint01.jpg",
+      "title": "Card title",
+      "price": "$800"
+    },
+    {
+      "img": "./src/assets/images/index_img/joint02.jpg",
+      "title": "Card title",
+      "price": "$800"
+    },
+    {
+      "img": "./src/assets/images/index_img/joint03.jpg",
+      "title": "Card title",
+      "price": "$800"
+    },
+    {
+      "img": "./src/assets/images/index_img/joint04.jpg",
+      "title": "Card title",
+      "price": "$800"
+    }
+  ]
+}

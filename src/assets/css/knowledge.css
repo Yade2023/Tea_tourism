@@ -1,0 +1,426 @@
+.home-pageNG{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.5rem;
+  color: #666;
+}
+/* === 全頁排版調整，避免左右滑動 === */
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    /* 🚫 禁止橫向滾動 */
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+:root {
+    --W: 100vw;
+    /* 寬度改成螢幕寬度 */
+    --H: 100vh;
+    /* 高度改成螢幕高度 */
+}
+
+body {
+    background: #fff;
+    font-family: 'Noto Sans TC', system-ui, sans-serif;
+    color: #222;
+}
+
+/* ====== 茶葉分類 ====== */
+.stage {
+    width: 100%;
+    height: var(--H);
+    overflow: hidden;
+    margin: 0 auto;
+    position: relative;
+}
+
+.thumbs {
+    display: flex;
+    height: 100%;
+}
+
+.thumb {
+    flex: 1;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+.thumb::after {
+    content: attr(data-title);
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 24px;
+    color: #fff;
+    /* background: rgba(0, 0, 0, 0.4); */
+    padding: 12px 0px;
+    font-weight: 600;
+}
+
+/* 展開後的版型：左1/6圖，右5/6資訊 */
+.selected-layout {
+    display: flex;
+    height: 100%;
+}
+
+.selected-left {
+    width: 16.666%;
+    background-size: cover;
+    background-position: center;
+}
+
+.selected-right {
+    width: 83.333%;
+    background-color: #fdfdfd;
+    padding: 100px 60px 60px 60px;
+    overflow-y: auto;
+    position: relative;
+    cursor: pointer;
+}
+
+.selected-right h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.selected-right p {
+    font-size: 18px;
+    color: #555;
+}
+
+.back-note {
+    font-size: 14px;
+    color: #999;
+    margin-top: 30px;
+}
+
+/* ====== 沖泡方式 ====== */
+.brew-section {
+    width: 100%;
+    background: #fafafa;
+    text-align: center;
+    padding: 100px 0;
+}
+
+.brew-section img {
+    width: 80%;
+    max-width: 1200px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+}
+
+.brew-section p {
+    width: 70%;
+    margin: 0 auto;
+    font-size: 18px;
+    color: #555;
+}
+
+/* ====== 茶葉特色 / 台灣茶歷史 ====== */
+.info-block {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 100px;
+    gap: 60px;
+}
+
+/* .info-block.reverse {
+    flex-direction: row-reverse;
+} */
+
+/* ====== 茶葉特色 / 台灣茶歷史 ==> 按鈕 ====== */
+.info-block button {
+    border-radius: 50%;
+    border: none;
+    padding: 10px 15px;
+    background-color: rgba(70, 85, 58, 0.2);
+    color: #fff;
+    font-weight: 1000;
+    z-index: 10;
+}
+
+.info-block button:hover {
+    background-color: rgba(70, 85, 58, 0.5);
+}
+
+/* 響應式：圖片容器相對定位 */
+@media (max-width: 991px) {
+    .info-block {
+        position: relative;
+    }
+    
+    .info-block img {
+        position: relative;
+    }
+    
+    /* 左右箭頭按鈕浮動在圖片上 */
+    .info-block button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(70, 85, 58, 0.7);
+        backdrop-filter: blur(4px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    .info-block button:first-child {
+        left: 20px;
+    }
+    
+    .info-block button:last-child {
+        right: 20px;
+    }
+    
+    .info-block button:hover {
+        background-color: rgba(70, 85, 58, 0.9);
+    }
+}
+
+.info-block img {
+    width: 45%;
+    border-radius: 12px;
+}
+
+.info-text {
+    width: 50%;
+}
+
+.info-text h3 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.info-text p {
+    font-size: 18px;
+    color: #555;
+    line-height: 1.8;
+}
+
+/* === 覆蓋全域 左右留白 樣式 === */
+@media (min-width: 1200px) {
+    .main-content {
+        padding: 0 !important;
+    }
+}
+
+@media (max-width: 991px) {
+    .info-block.reverse {
+        flex-direction: column;
+        /* ✅ 平板以下自動垂直排列 */
+    }
+}
+
+@media (max-width: 991px) and (min-width: 768px) {
+    .main-content {
+        padding: 0 !important;
+    }
+}
+
+@media (max-width: 767px) and (min-width: 481px) {
+    .main-content {
+        padding: 0 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 0 !important;
+    }
+}
+
+img,
+.thumb,
+.selected-left,
+.selected-right {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* 響應式區塊 */
+/* === RWD：筆電 992–1199px === */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .info-block {
+        padding: 80px;
+        gap: 40px;
+    }
+
+    .info-block img {
+        width: 50%;
+    }
+
+    .info-text {
+        width: 45%;
+    }
+
+    .selected-right {
+        padding: 160px 40px 40px 40px;
+    }
+
+}
+
+/* === RWD：平板 768–991px === */
+@media (max-width: 991px) and (min-width: 768px) {
+    .info-block {
+        flex-direction: column;
+        text-align: center;
+        /* padding: 60px 40px; */
+    }
+
+    .info-block img,
+    .info-text {
+        width: 100%;
+    }
+
+    .info-block img {
+        margin-bottom: 30px;
+    }
+
+    .selected-layout {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .selected-left,
+    .selected-right {
+        width: 100%;
+        /* height: auto; */
+        height: var(--H);
+    }
+
+    .selected-left {
+        display: none;
+    }
+
+    .selected-right {
+        padding: 160px 40px 40px 40px;
+    }
+
+    .brew-section img {
+        width: 90%;
+    }
+}
+
+/* === RWD：小平板 481–767px === */
+@media (max-width: 767px) and (min-width: 481px) {
+    .info-block {
+        flex-direction: column;
+        padding: 50px 30px;
+        gap: 30px;
+    }
+
+    .info-block img,
+    .info-text {
+        width: 100%;
+    }
+
+    .info-text h3 {
+        font-size: 28px;
+    }
+
+    .info-text p {
+        font-size: 16px;
+    }
+
+    .selected-layout {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .selected-left,
+    .selected-right {
+        width: 100%;
+        height: auto;
+    }
+
+    .selected-right {
+        padding: 160px 40px 40px 40px;
+        height: var(--H);
+    }
+
+    .brew-section {
+        padding: 80px 0;
+    }
+
+    .brew-section img {
+        width: 90%;
+    }
+}
+
+/* === RWD：手機 ≤480px === */
+@media (max-width: 480px) {
+    .info-block {
+        flex-direction: column;
+        padding: 40px 20px;
+        gap: 20px;
+    }
+
+    /* .thumb{
+        display: none !important;
+    } */
+
+    .info-block img,
+    .info-text {
+        width: 100%;
+    }
+
+    .info-text h3 {
+        font-size: 24px;
+    }
+
+    .info-text p {
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    .selected-layout {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .selected-left,
+    .selected-right {
+        width: 100%;
+        height: auto;
+    }
+
+    .selected-right {
+        padding: 160px 40px 40px 40px;
+        height: var(--H);
+    }
+
+    .thumb::after {
+        font-size: 18px;
+        bottom: 10px;
+    }
+
+    .brew-section {
+        padding: 60px 0;
+    }
+
+    .brew-section img {
+        width: 95%;
+    }
+}
