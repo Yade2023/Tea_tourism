@@ -1,22 +1,9 @@
 <template>
   <div style="background-color: #f5f5f5; min-height: 100vh; padding-bottom: 50px;">
-    <!-- 頂部標題區域 -->
-    <div class="container mt-4 mb-4">
-      <div class="row align-items-center">
-        <div class="col-auto">
-          <div class="d-flex align-items-center">
-            <span class="text-danger fw-bold fs-4">PChome</span>
-            <span class="text-dark fs-4 ms-2">24h購物</span>
-          </div>
-        </div>
-        <div class="col-auto">
-          <span class="ms-3 fw-bold fs-5">購物車</span>
-        </div>
-      </div>
-    </div>
+   <!-- 步驟指示器 -->
+   <div style="padding-top: 10px;"></div>
 
-    <!-- 步驟指示器 -->
-    <div class="container mb-4">
+    <div class="container mb-4 ">
       <div class="row justify-content-center">
         <div class="col-auto">
           <div class="d-flex align-items-center" style="background: white; padding: 20px 40px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
@@ -48,7 +35,7 @@
           <div class="mb-3" v-if="showList.length > 0">
             <div class="d-flex align-items-center mb-3">
               <input type="checkbox" class="form-check-input me-2" style="width: 20px; height: 20px;" :checked="allSelected" @change="setAllSelected(($event.target as HTMLInputElement).checked)">
-              <h5 class="mb-0">PChome 快速到貨 ({{ selectedShowList.length }})</h5>
+              <h5 class="mb-0">全選 ({{ selectedShowList.length }})</h5>
             </div>
 
             <!-- 動態商品列表 -->
@@ -62,11 +49,11 @@
                     <img :src="item.TeaName" alt="商品圖片" style="width: 100px; height: 100px; object-fit: cover; border-radius: 4px; cursor: pointer;" @click="openProductModal(item)">
                   </div>
                   <div class="col flex-grow-1">
-                    <div class="mb-2">
-                      <h6 class="mb-1">{{ item.name }}</h6>
-                      <p class="text-muted small mb-0" style="font-size: 13px; line-height: 1.4;">{{ item.description }}</p>
+                    <div class="mb-2 text-start">
+                      <h6 class="mb-1 text-start">{{ item.name }}</h6>
+                      <p class="text-muted small mb-0 text-start" style="font-size: 13px; line-height: 1.4;">{{ item.description }}</p>
                     </div>
-                    <div class="mb-2">
+                    <div class="mb-2 text-start">
                       <span class="text-danger fw-bold fs-5">${{ item.price.toLocaleString() }}</span>
                     </div>
                     <div class="d-flex align-items-center gap-3">
@@ -162,9 +149,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useCartStore } from '@/store/cart'
-import { storeToRefs } from 'pinia'
-import { useUserDataStore } from '@/store/userData'
+  import { useCartStore } from '../store/cart'
+  import { storeToRefs } from 'pinia'
+  import { useUserDataStore } from '../store/userData'
 import { useRouter } from 'vue-router'
 import { ref, computed } from 'vue'
 import InteractiveWindow from './InteractiveWindow.vue'
@@ -256,7 +243,7 @@ function deleteItem(productId: number) {
 // 結帳：存快照並導向使用者資料頁
 function onCheckout() {
   userDataStore.setCheckoutSnapshot(selectedShowList.value, discountCode.value)
-  router.push({ name: 'userData' })
+  router.push('/user')
 }
 
 // 處理數量輸入（即時連動）

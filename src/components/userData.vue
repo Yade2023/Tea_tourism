@@ -2,55 +2,9 @@
 <template>
   <div style="background-color: #f5f5f5; min-height: 100vh; padding-bottom: 50px;">
     <!-- 導覽列 - 固定置頂 -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" style="z-index: 1060; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-      <div class="container">
-        <a class="navbar-brand fw-bold fs-4" href="#">
-          <span class="text-danger">PChome</span>
-          <span class="text-dark ms-2">24h購物</span>
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <button
-                class="nav-link btn btn-link border-0"
-                @click="goToShopping"
-                style="text-decoration: none; cursor: pointer;">
-                商品頁面
-              </button>
-            </li>
-            <li class="nav-item">
-              <button
-                class="nav-link btn btn-link border-0"
-                @click="goToCheckout"
-                style="text-decoration: none; cursor: pointer;">
-                購物車
-              </button>
-            </li>
-            <li class="nav-item">
-              <button
-                class="nav-link btn btn-link border-0"
-                @click="goToShopping4"
-                style="text-decoration: none; cursor: pointer;">
-                旋轉木馬二
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
 
     <!-- 添加頂部間距避免被導覽列遮擋 -->
-    <div style="padding-top: 80px;"></div>
+    <div style="padding-top: 10px;"></div>
 
     <!-- 步驟指示器 -->
     <div class="container mb-4">
@@ -324,9 +278,9 @@
 
 <script lang="ts" setup>
 import { ref, watchEffect, computed } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useUserDataStore } from '@/store/userData'
-import { cities, districtsData, branchesData } from '@/store/branchData'
+  import { storeToRefs } from 'pinia'
+  import { useUserDataStore } from '../store/userData'
+  import { cities, districtsData, branchesData } from '../store/branchData'
 import { useRouter } from 'vue-router'
 
 const userDataStore = useUserDataStore()
@@ -454,11 +408,23 @@ function closeConfirmModal() {
 function confirmOrder() {
   showConfirmModal.value = false
   // 跳轉到訂單完成頁面
-  router.push({ name: 'orderCompleted' })
+  router.push('/order-completed')
 }
 
 function onReset() {
-  userDataStore.resetAll()
+  // 只重置基本資料，保留結帳明細
+  userDataStore.resetBasicInfo()
+  // 同時重置本地表單狀態
+  formName.value = ''
+  formPhone.value = ''
+  formEmail.value = ''
+  formPaymentMethod.value = '貨到付款'
+  formCreditCardNumber.value = ''
+  formDeliveryMethod.value = '宅配'
+  formConvenienceStore.value = ''
+  formStoreCity.value = ''
+  formStoreDistrict.value = ''
+  formStoreBranch.value = ''
 }
 
 // 結帳快照金額（與 Checkout 頁一致：碼 666 打九折）
@@ -507,15 +473,15 @@ const mapUrl = computed(() => {
 
 // 導覽列導航函數
 function goToShopping() {
-  router.push({ name: 'home' })
+  router.push('/')
 }
 
 function goToCheckout() {
-  router.push({ name: 'checkout' })
+  router.push('/store')
 }
 
 function goToShopping4() {
-  router.push({ name: 'home' })
+  router.push('/')
 }
 </script>
 

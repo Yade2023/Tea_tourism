@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import type { CartItem } from './cart'
 
 export interface UserBasicInfo {
@@ -17,6 +17,37 @@ export interface UserBasicInfo {
 }
 
 export const useUserDataStore = defineStore('userData', () => {
+  // Session Storage 的鍵名
+  const STORAGE_KEY = 'user_data_checkout_snapshot'
+
+  // 從 Session Storage 載入結帳明細
+  const loadCheckoutSnapshot = () => {
+    try {
+      const savedData = sessionStorage.getItem(STORAGE_KEY)
+      if (savedData) {
+        return JSON.parse(savedData)
+      }
+    } catch (error) {
+      console.error('讀取 Session Storage 失敗:', error)
+    }
+    return null
+  }
+
+  // 儲存結帳明細到 Session Storage
+  const saveCheckoutSnapshot = (items: CartItem[], discountCode: string) => {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+        checkoutItems: items,
+        usedDiscountCode: discountCode
+      }))
+    } catch (error) {
+      console.error('儲存到 Session Storage 失敗:', error)
+    }
+  }
+
+  // 載入之前儲存的結帳明細
+  const savedSnapshot = loadCheckoutSnapshot()
+
   // 使用者基本資料
   const name = ref<string>('')
   const address = ref<string>('')
@@ -31,10 +62,10 @@ export const useUserDataStore = defineStore('userData', () => {
   const storeBranch = ref<string>('')
 
   // 結帳明細（來自 Checkout.vue 當下的勾選清單快照）
-  const checkoutItems = ref<CartItem[]>([])
+  const checkoutItems = ref<CartItem[]>(savedSnapshot?.checkoutItems || [])
 
   // 使用的優惠碼（下單時實際使用的紀錄）
-  const usedDiscountCode = ref<string>('')
+  const usedDiscountCode = ref<string>(savedSnapshot?.usedDiscountCode || '')
 
   function setBasicInfo(info: Partial<UserBasicInfo>) {
     if (typeof info.name === 'string') name.value = info.name
@@ -54,14 +85,22 @@ export const useUserDataStore = defineStore('userData', () => {
     // 存快照，避免後續購物車變動影響當次結帳明細
     checkoutItems.value = items.map((it) => ({ ...it }))
     usedDiscountCode.value = discountCode || ''
+    // 同時儲存到 Session Storage
+    saveCheckoutSnapshot(checkoutItems.value, usedDiscountCode.value)
   }
 
   function clearCheckoutSnapshot() {
     checkoutItems.value = []
     usedDiscountCode.value = ''
+    // 清除 Session Storage
+    try {
+      sessionStorage.removeItem(STORAGE_KEY)
+    } catch (error) {
+      console.error('清除 Session Storage 失敗:', error)
+    }
   }
 
-  function resetAll() {
+  function resetBasicInfo() {
     name.value = ''
     address.value = ''
     phone.value = ''
@@ -73,8 +112,23 @@ export const useUserDataStore = defineStore('userData', () => {
     storeCity.value = ''
     storeDistrict.value = ''
     storeBranch.value = ''
+  }
+
+  function resetAll() {
+    resetBasicInfo()
     clearCheckoutSnapshot()
   }
+
+  // 監聽結帳明細變化，自動儲存到 Session Storage
+  watch(
+    [checkoutItems, usedDiscountCode],
+    () => {
+      if (checkoutItems.value.length > 0 || usedDiscountCode.value) {
+        saveCheckoutSnapshot(checkoutItems.value, usedDiscountCode.value)
+      }
+    },
+    { deep: true }
+  )
 
   return {
     // state
@@ -95,6 +149,7 @@ export const useUserDataStore = defineStore('userData', () => {
     setBasicInfo,
     setCheckoutSnapshot,
     clearCheckoutSnapshot,
+    resetBasicInfo,
     resetAll
   }
 })
