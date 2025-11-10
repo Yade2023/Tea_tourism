@@ -14,7 +14,7 @@ const routes = [
   { path: '/', component: HomeTea_tourism },
   { path: '/knowledge', component: knowledge },
   { path: '/teaTourismArea', component: teaTourismArea },
-  { path: '/Shopping4', component: Shopping4 },
+  { path: '/Shopping4', name: 'Shopping4', component: Shopping4 },
   { path: '/address', component: address },
   { path: '/login', component: login },
   { path: '/store', component: Checkout },
@@ -25,7 +25,16 @@ const routes = [
 // 建立 Router 實例
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  // 路由跳轉時自動滾動到頂部
+  scrollBehavior(to, from, savedPosition) {
+    // 如果有保存的位置（例如瀏覽器前進/後退），則回到該位置
+    if (savedPosition) {
+      return savedPosition
+    }
+    // 否則滾動到頂部
+    return { top: 0, behavior: 'smooth' }
+  }
 })
 
 export default router

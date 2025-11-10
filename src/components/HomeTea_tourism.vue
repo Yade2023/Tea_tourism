@@ -2,13 +2,14 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import '../assets/css/HomeTea_tourism.css'
-import InteractiveWindow from './InteractiveWindow.vue'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, nextTick } from 'vue'
+import { useRouter } from 'vue-router'
 import localJsonUrl from '../assets/json/HomeTea_tourism.json'
 // 合併工具：用 API 值覆蓋預設，但不覆蓋成 null / "" / undefined
 import { mergeDefault } from '../assets/js/mergeDefault.js'
 
 const homeData = ref(null)
+const router = useRouter()
 
 // 控制開場動畫顯示的狀態：預設為 false，待頁面載入完成後再觸發
 const showAnimation = ref(false)
@@ -35,6 +36,33 @@ const randomKnowledgeCards = computed(() => {
   if (!homeData.value?.knowledgeCards) return []
   return shuffleArray(homeData.value.knowledgeCards).slice(0, 3)
 })
+
+// 將商品陣列分組，每組指定數量
+const getShopChunks = (items, chunkSize) => {
+  if (!items || !Array.isArray(items)) return []
+  const chunks = []
+  for (let i = 0; i < items.length; i += chunkSize) {
+    chunks.push(items.slice(i, i + chunkSize))
+  }
+  return chunks
+}
+
+// 點擊商品卡片跳轉到購物頁面
+const goToShopping = (shop) => {
+  // 可以傳遞商品資訊到購物頁面
+  router.push({
+    name: 'Shopping4', // 確保路由名稱正確
+    query: {
+      productId: shop.id,
+      category: shop.category
+    }
+  }).then(() => {
+    // 路由跳轉完成後，確保滾動到頂部
+    nextTick(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    })
+  })
+}
 
 onMounted(async () => {
   // 1. 先一定抓到本地預設資料
@@ -168,15 +196,55 @@ onMounted(async () => {
         </div>
       </div>
 
-      <!-- ＝＝＝＝ 第四段：商品 / 聯名 / 價格 ＝＝＝＝ -->
-      <div class="card-group d-flex justify-content-between align-items-stretch px-0 flex-wrap">
-        <div class="card bg-dark text-white" v-for="(shop, sIdx) in homeData.shopItems" :key="'shop-' + sIdx">
-          <img :src="shop.img" class="card-img" alt="shop item" />
-          <div class="card-img-overlay">
-            <h5 class="card-title">{{ shop.title }}</h5>
-            <p class="card-text">{{ shop.price }}</p>
+      <!-- ＝＝＝＝ 第四段：商品輪播卡片 ＝＝＝＝ -->
+      <div class="text-center mb-3">
+        <h2>精選商品</h2>
+      </div>
+      <div id="shopCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+        <!-- 指示器 -->
+        <div class="carousel-indicators">
+          <button v-for="(item, idx) in Math.ceil(homeData.shopItems.length / 4)" :key="'shop-ind-' + idx" type="button"
+            data-bs-target="#shopCarousel" :data-bs-slide-to="idx" :class="{ active: idx === 0 }"
+            :aria-current="idx === 0 ? 'true' : undefined" :aria-label="`商品頁 ${idx + 1}`">
+          </button>
+        </div>
+        <!-- 輪播內容 -->
+        <div class="carousel-inner">
+          <div v-for="(chunk, chunkIdx) in getShopChunks(homeData.shopItems, 4)" :key="'shop-chunk-' + chunkIdx"
+            class="carousel-item" :class="{ active: chunkIdx === 0 }">
+            <div class="row justify-content-center">
+              <div v-for="shop in chunk" :key="'shop-' + shop.id" class="col-lg-3 col-md-4 col-sm-6 mb-3">
+                <div 
+                  class="card h-100 shop-card" 
+                  @click="goToShopping(shop)"
+                  style="cursor: pointer; transition: transform 0.3s;">
+                  <img :src="shop.TeaName" class="card-img-top" :alt="shop.name"
+                    style="height: 200px; object-fit: cover;" />
+                  <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ shop.name }}</h5>
+                    <!-- <p class="card-text flex-grow-1">{{ shop.description }}</p> -->
+                    <div class="mt-auto">
+                      <p class="card-text">
+                        <strong class="text-primary">NT$ {{ shop.price }}</strong>
+                      </p>
+                      <small class="text-muted">{{ shop.category }}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
+        <!-- 控制按鈕 -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#shopCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">上一頁</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#shopCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">下一頁</span>
+        </button>
       </div>
     </div>
   </div>
@@ -290,6 +358,7 @@ onMounted(async () => {
     transform: translate(-50%, -50%);
     opacity: 1;
   }
+
   to {
     top: -210px;
     left: -545px;
@@ -298,5 +367,26 @@ onMounted(async () => {
     transform: none;
     opacity: 1;
   }
+}
+
+/* 商品卡片hover效果 */
+.shop-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.shop-card {
+  transition: all 0.3s ease;
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.shop-card .card-img-top {
+  transition: transform 0.3s ease;
+}
+
+.shop-card:hover .card-img-top {
+  transform: scale(1.05);
 }
 </style>
