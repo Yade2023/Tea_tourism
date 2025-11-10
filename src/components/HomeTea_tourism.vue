@@ -2,6 +2,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import '../assets/css/HomeTea_tourism.css'
+import InteractiveWindow from './InteractiveWindow.vue'
 import { ref, onMounted, computed } from 'vue'
 import localJsonUrl from '../assets/json/HomeTea_tourism.json'
 // 合併工具：用 API 值覆蓋預設，但不覆蓋成 null / "" / undefined
