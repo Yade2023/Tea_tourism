@@ -7,7 +7,7 @@ import { useRouter } from 'vue-router'
 import localJsonUrl from '../assets/json/HomeTea_tourism.json'
 // 合併工具：用 API 值覆蓋預設，但不覆蓋成 null / "" / undefined
 import { mergeDefault } from '../assets/js/mergeDefault'
-import { safeFetch, API_ENDPOINTS } from '../utils/imageHelper'
+import { safeFetch, API_CONFIG } from '../utils/apiConfig'
 
 // 導入首頁需要的圖片
 import carousel01 from '../assets/images/index_img/carousel01.jpg'
@@ -208,8 +208,8 @@ onMounted(async () => {
   let rawData = localJsonUrl
 
   try {
-    // 2. 嘗試抓 API（使用安全請求處理 HTTPS 問題）
-    const res = await safeFetch(API_ENDPOINTS.HOME)
+    // 2. 嘗試抓 API（透過 Cloudflare Workers 代理）
+    const res = await safeFetch(API_CONFIG.ENDPOINTS.HOME)
     const apiData = await res.json()
 
     // 3. 把 API 跟預設合併，API 只會覆蓋有內容的欄位

@@ -39,8 +39,8 @@ async function submitForm() {
   }
 
   try {
-    // 發送 POST 請求到後端（使用安全請求處理 HTTPS 問題）
-    const response = await safeFetch(API_ENDPOINTS.CONTACT, {
+    // 發送 POST 請求到後端（透過 Cloudflare Workers 代理）
+    const response = await safeFetch(API_CONFIG.ENDPOINTS.CONTACT, {
       method: 'POST',
       body: JSON.stringify({
         name: name,
@@ -70,15 +70,15 @@ async function submitForm() {
 
 // onMounted：1.拿本地JSON 2.拿API 3.merge
 import defaultDataRaw from '../assets/json/address.json'
-import { safeFetch, API_ENDPOINTS } from '../utils/imageHelper'
+import { safeFetch, API_CONFIG } from '../utils/apiConfig'
 
 onMounted(async () => {
   // 1. 先把本地預設資料顯示在畫面上，讓頁面一開始就有內容
   //    defaultDataRaw 長這樣：{ accordionList: [...] }
   accordionList.value = defaultDataRaw.accordionList || []
   try {
-    // 2. 嘗試叫 API（使用安全請求處理 HTTPS 問題）
-    const res = await safeFetch(API_ENDPOINTS.ADDRESS)
+    // 2. 嘗試叫 API（透過 Cloudflare Workers 代理）
+    const res = await safeFetch(API_CONFIG.ENDPOINTS.ADDRESS)
     const apiData = await res.json()
 
     // 3. 合併：用 API 值覆蓋，API 沒給/是 null 不會洗掉預設
