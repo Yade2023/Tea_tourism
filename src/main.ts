@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import { createPinia } from 'pinia'
+import imageUrlPlugin from './plugins/imageUrlPlugin'
 
 import 'jquery'
 import 'slick-carousel'
@@ -11,9 +12,11 @@ import 'slick-carousel/slick/slick-theme.css'
 // import 'bootstrap'
 
 const app = createApp(App)
+
 //創建 pinia
 const pinia = createPinia()
 //安裝 pinia
 app.use(pinia)
 app.use(router)
+app.use(imageUrlPlugin)
 app.mount('#app')

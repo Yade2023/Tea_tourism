@@ -11,13 +11,13 @@
             <!-- 上部分：savorImage 照片 -->
             <div class="row mb-3">
               <div class="col-12 text-center">
-                <img :src="product.savorImage" class="img-fluid rounded savor-image-modal" :alt="product.name + ' savor'">
+                <img :src="getImageUrl(product.savorImage)" class="img-fluid rounded savor-image-modal" :alt="product.name + ' savor'">
               </div>
             </div>
             <!-- 下部分：TeaName 和商品資訊 -->
             <div class="row">
               <div class="col-md-6 mb-3 mb-md-0">
-                <img :src="product.TeaName" class="img-fluid rounded tea-name-image-modal" :alt="product.name">
+                <img :src="getImageUrl(product.TeaName)" class="img-fluid rounded tea-name-image-modal" :alt="product.name">
               </div>
               <div class="col-md-6">
                 <h5>{{ product.name }}</h5>
@@ -61,6 +61,7 @@
 
 <script setup lang="ts">
 import { computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { getImageUrl } from '../utils/imageHelper'
 
 // 定義 Props
 interface Props {

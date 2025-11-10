@@ -61,8 +61,8 @@ export const useCartStore = defineStore('cart', () => {
       name: '紅茶',
       price: 30,
       category: '經典茶品',
-      savorImage: '/images/HerbalTea/savor01.jpg',
-      TeaName: '/images/TeaName/special01.jpg',
+      savorImage: 'images/HerbalTea/savor01.jpg',
+      TeaName: 'images/TeaName/special01.jpg',
       description: '經典台灣紅茶，茶湯色澤紅潤明亮，香氣濃郁甘醇，口感滑順回甘，是最受歡迎的日常茶飲。'
     },
     {
@@ -70,8 +70,8 @@ export const useCartStore = defineStore('cart', () => {
       name: '東方美人',
       price: 25,
       category: '經典茶品',
-      savorImage: '/images/HerbalTea/savor02.jpg',
-      TeaName: '/images/TeaName/special02.jpg',
+      savorImage: 'images/HerbalTea/savor02.jpg',
+      TeaName: 'images/TeaName/special02.jpg',
       description: '又稱白毫烏龍，獨特的蜜香與果香交織，茶湯呈現琥珀色澤，口感甘甜滑潤，是台灣特有的頂級茶品。'
     },
     {
@@ -79,8 +79,8 @@ export const useCartStore = defineStore('cart', () => {
       name: '綠茶',
       price: 40,
       category: '經典茶品',
-      savorImage: '/images/HerbalTea/savor03.jpg',
-      TeaName: '/images/TeaName/special03.jpg',
+      savorImage: 'images/HerbalTea/savor03.jpg',
+      TeaName: 'images/TeaName/special03.jpg',
       description: '清新自然的綠茶，茶葉保留豐富的兒茶素，茶湯清澈碧綠，帶有清新的草木香氣，口感鮮爽回甘。'
     },
     {
@@ -88,8 +88,8 @@ export const useCartStore = defineStore('cart', () => {
       name: '包種茶',
       price: 50,
       category: '經典茶品',
-      savorImage: '/images/HerbalTea/savor04.jpg',
-      TeaName: '/images/TeaName/special04.jpg',
+      savorImage: 'images/HerbalTea/savor04.jpg',
+      TeaName: 'images/TeaName/special04.jpg',
       description: '文山包種茶，擁有優雅的花香與清香，茶湯金黃透亮，口感清雅細膩，是台灣輕發酵茶的代表作。'
     },
     {
@@ -97,8 +97,8 @@ export const useCartStore = defineStore('cart', () => {
       name: '焙相烏龍茶',
       price: 35,
       category: '烏龍茶系列',
-      savorImage: '/images/HerbalTea/savor05.jpg',
-      TeaName: '/images/TeaName/special05.jpg',
+      savorImage: 'images/HerbalTea/savor05.jpg',
+      TeaName: 'images/TeaName/special05.jpg',
       description: '經過精心烘焙的烏龍茶，帶有獨特的焙火香氣，茶湯琥珀色澤，口感醇厚溫潤，喉韻深長。'
     },
     {
@@ -106,8 +106,8 @@ export const useCartStore = defineStore('cart', () => {
       name: '烏龍茶',
       price: 35,
       category: '烏龍茶系列',
-      savorImage: '/images/HerbalTea/savor06.jpg',
-      TeaName: '/images/TeaName/special06.jpg',
+      savorImage: 'images/HerbalTea/savor06.jpg',
+      TeaName: 'images/TeaName/special06.jpg',
       description: '傳統烏龍茶，半發酵工藝造就獨特韻味，茶香濃郁持久，茶湯金黃明亮，口感甘醇順口。'
     },
     {
@@ -115,8 +115,8 @@ export const useCartStore = defineStore('cart', () => {
       name: '元氣茶',
       price: 45,
       category: '烏龍茶系列',
-      savorImage: '/images/HerbalTea/savor07.jpg',
-      TeaName: '/images/TeaName/special07.jpg',
+      savorImage: 'images/HerbalTea/savor07.jpg',
+      TeaName: 'images/TeaName/special07.jpg',
       description: '精選烏龍茶搭配天然草本，充滿活力的茶飲，帶來清新舒暢的口感，適合需要提神醒腦的時刻。'
     },
     {
@@ -124,8 +124,8 @@ export const useCartStore = defineStore('cart', () => {
       name: '茉莉綠茶',
       price: 55,
       category: '烏龍茶系列',
-      savorImage: '/images/HerbalTea/savor08.jpg',
-      TeaName: '/images/TeaName/special08.jpg',
+      savorImage: 'images/HerbalTea/savor08.jpg',
+      TeaName: 'images/TeaName/special08.jpg',
       description: '綠茶與新鮮茉莉花完美融合，花香四溢，茶湯清澈翠綠，口感清新甘甜，帶有優雅的茉莉花香。'
     },
     {
@@ -133,8 +133,8 @@ export const useCartStore = defineStore('cart', () => {
       name: '梅花鹿綠茶',
       price: 40,
       category: '特色茶品',
-      savorImage: '/images/HerbalTea/savor09.jpg',
-      TeaName: '/images/TeaName/special9.jpg',
+      savorImage: 'images/HerbalTea/savor09.jpg',
+      TeaName: 'images/TeaName/special9.jpg',
       description: '融合台灣在地特色的創意茶飲，清新的綠茶基底搭配特殊風味，口感獨特令人驚艷。'
     },
     {
@@ -142,8 +142,8 @@ export const useCartStore = defineStore('cart', () => {
       name: '橙心橙意柚藤茶',
       price: 50,
       category: '特色茶品',
-      savorImage: '/images/HerbalTea/savor10.jpg',
-      TeaName: '/images/TeaName/special10.jpg',
+      savorImage: 'images/HerbalTea/savor10.jpg',
+      TeaName: 'images/TeaName/special10.jpg',
       description: '柑橘香氣與茶韻的完美結合，帶有清新的果香，茶湯橙黃透亮，口感酸甜平衡，清爽宜人。'
     },
     {
@@ -151,8 +151,8 @@ export const useCartStore = defineStore('cart', () => {
       name: '鐵觀音',
       price: 40,
       category: '特色茶品',
-      savorImage: '/images/HerbalTea/savor11.jpg',
-      TeaName: '/images/TeaName/special11.jpg',
+      savorImage: 'images/HerbalTea/savor11.jpg',
+      TeaName: 'images/TeaName/special11.jpg',
       description: '經典鐵觀音茶，獨特的觀音韻，茶湯金黃濃郁，帶有蘭花香氣，口感醇厚甘甜，韻味悠長。'
     },
     {
@@ -160,8 +160,8 @@ export const useCartStore = defineStore('cart', () => {
       name: '花茶',
       price: 40,
       category: '特色茶品',
-      savorImage: '/images/HerbalTea/savor12.jpg',
-      TeaName: '/images/TeaName/special12.jpg',
+      savorImage: 'images/HerbalTea/savor12.jpg',
+      TeaName: 'images/TeaName/special12.jpg',
       description: '多種天然花卉調配而成，色彩繽紛，花香濃郁，茶湯清透，口感芬芳甘甜，視覺與味覺的雙重享受。'
     }
   ])

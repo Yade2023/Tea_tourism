@@ -40,7 +40,7 @@ async function submitForm() {
 
   try {
     // 發送 POST 請求到後端
-    const response = await fetch('https://localhost:7018/api/address/contact', {
+    const response = await fetch('http://3.34.188.214:85/api/Address/contact', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

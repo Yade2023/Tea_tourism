@@ -46,7 +46,7 @@
                     <input type="checkbox" class="form-check-input" style="width: 20px; height: 20px;" :checked="isSelected(item.id)" @change="setSelect(item.id, ($event.target as HTMLInputElement).checked)">
                   </div>
                   <div class="col-auto">
-                    <img :src="item.TeaName" alt="商品圖片" style="width: 100px; height: 100px; object-fit: cover; border-radius: 4px; cursor: pointer;" @click="openProductModal(item)">
+                    <img :src="getImageUrl(item.TeaName)" alt="商品圖片" style="width: 100px; height: 100px; object-fit: cover; border-radius: 4px; cursor: pointer;" @click="openProductModal(item)">
                   </div>
                   <div class="col flex-grow-1">
                     <div class="mb-2 text-start">
@@ -155,6 +155,7 @@
 import { useRouter } from 'vue-router'
 import { ref, computed } from 'vue'
 import InteractiveWindow from './InteractiveWindow.vue'
+import { getImageUrl } from '../utils/imageHelper'
 
 // 使用全局購物車 store
 const cartStore = useCartStore()

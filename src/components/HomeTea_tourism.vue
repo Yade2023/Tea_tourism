@@ -21,34 +21,33 @@ import sixTeaTypes from '../assets/images/index_img/六大茶類分類法.jpg'
 import teaHealth from '../assets/images/index_img/茶對健康有幫助.jpg'
 import teaCups from '../assets/images/index_img/喝幾杯茶最剛好.jpg'
 
-// 對於 public 資料夾中的圖片，我們使用路徑字符串
-const publicImageMap = {
-  '/images/HerbalTea/savor01.jpg': '/images/HerbalTea/savor01.jpg',
-  '/images/HerbalTea/savor02.jpg': '/images/HerbalTea/savor02.jpg',
-  '/images/HerbalTea/savor03.jpg': '/images/HerbalTea/savor03.jpg',
-  '/images/HerbalTea/savor04.jpg': '/images/HerbalTea/savor04.jpg',
-  '/images/HerbalTea/savor05.jpg': '/images/HerbalTea/savor05.jpg',
-  '/images/HerbalTea/savor06.jpg': '/images/HerbalTea/savor06.jpg',
-  '/images/HerbalTea/savor07.jpg': '/images/HerbalTea/savor07.jpg',
-  '/images/HerbalTea/savor08.jpg': '/images/HerbalTea/savor08.jpg',
-  '/images/HerbalTea/savor09.jpg': '/images/HerbalTea/savor09.jpg',
-  '/images/HerbalTea/savor10.jpg': '/images/HerbalTea/savor10.jpg',
-  '/images/HerbalTea/savor11.jpg': '/images/HerbalTea/savor11.jpg',
-  '/images/HerbalTea/savor12.jpg': '/images/HerbalTea/savor12.jpg',
-  
-  '/images/TeaName/special01.jpg': '/images/TeaName/special01.jpg',
-  '/images/TeaName/special02.jpg': '/images/TeaName/special02.jpg',
-  '/images/TeaName/special03.jpg': '/images/TeaName/special03.jpg',
-  '/images/TeaName/special04.jpg': '/images/TeaName/special04.jpg',
-  '/images/TeaName/special05.jpg': '/images/TeaName/special05.jpg',
-  '/images/TeaName/special06.jpg': '/images/TeaName/special06.jpg',
-  '/images/TeaName/special07.jpg': '/images/TeaName/special07.jpg',
-  '/images/TeaName/special08.jpg': '/images/TeaName/special08.jpg',
-  '/images/TeaName/special9.jpg': '/images/TeaName/special9.jpg',
-  '/images/TeaName/special10.jpg': '/images/TeaName/special10.jpg',
-  '/images/TeaName/special11.jpg': '/images/TeaName/special11.jpg',
-  '/images/TeaName/special12.jpg': '/images/TeaName/special12.jpg',
-}
+// 導入商品圖片 - HerbalTea 系列 (使用 URL 導入方式)
+const savor01 = new URL('/images/HerbalTea/savor01.jpg', import.meta.url).href
+const savor02 = new URL('/images/HerbalTea/savor02.jpg', import.meta.url).href
+const savor03 = new URL('/images/HerbalTea/savor03.jpg', import.meta.url).href
+const savor04 = new URL('/images/HerbalTea/savor04.jpg', import.meta.url).href
+const savor05 = new URL('/images/HerbalTea/savor05.jpg', import.meta.url).href
+const savor06 = new URL('/images/HerbalTea/savor06.jpg', import.meta.url).href
+const savor07 = new URL('/images/HerbalTea/savor07.jpg', import.meta.url).href
+const savor08 = new URL('/images/HerbalTea/savor08.jpg', import.meta.url).href
+const savor09 = new URL('/images/HerbalTea/savor09.jpg', import.meta.url).href
+const savor10 = new URL('/images/HerbalTea/savor10.jpg', import.meta.url).href
+const savor11 = new URL('/images/HerbalTea/savor11.jpg', import.meta.url).href
+const savor12 = new URL('/images/HerbalTea/savor12.jpg', import.meta.url).href
+
+// 導入商品圖片 - TeaName 系列 (使用 URL 導入方式)
+const special01 = new URL('/images/TeaName/special01.jpg', import.meta.url).href
+const special02 = new URL('/images/TeaName/special02.jpg', import.meta.url).href
+const special03 = new URL('/images/TeaName/special03.jpg', import.meta.url).href
+const special04 = new URL('/images/TeaName/special04.jpg', import.meta.url).href
+const special05 = new URL('/images/TeaName/special05.jpg', import.meta.url).href
+const special06 = new URL('/images/TeaName/special06.jpg', import.meta.url).href
+const special07 = new URL('/images/TeaName/special07.jpg', import.meta.url).href
+const special08 = new URL('/images/TeaName/special08.jpg', import.meta.url).href
+const special9 = new URL('/images/TeaName/special9.jpg', import.meta.url).href
+const special10 = new URL('/images/TeaName/special10.jpg', import.meta.url).href
+const special11 = new URL('/images/TeaName/special11.jpg', import.meta.url).href
+const special12 = new URL('/images/TeaName/special12.jpg', import.meta.url).href
 
 const homeData = ref(null)
 const router = useRouter()
@@ -59,9 +58,9 @@ const showAnimation = ref(false)
 // 圖片映射對象
 const imageMap = {
   // 輪播圖片
-  'index_img/carousel01.jpg': carousel01,
-  '../src/assets/images/index_img/carousel02.jpg': carousel02,
-  '../src/assets/images/index_img/carousel03.jpg': carousel03,
+  './src/assets/images/index_img/carousel01.jpg': carousel01,
+  './src/assets/images/index_img/carousel02.jpg': carousel02,
+  './src/assets/images/index_img/carousel03.jpg': carousel03,
   
   // 介紹區塊圖片
   './src/assets/images/index_img/茶景.jpg': teaScenery,
@@ -77,8 +76,33 @@ const imageMap = {
   './src/assets/images/index_img/茶對健康有幫助.jpg': teaHealth,
   './src/assets/images/index_img/喝幾杯茶最剛好.jpg': teaCups,
   
-  // 合併 public 資料夾的圖片映射
-  ...publicImageMap,
+  // 商品圖片 - savorImage
+  '/images/HerbalTea/savor01.jpg': savor01,
+  '/images/HerbalTea/savor02.jpg': savor02,
+  '/images/HerbalTea/savor03.jpg': savor03,
+  '/images/HerbalTea/savor04.jpg': savor04,
+  '/images/HerbalTea/savor05.jpg': savor05,
+  '/images/HerbalTea/savor06.jpg': savor06,
+  '/images/HerbalTea/savor07.jpg': savor07,
+  '/images/HerbalTea/savor08.jpg': savor08,
+  '/images/HerbalTea/savor09.jpg': savor09,
+  '/images/HerbalTea/savor10.jpg': savor10,
+  '/images/HerbalTea/savor11.jpg': savor11,
+  '/images/HerbalTea/savor12.jpg': savor12,
+  
+  // 商品圖片 - TeaName
+  '/images/TeaName/special01.jpg': special01,
+  '/images/TeaName/special02.jpg': special02,
+  '/images/TeaName/special03.jpg': special03,
+  '/images/TeaName/special04.jpg': special04,
+  '/images/TeaName/special05.jpg': special05,
+  '/images/TeaName/special06.jpg': special06,
+  '/images/TeaName/special07.jpg': special07,
+  '/images/TeaName/special08.jpg': special08,
+  '/images/TeaName/special9.jpg': special9,
+  '/images/TeaName/special10.jpg': special10,
+  '/images/TeaName/special11.jpg': special11,
+  '/images/TeaName/special12.jpg': special12,
 }
 
 // 替換圖片路徑的函數

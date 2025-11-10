@@ -23,7 +23,7 @@
               <div class="px-2">
                 <div class="card" style="width: 100%;">
                   <div @click="openProductModal(product)" style="cursor: pointer;">
-                  <img :src="product.TeaName" class="card-img-top" :alt="product.name"
+                  <img :src="getImageUrl(product.TeaName)" class="card-img-top" :alt="product.name"
                     style="height: 200px; object-fit: cover;">
                   <div class="card-body">
                     <div class="mb-2">
@@ -76,7 +76,7 @@
               <div class="px-2">
                 <div class="card" style="width: 100%;">
                   <div @click="openProductModal(product)" style="cursor: pointer;">
-                  <img :src="product.TeaName" class="card-img-top" :alt="product.name"
+                  <img :src="getImageUrl(product.TeaName)" class="card-img-top" :alt="product.name"
                     style="height: 200px; object-fit: cover;">
                   <div class="card-body">
                     <div class="mb-2">
@@ -129,7 +129,7 @@
               <div class="px-2">
                 <div class="card" style="width: 100%;">
                   <div @click="openProductModal(product)" style="cursor: pointer;">
-                  <img :src="product.TeaName" class="card-img-top" :alt="product.name"
+                  <img :src="getImageUrl(product.TeaName)" class="card-img-top" :alt="product.name"
                     style="height: 200px; object-fit: cover;">
                   <div class="card-body">
                     <div class="mb-2">
@@ -205,6 +205,7 @@ import { useCartStore } from '../store/cart'
 // import { storeToRefs } from 'pinia'
 import $ from 'jquery'
 import InteractiveWindow from './InteractiveWindow.vue'
+import { getImageUrl } from '../utils/imageHelper'
 
 // 使用全局購物車 store
 const cartStore = useCartStore()

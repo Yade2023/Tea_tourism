@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory  } from 'vue-router'
 import HomeTea_tourism from '../components/HomeTea_tourism.vue'
 import address from '../components/address.vue'
 import knowledge from '../components/knowledge.vue'
@@ -24,7 +24,7 @@ const routes = [
 
 // 建立 Router 實例
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory (import.meta.env.BASE_URL),
   routes,
   // 路由跳轉時自動滾動到頂部
   scrollBehavior(to, from, savedPosition) {

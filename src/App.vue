@@ -67,7 +67,7 @@
           <a href="#" role="button" class="icon-btn search" @click="toggleSearch" title="搜尋"></a>
           <!-- 搜尋輸入框 -->
           <!-- <input v-if="showInput" v-model="keyword" type="text" placeholder="輸入搜尋內容..." class="search-input" /> -->
-          <a href="/store" class="icon-btn cart" title="購物"></a>
+          <router-link to="/store" class="icon-btn cart" title="購物"></router-link>
           <!-- 如果已登入，顯示帳號和登出按鈕；否則顯示登入連結 -->
           <template v-if="userEmail">
             <span class="user-email">{{ userEmail }}</span>
