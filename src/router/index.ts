@@ -24,7 +24,7 @@ const routes = [
 
 // 建立 Router 實例
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   // 路由跳轉時自動滾動到頂部
   scrollBehavior(to, from, savedPosition) {

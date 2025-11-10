@@ -8,11 +8,125 @@ import localJsonUrl from '../assets/json/HomeTea_tourism.json'
 // 合併工具：用 API 值覆蓋預設，但不覆蓋成 null / "" / undefined
 import { mergeDefault } from '../assets/js/mergeDefault'
 
+// 導入首頁需要的圖片
+import carousel01 from '../assets/images/index_img/carousel01.jpg'
+import carousel02 from '../assets/images/index_img/carousel02.jpg'
+import carousel03 from '../assets/images/index_img/carousel03.jpg'
+import teaScenery from '../assets/images/index_img/茶景.jpg'
+import daxitea from '../assets/images/index_img/daxitea.jpg'
+import matcha from '../assets/images/index_img/抹茶.jpg'
+import teaTaboo from '../assets/images/index_img/茶禁忌.jpg'
+import baozongTea from '../assets/images/index_img/包種茶故鄉.jpg'
+import sixTeaTypes from '../assets/images/index_img/六大茶類分類法.jpg'
+import teaHealth from '../assets/images/index_img/茶對健康有幫助.jpg'
+import teaCups from '../assets/images/index_img/喝幾杯茶最剛好.jpg'
+
+// 對於 public 資料夾中的圖片，我們使用路徑字符串
+const publicImageMap = {
+  '/images/HerbalTea/savor01.jpg': '/images/HerbalTea/savor01.jpg',
+  '/images/HerbalTea/savor02.jpg': '/images/HerbalTea/savor02.jpg',
+  '/images/HerbalTea/savor03.jpg': '/images/HerbalTea/savor03.jpg',
+  '/images/HerbalTea/savor04.jpg': '/images/HerbalTea/savor04.jpg',
+  '/images/HerbalTea/savor05.jpg': '/images/HerbalTea/savor05.jpg',
+  '/images/HerbalTea/savor06.jpg': '/images/HerbalTea/savor06.jpg',
+  '/images/HerbalTea/savor07.jpg': '/images/HerbalTea/savor07.jpg',
+  '/images/HerbalTea/savor08.jpg': '/images/HerbalTea/savor08.jpg',
+  '/images/HerbalTea/savor09.jpg': '/images/HerbalTea/savor09.jpg',
+  '/images/HerbalTea/savor10.jpg': '/images/HerbalTea/savor10.jpg',
+  '/images/HerbalTea/savor11.jpg': '/images/HerbalTea/savor11.jpg',
+  '/images/HerbalTea/savor12.jpg': '/images/HerbalTea/savor12.jpg',
+  
+  '/images/TeaName/special01.jpg': '/images/TeaName/special01.jpg',
+  '/images/TeaName/special02.jpg': '/images/TeaName/special02.jpg',
+  '/images/TeaName/special03.jpg': '/images/TeaName/special03.jpg',
+  '/images/TeaName/special04.jpg': '/images/TeaName/special04.jpg',
+  '/images/TeaName/special05.jpg': '/images/TeaName/special05.jpg',
+  '/images/TeaName/special06.jpg': '/images/TeaName/special06.jpg',
+  '/images/TeaName/special07.jpg': '/images/TeaName/special07.jpg',
+  '/images/TeaName/special08.jpg': '/images/TeaName/special08.jpg',
+  '/images/TeaName/special9.jpg': '/images/TeaName/special9.jpg',
+  '/images/TeaName/special10.jpg': '/images/TeaName/special10.jpg',
+  '/images/TeaName/special11.jpg': '/images/TeaName/special11.jpg',
+  '/images/TeaName/special12.jpg': '/images/TeaName/special12.jpg',
+}
+
 const homeData = ref(null)
 const router = useRouter()
 
 // 控制開場動畫顯示的狀態：預設為 false，待頁面載入完成後再觸發
 const showAnimation = ref(false)
+
+// 圖片映射對象
+const imageMap = {
+  // 輪播圖片
+  'index_img/carousel01.jpg': carousel01,
+  '../src/assets/images/index_img/carousel02.jpg': carousel02,
+  '../src/assets/images/index_img/carousel03.jpg': carousel03,
+  
+  // 介紹區塊圖片
+  './src/assets/images/index_img/茶景.jpg': teaScenery,
+  
+  // 特色景點圖片
+  './src/assets/images/index_img/daxitea.jpg': daxitea,
+  
+  // 知識卡片圖片
+  './src/assets/images/index_img/抹茶.jpg': matcha,
+  './src/assets/images/index_img/茶禁忌.jpg': teaTaboo,
+  './src/assets/images/index_img/包種茶故鄉.jpg': baozongTea,
+  './src/assets/images/index_img/六大茶類分類法.jpg': sixTeaTypes,
+  './src/assets/images/index_img/茶對健康有幫助.jpg': teaHealth,
+  './src/assets/images/index_img/喝幾杯茶最剛好.jpg': teaCups,
+  
+  // 合併 public 資料夾的圖片映射
+  ...publicImageMap,
+}
+
+// 替換圖片路徑的函數
+const replaceImagePaths = (data) => {
+  const processedData = JSON.parse(JSON.stringify(data)) // 深拷貝
+  
+  // 處理輪播圖片
+  if (processedData.carousel) {
+    processedData.carousel.forEach(item => {
+      if (item.img && imageMap[item.img]) {
+        item.img = imageMap[item.img]
+      }
+    })
+  }
+  
+  // 處理介紹區塊圖片
+  if (processedData.introBlock?.leftImage && imageMap[processedData.introBlock.leftImage]) {
+    processedData.introBlock.leftImage = imageMap[processedData.introBlock.leftImage]
+  }
+  
+  // 處理特色景點圖片
+  if (processedData.featureSpot?.mainImage && imageMap[processedData.featureSpot.mainImage]) {
+    processedData.featureSpot.mainImage = imageMap[processedData.featureSpot.mainImage]
+  }
+  
+  // 處理知識卡片圖片
+  if (processedData.knowledgeCards) {
+    processedData.knowledgeCards.forEach(card => {
+      if (card.img && imageMap[card.img]) {
+        card.img = imageMap[card.img]
+      }
+    })
+  }
+  
+  // 處理商品圖片
+  if (processedData.shopItems) {
+    processedData.shopItems.forEach(item => {
+      if (item.savorImage && imageMap[item.savorImage]) {
+        item.savorImage = imageMap[item.savorImage]
+      }
+      if (item.TeaName && imageMap[item.TeaName]) {
+        item.TeaName = imageMap[item.TeaName]
+      }
+    })
+  }
+  
+  return processedData
+}
 
 // 將動畫中使用的三張圖片轉為瀏覽器可讀取的 URL
 // 這些圖片放在 assets/img 資料夾中，請依實際檔名調整路徑
@@ -66,7 +180,7 @@ const goToShopping = (shop) => {
 
 onMounted(async () => {
   // 1. 先一定抓到本地預設資料
-  homeData.value = localJsonUrl
+  let rawData = localJsonUrl
 
   try {
     // 2. 嘗試抓 API
@@ -76,13 +190,16 @@ onMounted(async () => {
     const apiData = await res.json()
 
     // 3. 把 API 跟預設合併，API 只會覆蓋有內容的欄位
-    homeData.value = mergeDefault(homeData.value, apiData)
+    rawData = mergeDefault(rawData, apiData)
 
     console.log('✅ 使用 API + fallback 合併資料')
   } catch (err) {
     // 4. API 壞掉 → 純預設
     console.warn('⚠️ API 失敗，使用純預設 JSON：', err)
   }
+
+  // 5. 替換所有圖片路徑為 import 的圖片
+  homeData.value = replaceImagePaths(rawData)
 
   // 頁面載入完成後才顯示開場動畫。先將動畫顯示，待一段時間後再關閉。
   // 在組件掛載（資料載入完畢）後，顯示動畫層
