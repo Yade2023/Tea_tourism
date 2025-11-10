@@ -97,129 +97,6 @@ const cities = ref([
   { name: '屏東縣', x: 38, y: 125, color: '#5a8c69' }
 ])
 
-// 縣市描述資料
-const cityDescriptions = {
-  '台北市': {
-    title: '台北茶鄉',
-    subtitle: '山城之上的茶香記憶',
-    description1: '台北文山區自古便是包種茶的發源地。山巒環抱、霧氣繚繞，茶樹沐浴於溫潤氣候之中，茶香清雅淡柔，湯色明亮透澈。',
-    description2: '行走於貓空山徑，茶香隨風輕拂，茶舍錯落於綠意之間，靜謐而悠然。每一壺文山包種茶，都是城市與自然最和諧的交響。',
-    quote: '「霧繞山城香入夢，一盞清心見人情」'
-  },
-  '新北市': {
-    title: '新北茶鄉',
-    subtitle: '探索台灣茶葉的故鄉',
-    description1: '新北自清代起便開始種茶，是台灣北部茶文化的發源地之一。山巒起伏、氣候涼爽，孕育出香氣馥郁、滋味清新的好茶。坪林、石碇一帶茶園層疊，綠意連綿，成就了文山包種茶的典雅韻味。',
-    description2: '漫步山間，霧氣瀰漫，茶香隨風流轉。茶農以專注的手藝守護土地，也傳承著這份屬於北台灣的茶之魂。',
-    quote: '「茶香飄逸滿山間，綠意盎然映眼簾」'
-  },
-  '桃園市': {
-    title: '桃園茶鄉',
-    subtitle: '細品拉拉山的雲霧甘露',
-    description1: '桃園山區自古便以高山茶聞名，拉拉山、復興區一帶雲霧繚繞、氣候涼爽，孕育出香氣清雅、滋味回甘的茶葉。當地茶農秉持傳統製茶工藝，結合現代技術，讓茶香更添層次。',
-    description2: '漫步於山徑間，茶園綿延如畫，微風拂過茶樹，清香隨風而來。這裡的每一口茶，都蘊含著土地的溫度與職人的心意。',
-    quote: '「雲霧深處藏甘露，一壺桃香沁人心」'
-  },
-  '新竹市': {
-    title: '新竹茶鄉',
-    subtitle: '山風輕拂的蜜香韻',
-    description1: '新竹北埔與峨眉地區，是東方美人茶的重要產地。茶園坐落山坡，陽光與山風交錯，讓茶葉散發淡淡蜜果香。',
-    description2: '茶農順應自然節氣採製，細心揉焙，使茶湯柔和清甜、韻味深長。那一抹香氣，藏著丘陵間的溫柔與歲月的堅定。',
-    quote: '「微風拂過葉初展，一壺蜜韻沁心間」'
-  },
-  '基隆市': {
-    title: '基隆茶鄉',
-    subtitle: '海霧山嶺的獨特氣息',
-    description1: '基隆山區雲霧繚繞、濕潤多雨，孕育出別具風味的在地小葉種茶。海風帶來鹹潤氣息，使茶香中多了一份柔順與清透。',
-    description2: '登上暖暖與七堵山巒，海景與茶園相映成趣。品茗之際，彷彿能嚐到山的靜謐與海的呼吸。',
-    quote: '「霧起潮聲共入香，一啜山海韻悠長」'
-  },
-  '宜蘭縣': {
-    title: '宜蘭茶鄉',
-    subtitle: '蘭陽山水的自然芬芳',
-    description1: '宜蘭的冬山、員山地區，以有機與自然農法聞名。茶園依山傍水，晨霧繚繞，使茶香格外清新。',
-    description2: '走進茶鄉，處處可見茶樹與山林共生的景致。每一口茶，都彷彿能嘗到山泉的甘甜與海風的氣息。',
-    quote: '「霧鎖蘭陽茶初綻，一啜清芳入心間」'
-  },
-  '苗栗縣': {
-    title: '苗栗茶鄉',
-    subtitle: '客家山城的樸實韻味',
-    description1: '苗栗是東方美人茶的故鄉，茶園坐落在山坡間，蟬鳴與風聲相伴。被小綠葉蟬輕咬過的嫩葉，製成的茶湯蜜香芬芳、入口柔順。',
-    description2: '走進這片客家茶鄉，濃濃人情與茶香交織。每一壺茶，都是時間與土地共同釀成的溫度。',
-    quote: '「蜜韻潤喉心自暖，山風輕語話人間」'
-  },
-  '台中市': {
-    title: '台中茶鄉',
-    subtitle: '谷關山間的清新韻味',
-    description1: '台中的東勢、和平一帶山巒起伏、氣候宜人，孕育出香氣柔和、滋味鮮爽的高山茶。這裡的茶園與林木相伴，茶香中帶著自然的氣息。',
-    description2: '茶農以傳統工法製茶，注重每個細節，讓一壺好茶蘊含山林的純粹。登高俯瞰，滿山翠綠，茶香隨風流轉。',
-    quote: '「山風吹綠滿茶嶺，一壺清香潤人心」'
-  },
-  '彰化縣': {
-    title: '彰化茶鄉',
-    subtitle: '山腳茶園的純樸香氣',
-    description1: '彰化八卦山脈西麓，日照充足、氣候溫和，是中台灣少見的平原茶區。茶園多以小農經營，專注於自然農法與傳統製茶工藝，香氣樸實、滋味柔和。',
-    description2: '走入芬園、社頭山區，茶園與稻田交錯，構成一幅恬靜的鄉村畫。這裡的茶，不張揚，卻在淡淡清香中，傳遞最真實的土地氣息。',
-    quote: '「山風輕拂香盈袖，一啜人情最純然」'
-  },
-  '南投縣': {
-    title: '南投茶鄉',
-    subtitle: '高山雲霧孕好茶',
-    description1: '南投是台灣著名的高山茶故鄉，從鹿谷凍頂到魚池紅茶，皆享譽國內外。海拔高、日夜溫差大，使茶葉香氣濃郁、滋味醇厚。',
-    description2: '茶園沿山坡層層疊疊，如詩如畫。走進茶鄉，耳邊傳來揉茶的節奏，鼻尖縈繞著淡淡茶香。每一片茶葉，都是職人與山林對話的結晶。',
-    quote: '「霧起山巒翠如畫，一啜南投見匠心」'
-  },
-  '雲林縣': {
-    title: '雲林茶鄉',
-    subtitle: '平原裡的暖陽茶香',
-    description1: '雲林古坑以綠茶與凍頂烏龍聞名。這裡日照充足、雨量適中，孕育出香氣清亮、口感柔和的茶葉。',
-    description2: '茶鄉小路蜿蜒，茶農笑語回盪。每一道焙茶工序，都是對土地最深的致敬。',
-    quote: '「陽光灑落茶正熟，香氣悠悠滿山谷」'
-  },
-  '嘉義市': {
-    title: '嘉義茶鄉',
-    subtitle: '阿里山雲巔的清香記憶',
-    description1: '嘉義的阿里山茶以「香、甘、潤」聞名，茶園多分布於中高海拔地區。陽光與雲霧交錯，造就茶湯金黃透亮、回甘悠長的特質。',
-    description2: '登山遠眺，層層茶園與雲海相映成趣；近觀茶農輕捻嫩芽，那份專注與堅持，是對自然最深的敬意。',
-    quote: '「雲上飄香阿里山，一盞清心韻千回」'
-  },
-  '台南市': {
-    title: '台南茶鄉',
-    subtitle: '古都茶香的溫潤氣息',
-    description1: '台南白河與東山地區，以東山碧螺春著稱。茶園環繞在蓮花與果樹之間，花香、果香與茶香交融，滋味甘潤清新。',
-    description2: '午後的微風帶著茶香穿過山谷，古樸的茶舍中，一壺熱茶靜靜散發著時間的溫度。',
-    quote: '「花影搖曳香滿室，一啜東山意綿長」'
-  },
-  '高雄市': {
-    title: '高雄茶鄉',
-    subtitle: '南方山嶺的溫厚茶魂',
-    description1: '高雄六龜、甲仙地區山勢高聳，氣候溫潤。茶園錯落山坡，製成的茶湯香氣濃郁、口感厚實，帶著南方土地的熱情與厚度。',
-    description2: '茶香隨風流轉，映襯著藍天綠嶺。這裡的每一口茶，都是陽光與汗水交織的結晶。',
-    quote: '「南風拂葉香滿懷，一盞濃情暖心懷」'
-  },
-  '屏東縣': {
-    title: '屏東茶鄉',
-    subtitle: '山海之間的清新調和',
-    description1: '屏東霧台與三地門一帶，海風與山霧交錯，孕育出獨特的原鄉茶香。茶湯清亮爽口，帶著淡淡果韻與花香。',
-    description2: '部落茶農以自然方式耕作，保留茶葉最純粹的氣息。每一杯茶，都是山林靈氣的延續。',
-    quote: '「山海交融香入夢，一啜南境見真情」'
-  },
-  '花蓮縣': {
-    title: '花蓮茶鄉',
-    subtitle: '東岸山谷的清澈韻味',
-    description1: '花蓮瑞穗、鳳林地區茶園依山傍谷，山風吹拂，溪水滋潤。茶湯色澤清透，滋味甘甜，宛如山林的呼吸。',
-    description2: '在這裡，茶不只是飲品，更是自然的回聲。啜飲之間，彷彿能聽見土地的心跳。',
-    quote: '「山谷輕語風作伴，一壺花蓮見真純」'
-  },
-  '台東縣': {
-    title: '台東茶鄉',
-    subtitle: '日出之地的溫柔茶韻',
-    description1: '台東鹿野與關山地區，以紅烏龍聞名。茶園沐浴晨曦，香氣帶著果甜與蜜香，茶湯琥珀閃耀，回甘悠遠。',
-    description2: '在山與海之間，茶香輕飄，風帶著日光的暖意。這一壺紅烏龍，盛滿台東的自在與寧靜。',
-    quote: '「旭日映紅茶湯暖，一飲東岸好時光」'
-  }
-}
-
 // 點擊縣市
 const selectCity = async (cityName) => {
   // 再點一次同一城市 -> 取消選取、回到全台地圖並收合所有口風琴
@@ -289,13 +166,6 @@ const prevSlide = () => {
 const goToSlide = (index) => {
   currentSlide.value = index
   applySlideEffects()
-}
-
-const goToPage = (page) => {
-  const list = pagesWithLocations.value
-  if (list.includes(page)) {
-    currentPage.value = page
-  }
 }
 
 // 各縣市 Google Maps 嵌入 URL 映射
@@ -878,21 +748,6 @@ onMounted(() => {
   }
 }
 
-.white-bg {
-  background-color: #ffffff;
-}
-
-.gray-bg {
-  background-color: #f5f5f500;
-}
-
-.taiwan-image {
-  width: 50vw;
-  height: auto;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
 .text-content {
   flex: 1;
   min-height: 0;
@@ -1262,37 +1117,6 @@ onMounted(() => {
   50% {
     box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
   }
-}
-
-/* 雙欄文字容器樣式 */
-.dual-text-container {
-  width: 100%;
-  background-color: #ffffff;
-  padding: 80px 40px;
-  display: flex;
-  gap: 60px;
-  align-items: flex-start;
-}
-
-.text-block {
-  flex: 1;
-  padding: 0;
-}
-
-.text-block h2 {
-  font-size: 2rem;
-  color: #1a1a1a;
-  margin-bottom: 20px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-.text-block p {
-  font-size: 1rem;
-  line-height: 1.8;
-  color: #4a4a4a;
-  margin-bottom: 20px;
-  text-align: left;
 }
 
 /* 活動表格樣式 */
@@ -1949,11 +1773,6 @@ onMounted(() => {
     transform: translateX(-50%);
   }
 
-  .taiwan-image {
-    width: 80vw;
-  }
-
-
   .map-header h3 {
     font-size: 1.8rem;
   }
@@ -2016,20 +1835,6 @@ onMounted(() => {
 
   .next-btn {
     right: 10px;
-  }
-
-  .dual-text-container {
-    flex-direction: column;
-    padding: 60px 20px;
-    gap: 30px;
-  }
-
-  .text-block h2 {
-    font-size: 1.8rem;
-  }
-
-  .text-block p {
-    font-size: 1.2rem;
   }
 
   .events-table-container {
