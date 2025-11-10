@@ -5,6 +5,7 @@ import '../assets/css/knowledge.css'
 import defaultDataRaw from '../assets/json/knowledge.json'
 // ===== mergeDefault：API 覆蓋預設，但不覆蓋成 null / 空字串 =====
 import { mergeDefault } from '../assets/js/mergeDefault'
+import { safeFetch, API_ENDPOINTS } from '../utils/imageHelper'
 
 // 導入知識頁面需要的圖片
 // 茶類圖片
@@ -143,10 +144,8 @@ onMounted(async () => {
     let rawData = defaultDataRaw
     
     try {
-        // 2. 嘗試抓 API（之後你會改成雲端的網址）
-        const res = await fetch('http://3.34.188.214:85/api/knowledge')
-        if (!res.ok) throw new Error('API 回傳狀態不是 200')
-
+        // 2. 嘗試抓 API（使用安全請求處理 HTTPS 問題）
+        const res = await safeFetch(API_ENDPOINTS.KNOWLEDGE)
         const apiData = await res.json()
 
         // 3. 把 API 跟預設合併，API 只會覆蓋有內容的欄位
