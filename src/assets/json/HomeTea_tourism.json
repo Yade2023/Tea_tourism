@@ -1,29 +1,167 @@
 {
   "carousel": [
-    { "img": "../assets/images/index_img/carousel01.jpg" },
-    { "img": "../assets/images/index_img/carousel02.jpg" },
-    { "img": "../assets/images/index_img/carousel03.jpg" }
+    { "img": "./src/assets/images/index_img/carousel01.jpg" },
+    { "img": "./src/assets/images/index_img/carousel02.jpg" },
+    { "img": "./src/assets/images/index_img/carousel03.jpg" }
   ],
-  "teaIntro": {
-    "img": "../assets/images/index_img/idea01.jpg",
+  "introBlock": {
+    "leftImage": "./src/assets/images/index_img/茶景.jpg",
     "title": "茶與旅",
-    "text": "茶，不只是飲品，更是一段文化的旅程。我們以旅為名，走訪茶山，記錄台灣茶的靜與深。"
+    "text": "茶，不只是飲品，\n更是一段文化的旅程。\n我們以旅為名，走訪茶山，\n記錄台灣茶的靜與深。"
   },
-  "cards": [
+  "featureSpot": {
+    "mainImage": "./src/assets/images/index_img/daxitea.jpg",
+    "title": "大溪茶廠",
+    "desc": "大溪茶廠創建於1926年，是台灣現存最古老的茶廠之一。這座歷史悠久的建築見證了台灣茶業的興衰，至今仍保持著傳統的製茶工藝。茶廠座落在桃園大溪的山間，四周綠意盎然，空氣清新怡人。在這裡，您可以深度體驗從採茶、製茶到品茶的完整過程，感受茶葉在時光中沉澱的醇厚韻味。走進大溪茶廠，彷彿走進了一座茶文化的博物館，每一個角落都訴說著台灣茶的故事。",
+    "info": "地址: 335桃園市大溪區復興路二段732巷80號\n營業時間: 週一至週五 9:30-17:30 (國定假日依官方公告)\n電話: 03-382-5089\n"
+  },
+  "knowledgeCards": [
     {
-      "title": "台灣高山茶",
-      "text": "這是高山茶的介紹內容。",
-      "img": "../assets/images/index_img/Knowledge01.jpg"
+      "img": "./src/assets/images/index_img/抹茶.jpg",
+      "title": "抹茶不等於綠茶？5分鐘看懂抹茶、煎茶與綠茶差別",
+      "text": "抹茶、煎茶與一般綠茶雖然皆屬於不發酵茶類的一員，但在栽培方式、殺菁與後製工藝、飲用方式與營養成分等方面有明顯差異。",
+      "footer": "https://tastetaiwantea.com/matcha-vs-green-tea-5-minute-guide/"
     },
     {
-      "title": "從葉到杯的旅程",
-      "text": "這是茶葉製作過程的介紹內容。",
-      "img": "../assets/images/index_img/Knowledge02.jpg"
+      "img": "./src/assets/images/index_img/茶禁忌.jpg",
+      "title": "錯誤喝茶習慣恐害身體！喝茶禁忌」",
+      "text": "許多人以為喝茶對身體有益、能代替開水、甚至可任意大量飲用，然而醫師與營養師提醒喝茶也有禁忌，錯誤喝法可能造成胃腸刺激、睡眠中斷、鐵質吸收受阻、腎臟負擔等風險。",
+      "footer": "https://tastetaiwantea.com/tea-drinking-taboo-wrong-habits-health-risk/"
     },
     {
-      "title": "台灣茶歷史",
-      "text": "這是台灣茶文化的歷史故事。",
-      "img": "../assets/images/index_img/Knowledge03.jpg"
+      "img": "./src/assets/images/index_img/包種茶故鄉.jpg",
+      "title": "坪林 文山包種茶的故鄉",
+      "text": "林是北台灣最具代表性的茶鄉，以「文山包種茶」聞名。當地有全台唯一的坪林茶業博物館，館內展示茶的歷史、製茶工序與器具演變，是入門茶文化的最佳起點。",
+      "footer": "https://tastetaiwantea.com/taiwan-north-tea-culture-tour/"
+    },
+    {
+      "img": "./src/assets/images/index_img/六大茶類分類法.jpg",
+      "title": "六大茶類的重要性與分類法",
+      "text": "六大茶類，指的是依據茶葉氧化發酵程度及製程工藝，包括綠茶、白茶、黃茶、青茶、紅茶與黑茶。。",
+      "footer": "https://tastetaiwantea.com/taiwan-tea-categorization-guide/"
+    },
+    {
+      "img": "./src/assets/images/index_img/茶對健康有幫助.jpg",
+      "title": "為什麼茶對健康有幫助？",
+      "text": "茶葉中含有數百種化合物，其中最具代表性的包括 茶多酚(兒茶素群)、生物鹼（咖啡因、茶鹼）、胺基酸（特別是茶胺酸）、芳香揮發物、維生素與礦物質等。",
+      "footer": "https://tastetaiwantea.com/tea-health-benefits-nutrition-best-taiwan-tea/"
+    },
+    {
+      "img": "./src/assets/images/index_img/喝幾杯茶最剛好.jpg",
+      "title": "一天喝幾杯茶最剛好？",
+      "text": "喝茶雖然是日常生活常見的習慣，但一天喝幾杯茶才剛好，怎樣喝才健康，並沒有絕對答案。",
+      "footer": "https://tastetaiwantea.com/best-time-and-amount-to-drink-tea-for-health/"
     }
+  ],
+  "shopItems": [
+     {
+      "id": 1,
+      "name": "紅茶",
+      "price": 30,
+      "category": "經典茶品",
+      "savorImage": "/images/HerbalTea/savor01.jpg",
+      "TeaName": "/images/TeaName/special01.jpg",
+      "description": "經典台灣紅茶，茶湯色澤紅潤明亮，香氣濃郁甘醇，口感滑順回甘，是最受歡迎的日常茶飲。"
+    },
+    {
+      "id": 2,
+      "name": "東方美人",
+      "price": 25,
+      "category": "經典茶品",
+      "savorImage": "/images/HerbalTea/savor02.jpg",
+      "TeaName": "/images/TeaName/special02.jpg",
+      "description": "又稱白毫烏龍，獨特的蜜香與果香交織，茶湯呈現琥珀色澤，口感甘甜滑潤，是台灣特有的頂級茶品。"
+    },
+    {
+      "id": 3,
+      "name": "綠茶",
+      "price": 40,
+      "category": "經典茶品",
+      "savorImage": "/images/HerbalTea/savor03.jpg",
+      "TeaName": "/images/TeaName/special03.jpg",
+      "description": "清新自然的綠茶，茶葉保留豐富的兒茶素，茶湯清澈碧綠，帶有清新的草木香氣，口感鮮爽回甘。"
+    },
+    {
+      "id": 4,
+      "name": "包種茶",
+      "price": 50,
+      "category": "經典茶品",
+      "savorImage": "/images/HerbalTea/savor04.jpg",
+      "TeaName": "/images/TeaName/special04.jpg",
+      "description": "文山包種茶，擁有優雅的花香與清香，茶湯金黃透亮，口感清雅細膩，是台灣輕發酵茶的代表作。"
+    },
+    {
+      "id": 5,
+      "name": "焙相烏龍茶",
+      "price": 35,
+      "category": "烏龍茶系列",
+      "savorImage": "/images/HerbalTea/savor05.jpg",
+      "TeaName": "/images/TeaName/special05.jpg",
+      "description": "經過精心烘焙的烏龍茶，帶有獨特的焙火香氣，茶湯琥珀色澤，口感醇厚溫潤，喉韻深長。"
+    },
+    {
+      "id": 6,
+      "name": "烏龍茶",
+      "price": 35,
+      "category": "烏龍茶系列",
+      "savorImage": "/images/HerbalTea/savor06.jpg",
+      "TeaName": "/images/TeaName/special06.jpg",
+      "description": "傳統烏龍茶，半發酵工藝造就獨特韻味，茶香濃郁持久，茶湯金黃明亮，口感甘醇順口。"
+    },
+    {
+      "id": 7,
+      "name": "元氣茶",
+      "price": 45,
+      "category": "烏龍茶系列",
+      "savorImage": "/images/HerbalTea/savor07.jpg",
+      "TeaName": "/images/TeaName/special07.jpg",
+      "description": "精選烏龍茶搭配天然草本，充滿活力的茶飲，帶來清新舒暢的口感，適合需要提神醒腦的時刻。"
+    },
+    {
+      "id": 8,
+      "name": "茉莉綠茶",
+      "price": 55,
+      "category": "烏龍茶系列",
+      "savorImage": "/images/HerbalTea/savor08.jpg",
+      "TeaName": "/images/TeaName/special08.jpg",
+      "description": "綠茶與新鮮茉莉花完美融合，花香四溢，茶湯清澈翠綠，口感清新甘甜，帶有優雅的茉莉花香。"
+    },
+    {
+      "id": 9,
+      "name": "梅花鹿綠茶",
+      "price": 40,
+      "category": "特色茶品",
+      "savorImage": "/images/HerbalTea/savor09.jpg",
+      "TeaName": "/images/TeaName/special9.jpg",
+      "description": "融合台灣在地特色的創意茶飲，清新的綠茶基底搭配特殊風味，口感獨特令人驚艷。"
+    },
+    {
+      "id": 10,
+      "name": "橙心橙意柚藤茶",
+      "price": 50,
+      "category": "特色茶品",
+      "savorImage": "/images/HerbalTea/savor10.jpg",
+      "TeaName": "/images/TeaName/special10.jpg",
+      "description": "柑橘香氣與茶韻的完美結合，帶有清新的果香，茶湯橙黃透亮，口感酸甜平衡，清爽宜人。"
+    },
+    {
+      "id": 11,
+      "name": "鐵觀音",
+      "price": 40,
+      "category": "特色茶品",
+      "savorImage": "/images/HerbalTea/savor11.jpg",
+      "TeaName": "/images/TeaName/special11.jpg",
+      "description": "經典鐵觀音茶，獨特的觀音韻，茶湯金黃濃郁，帶有蘭花香氣，口感醇厚甘甜，韻味悠長。"
+    },
+    {
+      "id": 12,
+      "name": "花茶",
+      "price": 40,
+      "category": "特色茶品",
+      "savorImage": "/images/HerbalTea/savor12.jpg",
+      "TeaName": "/images/TeaName/special12.jpg",
+      "description": "多種天然花卉調配而成，色彩繽紛，花香濃郁，茶湯清透，口感芬芳甘甜，視覺與味覺的雙重享受。"
+    }
+
   ]
 }
