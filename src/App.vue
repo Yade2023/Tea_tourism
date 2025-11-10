@@ -59,7 +59,7 @@
         </router-link>
         <div>
           <router-link to="/knowledge">台灣茶知識庫</router-link>
-          <router-link to="/teaTourismArea">茶旅專區</router-link>
+          <router-link to="/Travel">茶旅專區</router-link>
           <router-link to="/Shopping4">線上茶店</router-link>
           <router-link to="/address">Q&A/聯絡我們</router-link>
         </div>

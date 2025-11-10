@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeTea_tourism from '../components/HomeTea_tourism.vue'
 import address from '../components/address.vue'
 import knowledge from '../components/knowledge.vue'
-import teaTourismArea from '../components/teaTourismArea.vue'
+import Travel from '../components/Travel.vue'
 import login from '../components/login.vue'
 import Shopping4 from '../components/Shopping4.vue'
 import Checkout from '../components/Checkout.vue'
@@ -13,7 +13,7 @@ import OrderCompleted from '../components/OrderCompleted.vue'
 const routes = [
   { path: '/', component: HomeTea_tourism },
   { path: '/knowledge', component: knowledge },
-  { path: '/teaTourismArea', component: teaTourismArea },
+  { path: '/Travel', component: Travel },
   { path: '/Shopping4', name: 'Shopping4', component: Shopping4 },
   { path: '/address', component: address },
   { path: '/login', component: login },
