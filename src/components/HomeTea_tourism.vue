@@ -6,7 +6,7 @@ import { ref, onMounted, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import localJsonUrl from '../assets/json/HomeTea_tourism.json'
 // 合併工具：用 API 值覆蓋預設，但不覆蓋成 null / "" / undefined
-import { mergeDefault } from '../assets/js/mergeDefault.js'
+import { mergeDefault } from '../assets/js/mergeDefault'
 
 const homeData = ref(null)
 const router = useRouter()
@@ -70,13 +70,13 @@ onMounted(async () => {
 
   try {
     // 2. 嘗試抓 API
-    const res = await fetch('http://localhost:5000/api/home')
+    const res = await fetch('http://3.34.188.214:85/api/home')
     if (!res.ok) throw new Error('API 回傳狀態不是 200')
 
     const apiData = await res.json()
 
     // 3. 把 API 跟預設合併，API 只會覆蓋有內容的欄位
-    homeData.value = mergeDefault(defaultData, apiData)
+    homeData.value = mergeDefault(homeData.value, apiData)
 
     console.log('✅ 使用 API + fallback 合併資料')
   } catch (err) {

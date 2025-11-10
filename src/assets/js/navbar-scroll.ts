@@ -1,10 +1,10 @@
-// ./assets/js/navbar-scroll.js
+// ./assets/js/navbar-scroll.ts
 
 export default (function () {
   // 等DOM加載完成
-  function init() {
-    const navbar = document.querySelector('.navbar');
-    const hoverZone = document.querySelector('.nav-hover-zone');
+  function init(): void {
+    const navbar = document.querySelector('.navbar') as HTMLElement;
+    const hoverZone = document.querySelector('.nav-hover-zone') as HTMLElement;
 
     if (!navbar || !hoverZone) {
       setTimeout(init, 100); // 如果元素還沒載入，100ms後重試
@@ -15,7 +15,7 @@ export default (function () {
     let isHoveringNavbar = false;
 
     // 讓 hoverZone 只有在 navbar 收起時才攔滑鼠
-    function syncHoverZoneHitbox() {
+    function syncHoverZoneHitbox(): void {
       const navbarVisible = navbar.classList.contains('visible');
       if (navbarVisible) {
         // navbar 展開 → 不要擋住點擊
@@ -26,19 +26,19 @@ export default (function () {
       }
     }
 
-    function showNavbar() {
+    function showNavbar(): void {
       navbar.classList.add('visible');
       navbar.classList.remove('hidden');
       syncHoverZoneHitbox();
     }
 
-    function hideNavbar() {
+    function hideNavbar(): void {
       navbar.classList.add('hidden');
       navbar.classList.remove('visible');
       syncHoverZoneHitbox();
     }
 
-    function handleScroll() {
+    function handleScroll(): void {
       const atTop = window.scrollY === 0;
 
       if (atTop) {
@@ -89,8 +89,8 @@ export default (function () {
     initBackToTop();
   }
 
-  function initBackToTop() {
-    const backToTop = document.getElementById('backToTop');
+  function initBackToTop(): void {
+    const backToTop = document.getElementById('backToTop') as HTMLElement;
     
     if (!backToTop) {
       console.log('回到頂部按鈕元素未找到');
@@ -101,7 +101,7 @@ export default (function () {
     console.log('回到頂部按鈕已找到並初始化');
 
     // 監聽捲動，決定是否顯示按鈕
-    function toggleBackToTopVisibility() {
+    function toggleBackToTopVisibility(): void {
       if (window.scrollY > 200) {
         backToTop.classList.add('visible');
       } else {
@@ -112,7 +112,7 @@ export default (function () {
     window.addEventListener('scroll', toggleBackToTopVisibility, { passive: true });
 
     // 點擊回頂部
-    backToTop.addEventListener('click', (e) => {
+    backToTop.addEventListener('click', (e: Event) => {
       e.preventDefault();
       window.scrollTo({
         top: 0,

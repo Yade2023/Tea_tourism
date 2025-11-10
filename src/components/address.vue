@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import '../assets/css/address.css'
-import { mergeDefault } from '../assets/js/mergeDefault.js'
+import { mergeDefault } from '../assets/js/mergeDefault'
 
 // UI 狀態：哪一個手風琴目前展開
 const activeIndex = ref(null)
@@ -80,7 +80,7 @@ onMounted(async () => {
   accordionList.value = defaultDataRaw.accordionList || []
   try {
     // 2. 嘗試叫 API (你之後可以讓這支 API 回傳 { accordionList: [...] } )
-    const res = await fetch('http://localhost:5028/api/Address')
+    const res = await fetch('http://3.34.188.214:85/api/Address')
     if (!res.ok) throw new Error('API 回傳狀態不是 200')
 
     const apiData = await res.json()

@@ -182,7 +182,7 @@ export const useCartStore = defineStore('cart', () => {
       const product = products.value.find((p) => p.id === productId)
 
       if (product && product.price !== undefined) {
-        const quantity = productCount[productId]
+        const quantity = productCount[productId] || 0
         result.push({
           ...product,
           quantity

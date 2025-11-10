@@ -40,7 +40,7 @@
 
   // 導入導航欄滾動功能
   onMounted(() => {
-    import('./assets/js/navbar-scroll.js');
+    import('./assets/js/navbar-scroll');
     checkLoginStatus();
   });
 </script>
