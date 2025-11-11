@@ -2,15 +2,156 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import '../assets/css/HomeTea_tourism.css'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, nextTick } from 'vue'
+import { useRouter } from 'vue-router'
 import localJsonUrl from '../assets/json/HomeTea_tourism.json'
 // 合併工具：用 API 值覆蓋預設，但不覆蓋成 null / "" / undefined
-import { mergeDefault } from '../assets/js/mergeDefault.js'
+import { mergeDefault } from '../assets/js/mergeDefault'
+import { safeFetch, API_CONFIG } from '../utils/apiConfig'
+
+// 導入首頁需要的圖片
+import carousel01 from '../assets/images/index_img/carousel01.jpg'
+import carousel02 from '../assets/images/index_img/carousel02.jpg'
+import carousel03 from '../assets/images/index_img/carousel03.jpg'
+import teaScenery from '../assets/images/index_img/茶景.jpg'
+import daxitea from '../assets/images/index_img/daxitea.jpg'
+import matcha from '../assets/images/index_img/抹茶.jpg'
+import teaTaboo from '../assets/images/index_img/茶禁忌.jpg'
+import baozongTea from '../assets/images/index_img/包種茶故鄉.jpg'
+import sixTeaTypes from '../assets/images/index_img/六大茶類分類法.jpg'
+import teaHealth from '../assets/images/index_img/茶對健康有幫助.jpg'
+import teaCups from '../assets/images/index_img/喝幾杯茶最剛好.jpg'
+
+// 導入商品圖片 - HerbalTea 系列 (使用 URL 導入方式)
+const savor01 = new URL('/images/HerbalTea/savor01.jpg', import.meta.url).href
+const savor02 = new URL('/images/HerbalTea/savor02.jpg', import.meta.url).href
+const savor03 = new URL('/images/HerbalTea/savor03.jpg', import.meta.url).href
+const savor04 = new URL('/images/HerbalTea/savor04.jpg', import.meta.url).href
+const savor05 = new URL('/images/HerbalTea/savor05.jpg', import.meta.url).href
+const savor06 = new URL('/images/HerbalTea/savor06.jpg', import.meta.url).href
+const savor07 = new URL('/images/HerbalTea/savor07.jpg', import.meta.url).href
+const savor08 = new URL('/images/HerbalTea/savor08.jpg', import.meta.url).href
+const savor09 = new URL('/images/HerbalTea/savor09.jpg', import.meta.url).href
+const savor10 = new URL('/images/HerbalTea/savor10.jpg', import.meta.url).href
+const savor11 = new URL('/images/HerbalTea/savor11.jpg', import.meta.url).href
+const savor12 = new URL('/images/HerbalTea/savor12.jpg', import.meta.url).href
+
+// 導入商品圖片 - TeaName 系列 (使用 URL 導入方式)
+const special01 = new URL('/images/TeaName/special01.jpg', import.meta.url).href
+const special02 = new URL('/images/TeaName/special02.jpg', import.meta.url).href
+const special03 = new URL('/images/TeaName/special03.jpg', import.meta.url).href
+const special04 = new URL('/images/TeaName/special04.jpg', import.meta.url).href
+const special05 = new URL('/images/TeaName/special05.jpg', import.meta.url).href
+const special06 = new URL('/images/TeaName/special06.jpg', import.meta.url).href
+const special07 = new URL('/images/TeaName/special07.jpg', import.meta.url).href
+const special08 = new URL('/images/TeaName/special08.jpg', import.meta.url).href
+const special9 = new URL('/images/TeaName/special9.jpg', import.meta.url).href
+const special10 = new URL('/images/TeaName/special10.jpg', import.meta.url).href
+const special11 = new URL('/images/TeaName/special11.jpg', import.meta.url).href
+const special12 = new URL('/images/TeaName/special12.jpg', import.meta.url).href
 
 const homeData = ref(null)
+const router = useRouter()
 
 // 控制開場動畫顯示的狀態：預設為 false，待頁面載入完成後再觸發
 const showAnimation = ref(false)
+
+// 圖片映射對象
+const imageMap = {
+  // 輪播圖片
+  './src/assets/images/index_img/carousel01.jpg': carousel01,
+  './src/assets/images/index_img/carousel02.jpg': carousel02,
+  './src/assets/images/index_img/carousel03.jpg': carousel03,
+  
+  // 介紹區塊圖片
+  './src/assets/images/index_img/茶景.jpg': teaScenery,
+  
+  // 特色景點圖片
+  './src/assets/images/index_img/daxitea.jpg': daxitea,
+  
+  // 知識卡片圖片
+  './src/assets/images/index_img/抹茶.jpg': matcha,
+  './src/assets/images/index_img/茶禁忌.jpg': teaTaboo,
+  './src/assets/images/index_img/包種茶故鄉.jpg': baozongTea,
+  './src/assets/images/index_img/六大茶類分類法.jpg': sixTeaTypes,
+  './src/assets/images/index_img/茶對健康有幫助.jpg': teaHealth,
+  './src/assets/images/index_img/喝幾杯茶最剛好.jpg': teaCups,
+  
+  // 商品圖片 - savorImage
+  '/images/HerbalTea/savor01.jpg': savor01,
+  '/images/HerbalTea/savor02.jpg': savor02,
+  '/images/HerbalTea/savor03.jpg': savor03,
+  '/images/HerbalTea/savor04.jpg': savor04,
+  '/images/HerbalTea/savor05.jpg': savor05,
+  '/images/HerbalTea/savor06.jpg': savor06,
+  '/images/HerbalTea/savor07.jpg': savor07,
+  '/images/HerbalTea/savor08.jpg': savor08,
+  '/images/HerbalTea/savor09.jpg': savor09,
+  '/images/HerbalTea/savor10.jpg': savor10,
+  '/images/HerbalTea/savor11.jpg': savor11,
+  '/images/HerbalTea/savor12.jpg': savor12,
+  
+  // 商品圖片 - TeaName
+  '/images/TeaName/special01.jpg': special01,
+  '/images/TeaName/special02.jpg': special02,
+  '/images/TeaName/special03.jpg': special03,
+  '/images/TeaName/special04.jpg': special04,
+  '/images/TeaName/special05.jpg': special05,
+  '/images/TeaName/special06.jpg': special06,
+  '/images/TeaName/special07.jpg': special07,
+  '/images/TeaName/special08.jpg': special08,
+  '/images/TeaName/special9.jpg': special9,
+  '/images/TeaName/special10.jpg': special10,
+  '/images/TeaName/special11.jpg': special11,
+  '/images/TeaName/special12.jpg': special12,
+}
+
+// 替換圖片路徑的函數
+const replaceImagePaths = (data) => {
+  const processedData = JSON.parse(JSON.stringify(data)) // 深拷貝
+  
+  // 處理輪播圖片
+  if (processedData.carousel) {
+    processedData.carousel.forEach(item => {
+      if (item.img && imageMap[item.img]) {
+        item.img = imageMap[item.img]
+      }
+    })
+  }
+  
+  // 處理介紹區塊圖片
+  if (processedData.introBlock?.leftImage && imageMap[processedData.introBlock.leftImage]) {
+    processedData.introBlock.leftImage = imageMap[processedData.introBlock.leftImage]
+  }
+  
+  // 處理特色景點圖片
+  if (processedData.featureSpot?.mainImage && imageMap[processedData.featureSpot.mainImage]) {
+    processedData.featureSpot.mainImage = imageMap[processedData.featureSpot.mainImage]
+  }
+  
+  // 處理知識卡片圖片
+  if (processedData.knowledgeCards) {
+    processedData.knowledgeCards.forEach(card => {
+      if (card.img && imageMap[card.img]) {
+        card.img = imageMap[card.img]
+      }
+    })
+  }
+  
+  // 處理商品圖片
+  if (processedData.shopItems) {
+    processedData.shopItems.forEach(item => {
+      if (item.savorImage && imageMap[item.savorImage]) {
+        item.savorImage = imageMap[item.savorImage]
+      }
+      if (item.TeaName && imageMap[item.TeaName]) {
+        item.TeaName = imageMap[item.TeaName]
+      }
+    })
+  }
+  
+  return processedData
+}
 
 // 將動畫中使用的三張圖片轉為瀏覽器可讀取的 URL
 // 這些圖片放在 assets/img 資料夾中，請依實際檔名調整路徑
@@ -35,25 +176,53 @@ const randomKnowledgeCards = computed(() => {
   return shuffleArray(homeData.value.knowledgeCards).slice(0, 3)
 })
 
+// 將商品陣列分組，每組指定數量
+const getShopChunks = (items, chunkSize) => {
+  if (!items || !Array.isArray(items)) return []
+  const chunks = []
+  for (let i = 0; i < items.length; i += chunkSize) {
+    chunks.push(items.slice(i, i + chunkSize))
+  }
+  return chunks
+}
+
+// 點擊商品卡片跳轉到購物頁面
+const goToShopping = (shop) => {
+  // 可以傳遞商品資訊到購物頁面
+  router.push({
+    name: 'Shopping4', // 確保路由名稱正確
+    query: {
+      productId: shop.id,
+      category: shop.category
+    }
+  }).then(() => {
+    // 路由跳轉完成後，確保滾動到頂部
+    nextTick(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    })
+  })
+}
+
 onMounted(async () => {
   // 1. 先一定抓到本地預設資料
-  homeData.value = localJsonUrl
+  let rawData = localJsonUrl
 
   try {
-    // 2. 嘗試抓 API
-    const res = await fetch('http://localhost:5000/api/home')
-    if (!res.ok) throw new Error('API 回傳狀態不是 200')
-
+    // 2. 嘗試抓 API（透過 Cloudflare Workers 代理）
+    const res = await safeFetch(API_CONFIG.ENDPOINTS.HOME)
     const apiData = await res.json()
 
     // 3. 把 API 跟預設合併，API 只會覆蓋有內容的欄位
-    homeData.value = mergeDefault(defaultData, apiData)
+    rawData = mergeDefault(rawData, apiData)
 
     console.log('✅ 使用 API + fallback 合併資料')
   } catch (err) {
     // 4. API 壞掉 → 純預設
     console.warn('⚠️ API 失敗，使用純預設 JSON：', err)
   }
+
+  // 5. 替換所有圖片路徑為 import 的圖片
+  homeData.value = replaceImagePaths(rawData)
 
   // 頁面載入完成後才顯示開場動畫。先將動畫顯示，待一段時間後再關閉。
   // 在組件掛載（資料載入完畢）後，顯示動畫層
@@ -167,15 +336,55 @@ onMounted(async () => {
         </div>
       </div>
 
-      <!-- ＝＝＝＝ 第四段：商品 / 聯名 / 價格 ＝＝＝＝ -->
-      <div class="card-group d-flex justify-content-between align-items-stretch px-0 flex-wrap">
-        <div class="card bg-dark text-white" v-for="(shop, sIdx) in homeData.shopItems" :key="'shop-' + sIdx">
-          <img :src="shop.img" class="card-img" alt="shop item" />
-          <div class="card-img-overlay">
-            <h5 class="card-title">{{ shop.title }}</h5>
-            <p class="card-text">{{ shop.price }}</p>
+      <!-- ＝＝＝＝ 第四段：商品輪播卡片 ＝＝＝＝ -->
+      <div class="text-center mb-3">
+        <h2>精選商品</h2>
+      </div>
+      <div id="shopCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+        <!-- 指示器 -->
+        <div class="carousel-indicators">
+          <button v-for="(item, idx) in Math.ceil(homeData.shopItems.length / 4)" :key="'shop-ind-' + idx" type="button"
+            data-bs-target="#shopCarousel" :data-bs-slide-to="idx" :class="{ active: idx === 0 }"
+            :aria-current="idx === 0 ? 'true' : undefined" :aria-label="`商品頁 ${idx + 1}`">
+          </button>
+        </div>
+        <!-- 輪播內容 -->
+        <div class="carousel-inner">
+          <div v-for="(chunk, chunkIdx) in getShopChunks(homeData.shopItems, 4)" :key="'shop-chunk-' + chunkIdx"
+            class="carousel-item" :class="{ active: chunkIdx === 0 }">
+            <div class="row justify-content-center">
+              <div v-for="shop in chunk" :key="'shop-' + shop.id" class="col-lg-3 col-md-4 col-sm-6 mb-3">
+                <div 
+                  class="card h-100 shop-card" 
+                  @click="goToShopping(shop)"
+                  style="cursor: pointer; transition: transform 0.3s;">
+                  <img :src="shop.TeaName" class="card-img-top" :alt="shop.name"
+                    style="height: 200px; object-fit: cover;" />
+                  <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ shop.name }}</h5>
+                    <!-- <p class="card-text flex-grow-1">{{ shop.description }}</p> -->
+                    <div class="mt-auto">
+                      <p class="card-text">
+                        <strong class="text-primary">NT$ {{ shop.price }}</strong>
+                      </p>
+                      <small class="text-muted">{{ shop.category }}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
+        <!-- 控制按鈕 -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#shopCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">上一頁</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#shopCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">下一頁</span>
+        </button>
       </div>
     </div>
   </div>
@@ -289,6 +498,7 @@ onMounted(async () => {
     transform: translate(-50%, -50%);
     opacity: 1;
   }
+
   to {
     top: -210px;
     left: -545px;
@@ -297,5 +507,26 @@ onMounted(async () => {
     transform: none;
     opacity: 1;
   }
+}
+
+/* 商品卡片hover效果 */
+.shop-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.shop-card {
+  transition: all 0.3s ease;
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.shop-card .card-img-top {
+  transition: transform 0.3s ease;
+}
+
+.shop-card:hover .card-img-top {
+  transform: scale(1.05);
 }
 </style>

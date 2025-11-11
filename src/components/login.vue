@@ -574,7 +574,7 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   /* 在主畫面區塊加入背景圖（以漸層疊加圖片，確保文字/角色可讀） */
-  background: linear-gradient(135deg, rgba(250, 248, 243, 0.8), rgba(245, 240, 232, 0.8)), url('/src/images/原始圖/teaserving.png') no-repeat center center;
+  background: linear-gradient(135deg, rgba(250, 248, 243, 0.8), rgba(245, 240, 232, 0.8)), url('../assets/images/index_img/原始圖/teaserving.png') no-repeat center center;
   background-size: cover;
   display: flex;
   align-items: center;

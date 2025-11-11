@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import '../assets/css/address.css'
-import { mergeDefault } from '../assets/js/mergeDefault.js'
+import { mergeDefault } from '../assets/js/mergeDefault'
 
 // UI 狀態：哪一個手風琴目前展開
 const activeIndex = ref(null)
@@ -39,12 +39,9 @@ async function submitForm() {
   }
 
   try {
-    // 發送 POST 請求到後端
-    const response = await fetch('https://localhost:7018/api/address/contact', {
+    // 發送 POST 請求到後端（透過 Cloudflare Workers 代理）
+    const response = await safeFetch(API_CONFIG.ENDPOINTS.CONTACT, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
       body: JSON.stringify({
         name: name,
         email: email,
@@ -73,16 +70,15 @@ async function submitForm() {
 
 // onMounted：1.拿本地JSON 2.拿API 3.merge
 import defaultDataRaw from '../assets/json/address.json'
+import { safeFetch, API_CONFIG } from '../utils/apiConfig'
 
 onMounted(async () => {
   // 1. 先把本地預設資料顯示在畫面上，讓頁面一開始就有內容
   //    defaultDataRaw 長這樣：{ accordionList: [...] }
   accordionList.value = defaultDataRaw.accordionList || []
   try {
-    // 2. 嘗試叫 API (你之後可以讓這支 API 回傳 { accordionList: [...] } )
-    const res = await fetch('http://localhost:5028/api/Address')
-    if (!res.ok) throw new Error('API 回傳狀態不是 200')
-
+    // 2. 嘗試叫 API（透過 Cloudflare Workers 代理）
+    const res = await safeFetch(API_CONFIG.ENDPOINTS.ADDRESS)
     const apiData = await res.json()
 
     // 3. 合併：用 API 值覆蓋，API 沒給/是 null 不會洗掉預設

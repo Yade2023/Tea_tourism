@@ -361,61 +361,139 @@ h2 {
 }
 
 /* --------------------------------------------------
-   🟨 第四段（價格卡：overlay樣式）
+   🟨 第四段（商品輪播卡片）
 -------------------------------------------------- */
-.card-group:last-of-type {
-  /* 與其他段落統一的寬度並置中 */
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1.2rem;
+#shopCarousel {
+  width: min(1150px, 94vw);
+  margin: 50px auto;
 }
 
-.card-group:last-of-type .card {
-  border: none;
+/* 商品卡片基本樣式 - 繼承原有的overlay風格 */
+.shop-card {
+  border: none !important;
   position: relative;
   border-radius: 18px;
   overflow: hidden;
-  flex: 1 1 230px;
-  max-width: 240px;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
+  background: transparent;
+  height: 100%;
 }
 
-.card-group:last-of-type .card:hover {
+.shop-card:hover {
   transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
-.card-group:last-of-type img {
+/* 商品圖片樣式 - 保持原有的overlay效果 */
+.shop-card .card-img-top {
   width: 100%;
   height: 260px;
   object-fit: cover;
   filter: brightness(90%);
   transition: filter 0.3s ease;
-
+  border-radius: 18px 18px 0 0;
 }
 
-.card-group:last-of-type .card:hover img {
+.shop-card:hover .card-img-top {
   filter: brightness(100%);
 }
 
-.card-group:last-of-type .card-img-overlay {
+/* 卡片內容區 - 改為overlay樣式 */
+.shop-card .card-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+  color: white;
+  padding: 2rem 1.5rem 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.65));
-  padding: 1rem;
 }
 
-.card-group:last-of-type .card-title {
+/* 商品標題樣式 */
+.shop-card .card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff !important;
+  margin-bottom: 0.5rem;
+}
+
+/* 商品描述文字 */
+.shop-card .card-text {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-bottom: 0.8rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 價格顯示 */
+.shop-card .card-text strong {
+  color: #e8cfa6 !important;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #fff;
 }
 
-.card-group:last-of-type .card-text {
-  color: #e8cfa6;
-  font-weight: 500;
+/* 分類標籤 */
+.shop-card small.text-muted {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 0.85rem;
+}
+
+/* 輪播指示器樣式調整 */
+#shopCarousel .carousel-indicators {
+  position: relative;
+  margin: 2rem 0 0 0;
+}
+
+#shopCarousel .carousel-indicators [data-bs-target] {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #c7a27c;
+  opacity: 0.4;
+  margin: 0 8px;
+  transition: all 0.3s ease;
+}
+
+#shopCarousel .carousel-indicators .active {
+  opacity: 1;
+  transform: scale(1.2);
+  background-color: #3e2f24;
+}
+
+/* 輪播控制按鈕樣式 */
+#shopCarousel .carousel-control-prev,
+#shopCarousel .carousel-control-next {
+  width: 40px;
+  height: 40px;
+  top: 45%;
+  transform: translateY(-50%);
+  background-color: rgba(62, 47, 36, 0.8);
+  border-radius: 50%;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+#shopCarousel .carousel-control-prev:hover,
+#shopCarousel .carousel-control-next:hover {
+  opacity: 1;
+  background-color: rgba(62, 47, 36, 0.9);
+}
+
+#shopCarousel .carousel-control-prev {
+  left: -50px;
+}
+
+#shopCarousel .carousel-control-next {
+  right: -50px;
 }
 
 /* --------------------------------------------------
@@ -513,5 +591,45 @@ h2 {
     grid-column: 1;
     word-wrap: break-word;
     overflow-wrap: break-word;
+  }
+
+  /* 商品輪播響應式 */
+  #shopCarousel {
+    margin: 20px auto;
+    width: calc(100% - 30px);
+  }
+
+  #shopCarousel .carousel-control-prev,
+  #shopCarousel .carousel-control-next {
+    display: none;
+  }
+
+  .shop-card .card-body {
+    padding: 1.5rem 1rem 1rem;
+  }
+
+  .shop-card .card-title {
+    font-size: 1rem;
+  }
+
+  .shop-card .card-text {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
+}
+
+@media (max-width: 992px) and (min-width: 769px) {
+  #shopCarousel {
+    margin: 30px auto;
+    width: calc(100% - 40px);
+  }
+
+  #shopCarousel .carousel-control-prev {
+    left: -30px;
+  }
+
+  #shopCarousel .carousel-control-next {
+    right: -30px;
   }
 }

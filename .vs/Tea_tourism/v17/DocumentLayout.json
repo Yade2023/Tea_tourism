@@ -1,0 +1,105 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\\u5065\u884C\u5168\u7AEF\\\u5C08\u6848\\Tea_tourism\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{40D7A497-9433-BE70-67CB-FEEB4C77D009}|tea_tourism.esproj|d:\\\u5065\u884C\u5168\u7AEF\\\u5C08\u6848\\tea_tourism\\src\\components\\shopping4.vue||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{40D7A497-9433-BE70-67CB-FEEB4C77D009}|tea_tourism.esproj|solutionrelative:src\\components\\shopping4.vue||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\\u5065\u884C\u5168\u7AEF\\\u5C08\u6848\\Tea_tourism\\node_modules\\@vue\\runtime-core\\dist\\runtime-core.esm-bundler.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}|",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:node_modules\\@vue\\runtime-core\\dist\\runtime-core.esm-bundler.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{40D7A497-9433-BE70-67CB-FEEB4C77D009}|tea_tourism.esproj|d:\\\u5065\u884C\u5168\u7AEF\\\u5C08\u6848\\tea_tourism\\src\\components\\checkout.vue||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{40D7A497-9433-BE70-67CB-FEEB4C77D009}|tea_tourism.esproj|solutionrelative:src\\components\\checkout.vue||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{40D7A497-9433-BE70-67CB-FEEB4C77D009}|tea_tourism.esproj|d:\\\u5065\u884C\u5168\u7AEF\\\u5C08\u6848\\tea_tourism\\src\\router\\index.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{40D7A497-9433-BE70-67CB-FEEB4C77D009}|tea_tourism.esproj|solutionrelative:src\\router\\index.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{40D7A497-9433-BE70-67CB-FEEB4C77D009}|tea_tourism.esproj|d:\\\u5065\u884C\u5168\u7AEF\\\u5C08\u6848\\tea_tourism\\src\\app.vue||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{40D7A497-9433-BE70-67CB-FEEB4C77D009}|tea_tourism.esproj|solutionrelative:src\\app.vue||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Shopping4.vue",
+              "DocumentMoniker": "D:\\\u5065\u884C\u5168\u7AEF\\\u5C08\u6848\\Tea_tourism\\src\\components\\Shopping4.vue",
+              "RelativeDocumentMoniker": "src\\components\\Shopping4.vue",
+              "ToolTip": "D:\\\u5065\u884C\u5168\u7AEF\\\u5C08\u6848\\Tea_tourism\\src\\components\\Shopping4.vue",
+              "RelativeToolTip": "src\\components\\Shopping4.vue",
+              "ViewState": "AgIAABEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003491|",
+              "WhenOpened": "2025-11-08T07:21:21.345Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "runtime-core.esm-bundler.js",
+              "DocumentMoniker": "D:\\\u5065\u884C\u5168\u7AEF\\\u5C08\u6848\\Tea_tourism\\node_modules\\@vue\\runtime-core\\dist\\runtime-core.esm-bundler.js",
+              "RelativeDocumentMoniker": "node_modules\\@vue\\runtime-core\\dist\\runtime-core.esm-bundler.js",
+              "ToolTip": "D:\\\u5065\u884C\u5168\u7AEF\\\u5C08\u6848\\Tea_tourism\\node_modules\\@vue\\runtime-core\\dist\\runtime-core.esm-bundler.js",
+              "RelativeToolTip": "node_modules\\@vue\\runtime-core\\dist\\runtime-core.esm-bundler.js",
+              "ViewState": "AgIAAAIBAAAAAAAAAADgvwsBAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-11-08T07:04:30.293Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "index.ts",
+              "DocumentMoniker": "D:\\\u5065\u884C\u5168\u7AEF\\\u5C08\u6848\\Tea_tourism\\src\\router\\index.ts",
+              "RelativeDocumentMoniker": "src\\router\\index.ts",
+              "ToolTip": "D:\\\u5065\u884C\u5168\u7AEF\\\u5C08\u6848\\Tea_tourism\\src\\router\\index.ts",
+              "RelativeToolTip": "src\\router\\index.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2025-11-07T05:14:25.525Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Checkout.vue",
+              "DocumentMoniker": "D:\\\u5065\u884C\u5168\u7AEF\\\u5C08\u6848\\Tea_tourism\\src\\components\\Checkout.vue",
+              "RelativeDocumentMoniker": "src\\components\\Checkout.vue",
+              "ToolTip": "D:\\\u5065\u884C\u5168\u7AEF\\\u5C08\u6848\\Tea_tourism\\src\\components\\Checkout.vue",
+              "RelativeToolTip": "src\\components\\Checkout.vue",
+              "ViewState": "AgIAAIYAAAAAAAAAAAAAAJMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003491|",
+              "WhenOpened": "2025-11-07T05:10:28.07Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "App.vue",
+              "DocumentMoniker": "D:\\\u5065\u884C\u5168\u7AEF\\\u5C08\u6848\\Tea_tourism\\src\\App.vue",
+              "RelativeDocumentMoniker": "src\\App.vue",
+              "ToolTip": "D:\\\u5065\u884C\u5168\u7AEF\\\u5C08\u6848\\Tea_tourism\\src\\App.vue",
+              "RelativeToolTip": "src\\App.vue",
+              "ViewState": "AgIAADYAAAAAAAAAAAAAAEEAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003491|",
+              "WhenOpened": "2025-11-07T05:06:28.625Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

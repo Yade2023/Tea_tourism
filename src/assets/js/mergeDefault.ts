@@ -1,9 +1,9 @@
-// /src/assets/js/mergeDefault.js
-export function mergeDefault(defaultData, apiData) {
+// /src/assets/js/mergeDefault.ts
+export function mergeDefault(defaultData: any, apiData: any): any {
   // 如果 API 是空的，直接回預設
   if (!apiData || typeof apiData !== 'object') return defaultData
 
-  const result = Array.isArray(defaultData) ? [] : {}
+  const result: any = Array.isArray(defaultData) ? [] : {}
 
   // 先把「預設的 key」都跑一遍
   for (const key in defaultData) {
@@ -18,7 +18,7 @@ export function mergeDefault(defaultData, apiData) {
 
     // 2. 兩邊都是陣列 → 做「逐筆合併」
     if (Array.isArray(defVal) && Array.isArray(apiVal)) {
-      const mergedArray = []
+      const mergedArray: any[] = []
       const maxLen = Math.max(defVal.length, apiVal.length)
 
       for (let i = 0; i < maxLen; i++) {
